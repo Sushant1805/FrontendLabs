@@ -3,7 +3,7 @@ import React from "react"
 const Navbar = ()=>{
     return(
         <>
-            <div className="navbar">
+            <div className="navbar glass-effect">
                 <p className="logo"><strong>FrontendLabs</strong></p>
                 <ul className="navbar-menu">
                     <li>About</li>

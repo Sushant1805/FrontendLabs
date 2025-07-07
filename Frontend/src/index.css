@@ -2,16 +2,25 @@
   padding: 0;
   margin: 0;
   font-family: 'Inter', sans-serif;
+  box-sizing: border-box;
+}
+:root{
+  --primary-color: #2934FF;
+  --light-blue:#8AA5FF;
+  --secondary-color: #031457;
+  --dark-blue:#121426;
+  --yellow-color:#FFD63A;
+
 }
 body{
   background-color: #161618;
   color : white;
-
 }
 .logo{
   font-size: large;
 }
 .navbar{
+  position: fixed;
   height: 60px;
   display: flex;
   gap :15px;
@@ -43,7 +52,31 @@ body{
 }
 
 .button-purple{
-  background-color: #8062D6;
+  background-color: var(--primary-color);
+}
+
+.landing-page::after {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  height: 100px;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0), #0b0b23);
+  z-index: 2;
+}
+
+.section-divider {
+  position: relative;
+  width: 100%;
+  height: 100px;
+  overflow: hidden;
+  margin-top: -2px;
+}
+.section-divider svg {
+  display: block;
+  width: 100%;
+  height: 100px;
 }
 
 .hero-section{
@@ -57,7 +90,7 @@ body{
   
 }
 .hero-frontend-text{
-  color: #8062D6;
+  color: var(--primary-color);
 }
 .hero-heading{
   display: flex;
@@ -77,4 +110,89 @@ body{
 .hero-buttons{
   display: flex;
   gap:15px;
+}
+
+
+
+.glass-effect {
+  position: relative;
+  background: rgba(255, 255, 255, 0.08); /* Semi-transparent white background */
+  backdrop-filter: blur(1px); /* Apply the blur effect */
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional: subtle shadow */
+
+}
+
+*::-webkit-scrollbar{
+  display: none;
+}
+
+.feature-page{
+  height: 100vh;
+background: #031457;
+background: linear-gradient(180deg, rgba(3, 20, 87, 0.62) 0%, rgba(0, 0, 0, 0) 66%);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+  gap: 20px;
+  font-family: 'Poppins';
+}
+.feature-heading{
+  margin-top: 50px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 50%;
+  text-align: center;
+  font-weight: 700;
+}
+
+.feature-subheading{
+  font-weight: 200;
+  color: rgb(131, 131, 131);
+  width: 50%;
+  text-align: center;
+}
+.feature-card-container{
+  display: flex;
+  width: 100vw;
+  gap: 25px;
+  justify-content: center;
+  margin-top: 50px;
+}
+
+.card{
+background: #031457;
+background: linear-gradient(180deg, rgba(3, 20, 87, 0.62) 0%, rgba(0, 0, 0, 0) 66%);
+  justify-content: start;
+  align-items: center;
+  width: 15em;
+  height: 20em;
+  padding: 50px 15px 10px 15px;
+  border-radius: 15px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap:25px;
+  border: solid 0.2px  var(--primary-color);
+  perspective: 1000px; /* needed for 3D effect */
+  transition: transform 0.5s ease;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.card-1{
+  margin-top: -20px;
+  height: 23em;
+}
+
+.card:hover{
+    border: solid 1px var(--yellow-color);
+     transform: rotateY(10deg) rotateX(5deg);
+}
+.icon{
+  font-size: 2em;
+  color:var(--primary-color);
 }
