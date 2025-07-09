@@ -2,12 +2,26 @@ import React, {useEffect} from 'react'
 import LandingPage from './Pages/LandingPage'
 import Features from './Pages/Features'
 import Lenis from '@studio-freight/lenis';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
 
 
 
 const App = () => {
   useEffect(() => {
+    // Initialize AOS
+    AOS.init({
+      duration: 1000,
+      once: true,
+      easing: 'ease-in-out',
+      disable: false,
+      startEvent: 'DOMContentLoaded',
+      initClassName: 'aos-init',
+      animatedClassName: 'aos-animate',
+    });
+
+    // Initialize Lenis smooth scrolling
     const lenis = new Lenis({
       duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -20,6 +34,11 @@ const App = () => {
     }
 
     requestAnimationFrame(raf);
+
+    // Cleanup
+    return () => {
+      lenis.destroy();
+    };
   }, []);
 
   return (

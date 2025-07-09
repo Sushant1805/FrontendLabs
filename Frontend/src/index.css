@@ -1,35 +1,49 @@
-*{
+* {
   padding: 0;
   margin: 0;
   font-family: 'Inter', sans-serif;
   box-sizing: border-box;
 }
-:root{
+
+:root {
   --primary-color: #2934FF;
-  --light-blue:#8AA5FF;
+  --light-blue: #8AA5FF;
   --secondary-color: #031457;
-  --dark-blue:#121426;
-  --yellow-color:#FFD63A;
+  --dark-blue: #121426;
+  --yellow-color: rgb(255, 214, 58);
 
 }
-body{
+
+.logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+}
+
+.FrontendLabs-logo {
+  height: 40px;
+  width: 40px;
+  margin-top: -7px;
+}
+
+body {
   background-color: #161618;
-  color : white;
+  color: white;
 }
-.logo{
-  font-size: large;
-}
-.navbar{
+
+.navbar {
   position: fixed;
   height: 60px;
   display: flex;
-  gap :15px;
+  gap: 15px;
   justify-content: space-around;
   align-items: center;
   background-color: #151516;
   border-bottom: 1px solid rgb(62, 62, 62);
 }
-.navbar-menu{
+
+.navbar-menu {
   font-weight: 500;
   font-size: 15px;
   list-style-type: none;
@@ -37,12 +51,12 @@ body{
   gap: 20px;
 }
 
-.navbar-buttons{
+.navbar-buttons {
   display: flex;
-  gap:15px;
+  gap: 15px;
 }
 
-.button{
+.button {
   height: 30px;
   width: fit-content;
   padding: 0 15px 0 15px;
@@ -51,7 +65,7 @@ body{
   font-weight: 600;
 }
 
-.button-purple{
+.button-purple {
   background-color: var(--primary-color);
 }
 
@@ -73,13 +87,14 @@ body{
   overflow: hidden;
   margin-top: -2px;
 }
+
 .section-divider svg {
   display: block;
   width: 100%;
   height: 100px;
 }
 
-.hero-section{
+.hero-section {
   margin-top: 150px;
   display: flex;
   flex-direction: column;
@@ -87,12 +102,14 @@ body{
   align-items: center;
   gap: 20px;
   font-family: 'Poppins';
-  
+
 }
-.hero-frontend-text{
+
+.hero-frontend-text {
   color: var(--primary-color);
 }
-.hero-heading{
+
+.hero-heading {
   display: flex;
   flex-direction: column;
   gap: 5px;
@@ -100,38 +117,41 @@ body{
   text-align: center;
   font-weight: 700;
 }
-.hero-paragraph{
+
+.hero-paragraph {
   font-weight: 200;
   color: rgb(131, 131, 131);
   width: 50%;
   text-align: center;
 }
 
-.hero-buttons{
+.hero-buttons {
   display: flex;
-  gap:15px;
+  gap: 15px;
 }
 
 
 
 .glass-effect {
   position: relative;
-  background: rgba(255, 255, 255, 0.08); /* Semi-transparent white background */
-  backdrop-filter: blur(1px); /* Apply the blur effect */
+  background: rgba(255, 255, 255, 0.08);
+  /* Semi-transparent white background */
+  backdrop-filter: blur(1px);
+  /* Apply the blur effect */
   padding: 20px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional: subtle shadow */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  /* Optional: subtle shadow */
 
 }
 
-*::-webkit-scrollbar{
+*::-webkit-scrollbar {
   display: none;
 }
 
-.feature-page{
+.feature-page {
   height: 100vh;
-background: #031457;
-background: linear-gradient(180deg, rgba(3, 20, 87, 0.62) 0%, rgba(0, 0, 0, 0) 66%);
-
+  background: #031457;
+  background: linear-gradient(180deg, rgba(3, 20, 87, 0.62) 0%, rgba(0, 0, 0, 0) 66%);
   display: flex;
   flex-direction: column;
   justify-content: start;
@@ -139,7 +159,8 @@ background: linear-gradient(180deg, rgba(3, 20, 87, 0.62) 0%, rgba(0, 0, 0, 0) 6
   gap: 20px;
   font-family: 'Poppins';
 }
-.feature-heading{
+
+.feature-heading {
   margin-top: 50px;
   display: flex;
   flex-direction: column;
@@ -149,13 +170,14 @@ background: linear-gradient(180deg, rgba(3, 20, 87, 0.62) 0%, rgba(0, 0, 0, 0) 6
   font-weight: 700;
 }
 
-.feature-subheading{
+.feature-subheading {
   font-weight: 200;
   color: rgb(131, 131, 131);
   width: 50%;
   text-align: center;
 }
-.feature-card-container{
+
+.feature-card-container {
   display: flex;
   width: 100vw;
   gap: 25px;
@@ -163,9 +185,9 @@ background: linear-gradient(180deg, rgba(3, 20, 87, 0.62) 0%, rgba(0, 0, 0, 0) 6
   margin-top: 50px;
 }
 
-.card{
-background: #031457;
-background: linear-gradient(180deg, rgba(3, 20, 87, 0.62) 0%, rgba(0, 0, 0, 0) 66%);
+.card {
+  background: #031457;
+  background: linear-gradient(180deg, rgba(3, 20, 87, 0.62) 0%, rgba(0, 0, 0, 0) 66%);
   justify-content: start;
   align-items: center;
   width: 15em;
@@ -175,24 +197,48 @@ background: linear-gradient(180deg, rgba(3, 20, 87, 0.62) 0%, rgba(0, 0, 0, 0) 6
   text-align: center;
   display: flex;
   flex-direction: column;
-  gap:25px;
-  border: solid 0.2px  var(--primary-color);
-  perspective: 1000px; /* needed for 3D effect */
-  transition: transform 0.5s ease;
+  gap: 25px;
+  border: solid 0.2px var(--primary-color);
+  perspective: 1000px;
+  transition: all 0.3s ease-in-out;
   transform-style: preserve-3d;
-  will-change: transform;
+  will-change: transform, border-color;
+  cursor: pointer;
 }
 
-.card-1{
+.card-1 {
   margin-top: -20px;
   height: 23em;
 }
 
-.card:hover{
-    border: solid 1px var(--yellow-color);
-     transform: rotateY(10deg) rotateX(5deg);
+.card:hover {
+  border: solid 1px var(--yellow-color);
+  transform: rotateY(10deg) rotateX(10deg);
+  box-shadow: 0 5px 10px rgba(255, 214, 58, 0.3);
+  animation: all 10s ease-in-out;
 }
-.icon{
+
+.icon {
   font-size: 2em;
-  color:var(--primary-color);
+  color: var(--primary-color);
 }
+
+/* Smooth Blur Animation */
+@keyframes blurFadeIn {
+  0% {
+    opacity: 0;
+    filter: blur(5px);
+    transform: translateY(20px);
+  }
+
+  100% {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0);
+  }
+}
+
+.hero-section-animated {
+  animation: blurFadeIn 1.5s ease-out forwards;
+}
+
