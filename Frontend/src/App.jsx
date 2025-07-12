@@ -4,6 +4,9 @@ import Features from './Pages/Features'
 import Lenis from '@studio-freight/lenis';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import {Routes,Route} from 'react-router-dom'
+import Login from './Pages/Login'
+import Register from './Pages/Register'
 
 
 
@@ -43,9 +46,19 @@ const App = () => {
 
   return (
     <>
+    <Routes>
+      <Route path='/' element={
+        <>
+            <LandingPage/>
+            <Features/>
+        </>
+      }/>
+
+      <Route path='/login' element={<Login/>}/>
+      <Route path='/register' element={<Register/>}/>
+
+    </Routes>
     
-    <LandingPage/>
-    <Features/>
     </>
   )
 }
