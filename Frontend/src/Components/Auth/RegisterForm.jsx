@@ -1,11 +1,59 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './RegisterForm.module.css';
 import { Link } from 'react-router-dom';
 import { BiUser } from "react-icons/bi";
 import { MdOutlineEmail } from "react-icons/md";
 import { TbLockPassword } from "react-icons/tb";
-
+import { HiOutlineEye } from "react-icons/hi";
+import { HiOutlineEyeOff } from "react-icons/hi";
 const RegisterForm = () => {
+    const [isPasswordVisible, setisPasswordVisible] = useState(false)
+    const [errors,setErrors] = useState({
+        name : '',
+        email : '',
+        password:''
+    });
+    const [userData, setUserData] = useState({
+        name: '',
+        email: '',
+        password: ''
+    });
+    const validateInputs = (e)=>{
+        switch(e.target.name){
+            case 'name':
+                return ((e.target.value.length === 0 || e.target.value === '') && 'Please Enter your name');
+            case 'email':
+                return (!(e.target.value.match(/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/)) ? 'Please Enter Correct Email Address':'')
+            case 'password' : 
+                return (!(e.target.value.match(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/
+)) ? "Weak password: add letter, number & symbol." : ''
+)
+            
+        }
+    }
+    const handleChange = (e) => {
+        setUserData((prev) => {
+            return {
+                ...prev,
+                [e.target.name]: e.target.value
+            }
+        })
+        
+        setErrors((prev)=>{
+            return {
+                ...prev,
+                [e.target.name] : validateInputs(e)
+            }
+        })
+        
+    }
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if (!Object.values(userData).some(val => val === '')) {
+            console.log("Form Submitted", userData);
+        }
+
+    }
     return (
         <main className={styles.registerForm}>
             <header>
@@ -15,7 +63,7 @@ const RegisterForm = () => {
                 </h2>
             </header>
 
-            <form className={styles.registerFormFields}>
+            <form onSubmit={handleSubmit} className={styles.registerFormFields}>
                 <div className={styles.inputCell}>
                     <label className={styles.labels} htmlFor="register-email">
                         Name <span className={styles.inputRequired}>*</span>
@@ -23,43 +71,54 @@ const RegisterForm = () => {
                     <div className={styles.inputGroup}>
                         <BiUser className={styles.inputIcon} />
                         <input
+                            onChange={handleChange}
+                            name="name"
                             className={styles.inputText}
                             id="register-name"
                             type="text"
                             placeholder="Enter your name"
                         />
                     </div>
+                    <p className={styles.errorMsg}>{errors.name}</p>
                 </div>
 
-            <div className={styles.inputCell}>
-                <label className={styles.labels} htmlFor="register-email">
-                    Email <span className={styles.inputRequired}>*</span>
-                </label>
-                <div className={styles.inputGroup}>
-                    <MdOutlineEmail className={styles.inputIcon} />
-                    <input
-                        className={styles.inputText}
-                        id="register-email"
-                        type="text"
-                        placeholder="Enter your email"
-                    />
+                <div className={styles.inputCell}>
+                    <label className={styles.labels} htmlFor="register-email">
+                        Email <span className={styles.inputRequired}>*</span>
+                    </label>
+                    <div className={styles.inputGroup}>
+                        <MdOutlineEmail className={styles.inputIcon} />
+                        <input
+                            onChange={handleChange}
+                            name="email"
+                            className={styles.inputText}
+                            id="register-email"
+                            type="text"
+                            placeholder="Enter your email"
+                        />
+                    </div>
+                     <p className={styles.errorMsg}>{errors.email}</p>
                 </div>
-</div>
-<div className={styles.inputCell}>
-                <label className={styles.labels} htmlFor="register-password">
-                    Password <span className={styles.inputRequired}>*</span>
-                </label>
-                <div className={styles.inputGroup}>
-                    <TbLockPassword className={styles.inputIcon} />
-                    <input
-                        className={styles.inputText}
-                        id="register-password"
-                        type="text"
-                        placeholder="Enter your password"
-                    />
+                <div className={styles.inputCell}>
+                    <label className={styles.labels} htmlFor="register-password">
+                        Password <span className={styles.inputRequired}>*</span>
+                    </label>
+                    <div className={styles.inputGroup}>
+                        <TbLockPassword className={styles.inputIcon} />
+                        <input
+                            onChange={handleChange}
+                            name="password"
+                            className={styles.inputText}
+                            id="register-password"
+                            type={!isPasswordVisible ? "password" : "text"}
+                            placeholder="Enter your password"
+                        />
+                        {!isPasswordVisible ? <HiOutlineEye className={styles.eyeOff} onClick={() => setisPasswordVisible(true)} /> : <HiOutlineEyeOff className={styles.eyeOff} onClick={() => setisPasswordVisible(false)} />
+                        }
+                    </div>
+                     <p className={styles.errorMsg}>{errors.password}</p>
                 </div>
-</div>
-                <button className="button button-primary authbuttons">Sign Up</button>
+                <button type="submit" className="button button-primary authbuttons">Sign Up</button>
 
                 <h4 className={styles.alreadyText}>
                     Already have an account?
@@ -67,6 +126,7 @@ const RegisterForm = () => {
                         <span className={styles.already}> Sign In</span>
                     </Link>
                 </h4>
+                
             </form>
         </main>
     );

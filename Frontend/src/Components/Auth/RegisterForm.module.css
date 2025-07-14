@@ -75,4 +75,24 @@
   font-size: 1.2rem;
 }
 
+.eyeOff{
+    position: absolute;
+    right : 10px;
+    color: #999;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.errorMsg{
+    color: red;
+    font-size: 0.7em;
+    font-weight: 400 ;
+}
+.mainErrorMsg{
+    color: red;
+    font-size: 0.7em;
+    font-weight: 400 ;
+    text-align: center;
+}
+
 
