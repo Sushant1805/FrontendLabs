@@ -48,7 +48,10 @@ const LoginForm = () => {
         e.preventDefault();
         if (!Object.values(loginData).some((val) => val === '')) {
             console.log('Login Submitted', loginData);
-            // Add login logic here
+            setLoginData({
+        email: '',
+        password: '',
+    })
         }else{
             setmainError('Please enter valid Credentials')
         }
@@ -71,6 +74,7 @@ const LoginForm = () => {
                     <div className={styles.inputGroup}>
                         <MdOutlineEmail className={styles.inputIcon} />
                         <input
+                            value={loginData.email}
                             onChange={handleChange}
                             name="email"
                             className={styles.inputText}
@@ -89,6 +93,7 @@ const LoginForm = () => {
                     <div className={styles.inputGroup}>
                         <TbLockPassword className={styles.inputIcon} />
                         <input
+                            value={loginData.password}
                             onChange={handleChange}
                             name="password"
                             className={styles.inputText}

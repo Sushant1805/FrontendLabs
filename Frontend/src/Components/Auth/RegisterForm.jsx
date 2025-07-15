@@ -6,29 +6,31 @@ import { MdOutlineEmail } from "react-icons/md";
 import { TbLockPassword } from "react-icons/tb";
 import { HiOutlineEye } from "react-icons/hi";
 import { HiOutlineEyeOff } from "react-icons/hi";
+import axios from 'axios';
 const RegisterForm = () => {
+    const [mainError, setmainError] = useState('')
     const [isPasswordVisible, setisPasswordVisible] = useState(false)
-    const [errors,setErrors] = useState({
-        name : '',
-        email : '',
-        password:''
+    const [errors, setErrors] = useState({
+        name: '',
+        email: '',
+        password: ''
     });
     const [userData, setUserData] = useState({
         name: '',
         email: '',
         password: ''
     });
-    const validateInputs = (e)=>{
-        switch(e.target.name){
+    const validateInputs = (e) => {
+        switch (e.target.name) {
             case 'name':
                 return ((e.target.value.length === 0 || e.target.value === '') && 'Please Enter your name');
             case 'email':
-                return (!(e.target.value.match(/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/)) ? 'Please Enter Correct Email Address':'')
-            case 'password' : 
+                return (!(e.target.value.match(/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/)) ? 'Please Enter Correct Email Address' : '')
+            case 'password':
                 return (!(e.target.value.match(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/
-)) ? "Weak password: add letter, number & symbol." : ''
-)
-            
+                )) ? "Weak password: add letter, number & symbol." : ''
+                )
+
         }
     }
     const handleChange = (e) => {
@@ -38,19 +40,30 @@ const RegisterForm = () => {
                 [e.target.name]: e.target.value
             }
         })
-        
-        setErrors((prev)=>{
+
+        setErrors((prev) => {
             return {
                 ...prev,
-                [e.target.name] : validateInputs(e)
+                [e.target.name]: validateInputs(e)
             }
         })
-        
+
     }
+  
     const handleSubmit = (e) => {
         e.preventDefault();
         if (!Object.values(userData).some(val => val === '')) {
             console.log("Form Submitted", userData);
+            axios.post('http://localhost:5000/api/auth/register',userData)
+            .then((res)=>console.log(res))
+            .catch(err=>console.log(err))
+            setUserData({
+                name: '',
+                email: '',
+                password: ''
+            })
+        } else {
+            setmainError('Please enter Valid Details!')
         }
 
     }
@@ -71,6 +84,7 @@ const RegisterForm = () => {
                     <div className={styles.inputGroup}>
                         <BiUser className={styles.inputIcon} />
                         <input
+                            value={userData.name}
                             onChange={handleChange}
                             name="name"
                             className={styles.inputText}
@@ -89,6 +103,7 @@ const RegisterForm = () => {
                     <div className={styles.inputGroup}>
                         <MdOutlineEmail className={styles.inputIcon} />
                         <input
+                            value={userData.email}
                             onChange={handleChange}
                             name="email"
                             className={styles.inputText}
@@ -97,7 +112,7 @@ const RegisterForm = () => {
                             placeholder="Enter your email"
                         />
                     </div>
-                     <p className={styles.errorMsg}>{errors.email}</p>
+                    <p className={styles.errorMsg}>{errors.email}</p>
                 </div>
                 <div className={styles.inputCell}>
                     <label className={styles.labels} htmlFor="register-password">
@@ -106,6 +121,7 @@ const RegisterForm = () => {
                     <div className={styles.inputGroup}>
                         <TbLockPassword className={styles.inputIcon} />
                         <input
+                            value={userData.password}
                             onChange={handleChange}
                             name="password"
                             className={styles.inputText}
@@ -116,8 +132,9 @@ const RegisterForm = () => {
                         {!isPasswordVisible ? <HiOutlineEye className={styles.eyeOff} onClick={() => setisPasswordVisible(true)} /> : <HiOutlineEyeOff className={styles.eyeOff} onClick={() => setisPasswordVisible(false)} />
                         }
                     </div>
-                     <p className={styles.errorMsg}>{errors.password}</p>
+                    <p className={styles.errorMsg}>{errors.password}</p>
                 </div>
+                {mainError && <p className={styles.mainErrorMsg}>{mainError}</p>}
                 <button type="submit" className="button button-primary authbuttons">Sign Up</button>
 
                 <h4 className={styles.alreadyText}>
@@ -126,7 +143,7 @@ const RegisterForm = () => {
                         <span className={styles.already}> Sign In</span>
                     </Link>
                 </h4>
-                
+
             </form>
         </main>
     );
