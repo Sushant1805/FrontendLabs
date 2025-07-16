@@ -1,40 +1,83 @@
-const { json } = require("express");
-const User = require('../Models/user-model')
+const bcrypt = require('bcrypt');
+const User = require('../Models/user-model');
 
-
-
+// Home route
 const home = async (req, res) => {
     try {
         res.status(200).send("From Controller");
     } catch (err) {
-        console.log(err);
+        console.error(err);
+        const status = 500;
+        const message = 'Server Error';
+        const error = {
+            status,
+            message
+        }
+        next(error);
     }
-}
+};
 
-const register = async (req, resp) => {
+// Register route
+const register = async (req, res) => {
     try {
-        // console.log(req.body);
         const { name, email, password } = req.body;
-        const userExist = await User.findOne({ email: email })
+
+        // Check if user already exists
+        const userExist = await User.findOne({ email });
         if (userExist) {
-            return resp.status(400).json({ msg: "Email already exist" });
+            return res.status(400).json({ msg: "Email already exists" });
         }
 
-        // creating user
-        const newUser = await User.create({ name, email, password })
+        // Create new user
+        const newUser = await User.create({ name, email, password });
 
-        //getting response
-        resp.status(201).json({
+        // Send response with token
+        res.status(201).json({
             msg: "User registered successfully",
-            user: {
-                name: newUser.name,
-                email: newUser.email,
-                password: newUser.password
-            },
-        })
-    } catch (err) {
-        console.log(err);
+            token: await newUser.generateToken()
+        });
+    } catch (error) {
+        console.error(error);
+        const status = 500;
+        const message = 'Server error during registration';
+        const err = {
+            status,
+            message
+        }
+        next(err);
     }
+};
 
-}
-module.exports = { home, register };
+// Login route
+const login = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+
+        const userExist = await User.findOne({ email });
+        if (!userExist) {
+            return res.status(400).json({ msg: "Invalid credentials" });
+        }
+
+        // Compare password
+        const isMatch = await bcrypt.compare(password, userExist.password);
+        if (!isMatch) {
+            return res.status(401).json({ msg: "Invalid credentials" });
+        }
+
+        res.status(200).json({
+            msg: "Login successful",
+            token: await userExist.generateToken()
+        });
+    } catch (error) {
+        console.error(error);
+        const status = 500;
+        const message = 'Server error during login';
+        const err = {
+            status,
+            message
+        }
+        next(err);
+    }
+};
+
+module.exports = { home, register, login };
