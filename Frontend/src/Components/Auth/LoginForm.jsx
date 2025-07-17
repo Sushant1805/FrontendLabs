@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { MdOutlineEmail } from 'react-icons/md';
 import { TbLockPassword } from 'react-icons/tb';
 import { HiOutlineEye, HiOutlineEyeOff } from 'react-icons/hi';
+import axios from 'axios';
 
 const LoginForm = () => {
     const [mainError, setmainError] = useState('')
@@ -18,19 +19,19 @@ const LoginForm = () => {
     });
 
     const validateInputs = (e) => {
-    switch (e.target.name) {
-        case 'email':
-            return !e.target.value.match(/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/)
-                ? 'Please Enter Correct Email Address'
-                : '';
-        case 'password':
-            return e.target.value.trim() === ''
-                ? 'Please enter your password'
-                : '';
-        default:
-            return '';
-    }
-};
+        switch (e.target.name) {
+            case 'email':
+                return !e.target.value.match(/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/)
+                    ? 'Please Enter Correct Email Address'
+                    : '';
+            case 'password':
+                return e.target.value.trim() === ''
+                    ? 'Please enter your password'
+                    : '';
+            default:
+                return '';
+        }
+    };
 
     const handleChange = (e) => {
         setLoginData((prev) => ({
@@ -48,11 +49,18 @@ const LoginForm = () => {
         e.preventDefault();
         if (!Object.values(loginData).some((val) => val === '')) {
             console.log('Login Submitted', loginData);
+            axios.post('http://localhost:5000/api/auth/login',loginData)
+            .then((res)=>{
+                console.log("Login Successfull: ",res.data)
+            })
+            .catch((err)=>{
+                console.log("Login Failed!!",error)
+            })
             setLoginData({
-        email: '',
-        password: '',
-    })
-        }else{
+                email: '',
+                password: '',
+            })
+        } else {
             setmainError('Please enter valid Credentials')
         }
     };
@@ -115,7 +123,7 @@ const LoginForm = () => {
                     </div>
                     <p className={styles.errorMsg}>{errors.password}</p>
                 </div>
-                 {mainError && <p className={styles.mainErrorMsg}>{mainError}</p>}
+                {mainError && <p className={styles.mainErrorMsg}>{mainError}</p>}
                 <button type="submit" className="button button-primary authbuttons">
                     Log In
                 </button>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styles from './RegisterForm.module.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { BiUser } from "react-icons/bi";
 import { MdOutlineEmail } from "react-icons/md";
 import { TbLockPassword } from "react-icons/tb";
@@ -8,6 +8,7 @@ import { HiOutlineEye } from "react-icons/hi";
 import { HiOutlineEyeOff } from "react-icons/hi";
 import axios from 'axios';
 const RegisterForm = () => {
+    const navigate = useNavigate();
     const [mainError, setmainError] = useState('')
     const [isPasswordVisible, setisPasswordVisible] = useState(false)
     const [errors, setErrors] = useState({
@@ -55,7 +56,10 @@ const RegisterForm = () => {
         if (!Object.values(userData).some(val => val === '')) {
             console.log("Form Submitted", userData);
             axios.post('http://localhost:5000/api/auth/register',userData)
-            .then((res)=>console.log(res))
+            .then((res)=>{
+                console.log(res)
+                navigate('/login');         
+            })
             .catch(err=>console.log(err))
             setUserData({
                 name: '',
