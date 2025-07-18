@@ -1,6 +1,27 @@
 const bcrypt = require('bcrypt');
 const User = require('../Models/user-model');
 
+const authMiddleware = require('../Middlewares/authMiddleware');
+
+const getUser = async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id).select("-password");
+        res.status(200).json({ user });
+    } catch (error) {
+        res.status(500).json({ msg: "Error fetching user profile" });
+    }
+};
+
+const logout = (req, res) => {
+  res.clearCookie("token", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "Lax"
+  });
+  res.status(200).json({ msg: "Logged out successfully" });
+};
+
+
 // Home route
 const home = async (req, res) => {
     try {
@@ -49,7 +70,7 @@ const register = async (req, res) => {
 };
 
 // Login route
-const login = async (req, res) => {
+const login = async (req, res, next) => {
     try {
         const { email, password } = req.body;
 
@@ -64,20 +85,27 @@ const login = async (req, res) => {
             return res.status(401).json({ msg: "Invalid credentials" });
         }
 
-        res.status(200).json({
-            msg: "Login successful",
-            token: await userExist.generateToken()
+        // Generate JWT token
+        const token = await userExist.generateToken();
+
+        // Set cookie with token
+        res.cookie("token", token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production", // true in production
+            sameSite: "Lax", // Changed from Strict to Lax for cross-origin requests
+            maxAge: 1000 * 60 * 60 * 24, // 1 day
         });
+
+        res.status(200).json({ msg: "Login successful" });
+
     } catch (error) {
         console.error(error);
         const status = 500;
         const message = 'Server error during login';
-        const err = {
-            status,
-            message
-        }
+        const err = { status, message };
         next(err);
     }
 };
 
-module.exports = { home, register, login };
+
+module.exports = { home, register, login, getUser,logout };

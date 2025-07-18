@@ -45,25 +45,48 @@ const LoginForm = () => {
         }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!Object.values(loginData).some((val) => val === '')) {
-            console.log('Login Submitted', loginData);
-            axios.post('http://localhost:5000/api/auth/login',loginData)
-            .then((res)=>{
-                console.log("Login Successfull: ",res.data)
-            })
-            .catch((err)=>{
-                console.log("Login Failed!!",error)
-            })
+        setmainError('');
+
+        const hasEmptyField = Object.values(loginData).some((val) => val === '');
+        if (hasEmptyField) {
+            setmainError('Please enter valid Credentials');
+            return;
+        }
+
+        try {
+            const response = await axios.post(
+                'http://localhost:5000/api/auth/login',
+                loginData,
+                {
+                    withCredentials: true, // ⬅️ Send cookie from server
+                }
+            );
+
+            console.log("Login Successful:", response.data);
+
+            // Fetch user profile after login
+            const res = await fetch("http://localhost:5000/api/auth/user-profile", {
+                method: "GET",
+                credentials: "include", // <- VERY IMPORTANT to include cookies
+            });
+
+            const data = await res.json();
+            console.log("User Data:", data.user); // <== Should see { user: { ... } }
+
+
+            // Reset login form
             setLoginData({
                 email: '',
                 password: '',
-            })
-        } else {
-            setmainError('Please enter valid Credentials')
+            });
+        } catch (error) {
+            console.error("Login Failed:", error.response?.data?.msg || error.message);
+            setmainError(error.response?.data?.msg || "Login failed. Try again.");
         }
     };
+
 
     return (
         <main className={styles.registerForm}>

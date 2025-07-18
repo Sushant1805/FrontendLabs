@@ -31,6 +31,7 @@ userSchema.pre('save', async function (next) {
 userSchema.methods.generateToken = async function(){
     try {
       return JWT.sign({
+        id: this._id,
         name : this.name,
         email : this.email,
         isAdmin : this.isAdmin
