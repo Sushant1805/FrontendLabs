@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
 import styles from './RegisterForm.module.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { MdOutlineEmail } from 'react-icons/md';
 import { TbLockPassword } from 'react-icons/tb';
 import { HiOutlineEye, HiOutlineEyeOff } from 'react-icons/hi';
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import {login} from './authSlice'
 
 const LoginForm = () => {
+    const dispatch = useDispatch()
+    const navigate = useNavigate();
     const [mainError, setmainError] = useState('')
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
     const [errors, setErrors] = useState({
@@ -74,13 +78,14 @@ const LoginForm = () => {
 
             const data = await res.json();
             console.log("User Data:", data.user); // <== Should see { user: { ... } }
-
+            dispatch(login(data.user))
 
             // Reset login form
             setLoginData({
                 email: '',
                 password: '',
             });
+            navigate('/')
         } catch (error) {
             console.error("Login Failed:", error.response?.data?.msg || error.message);
             setmainError(error.response?.data?.msg || "Login failed. Try again.");

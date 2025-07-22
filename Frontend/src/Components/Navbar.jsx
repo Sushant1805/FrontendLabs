@@ -5,13 +5,12 @@ import styles from './Navbar.module.css'
 import { RiArrowDownSLine } from "react-icons/ri";
 import { CgProfile } from "react-icons/cg";
 import { RiLogoutCircleRLine } from "react-icons/ri";
+import { useSelector } from "react-redux";
 const Navbar = () => {
-    const userData = {
-        name: "Sushant"
-    }
-    const [isLoggedIn, setisLoggedIn] = useState(true)
+    const userData = useSelector((state)=>state.auth.user);
+    const isLoggedIn = useSelector((state)=>state.auth.isAuthenticated)
     const [showUserWelcomeModal, setshowUserWelcomeModal] = useState(false)
-
+    console.log(userData);
     return (
         <>
             <div className="navbar glass-effect">

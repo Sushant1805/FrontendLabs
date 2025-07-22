@@ -8,8 +8,8 @@ const HeroSection = () => {
           
             <p className='hero-paragraph'>Skip the endless tutorials. Master React, JavaScript, and real UI logic through challenge-driven learning that forces you to think, build, and grow.</p>
             <div className="hero-buttons">
-                <button className="button">Get Started</button>
-                <button className="button button-purple">See Challenges</button>
+                <button className="button button-white">Get Started</button>
+                <button className="button button-primary">See Challenges</button>
             </div>
         </div>
         
