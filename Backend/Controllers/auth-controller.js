@@ -21,6 +21,40 @@ const logout = (req, res) => {
   res.status(200).json({ msg: "Logged out successfully" });
 };
 
+const updateProfile = async (req, res) => {
+    try {
+        const { name, password } = req.body;
+        const userId = req.user.id;
+
+        // Find the user
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ msg: "User not found" });
+        }
+
+        // Update fields
+        if (name) user.name = name;
+        if (password) {
+            // Password will be hashed automatically by the pre-save middleware
+            user.password = password;
+        }
+
+        // Save the updated user
+        await user.save();
+
+        // Return updated user without password
+        const updatedUser = await User.findById(userId).select("-password");
+        res.status(200).json({ 
+            msg: "Profile updated successfully", 
+            user: updatedUser 
+        });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ msg: "Error updating profile" });
+    }
+};
+
 
 // Home route
 const home = async (req, res) => {
@@ -108,4 +142,4 @@ const login = async (req, res, next) => {
 };
 
 
-module.exports = { home, register, login, getUser,logout };
+module.exports = { home, register, login, getUser, logout, updateProfile };

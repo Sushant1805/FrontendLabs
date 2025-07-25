@@ -7,11 +7,17 @@ import 'aos/dist/aos.css';
 import {Routes,Route} from 'react-router-dom'
 import Login from './Pages/Login'
 import Register from './Pages/Register'
-
+import { useDispatch } from 'react-redux'
+import {loadUser} from '../src/Components/Auth/authThunk'
 
 
 
 const App = () => {
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(loadUser())
+  }, [dispatch])
   useEffect(() => {
     // Initialize AOS
     AOS.init({

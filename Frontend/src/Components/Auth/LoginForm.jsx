@@ -7,6 +7,8 @@ import { HiOutlineEye, HiOutlineEyeOff } from 'react-icons/hi';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import {login} from './authSlice'
+import { IoMdClose } from "react-icons/io";
+import { setShowLogin } from './modalSlice';
 
 const LoginForm = () => {
     const dispatch = useDispatch()
@@ -85,7 +87,7 @@ const LoginForm = () => {
                 email: '',
                 password: '',
             });
-            navigate('/')
+            dispatch(setShowLogin(false));
         } catch (error) {
             console.error("Login Failed:", error.response?.data?.msg || error.message);
             setmainError(error.response?.data?.msg || "Login failed. Try again.");
@@ -94,7 +96,10 @@ const LoginForm = () => {
 
 
     return (
+        <div className={styles.mainRegisterDiv}>
         <main className={styles.registerForm}>
+            <IoMdClose onClick={()=>dispatch(setShowLogin(false))} className={styles.closeButton}/>
+            
             <header>
                 <h1>Welcome Back</h1>
                 <h2 className={styles.registerSubheading}>
@@ -164,6 +169,7 @@ const LoginForm = () => {
                 </h4>
             </form>
         </main>
+        </div>
     );
 };
 

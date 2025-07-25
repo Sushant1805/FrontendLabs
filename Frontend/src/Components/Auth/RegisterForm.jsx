@@ -6,8 +6,13 @@ import { MdOutlineEmail } from "react-icons/md";
 import { TbLockPassword } from "react-icons/tb";
 import { HiOutlineEye } from "react-icons/hi";
 import { HiOutlineEyeOff } from "react-icons/hi";
+import { IoMdClose } from "react-icons/io";
 import axios from 'axios';
+import { setShowRegister } from './modalSlice';
+import { useDispatch } from 'react-redux';
+
 const RegisterForm = () => {
+    const dispatch = useDispatch()
     const navigate = useNavigate();
     const [mainError, setmainError] = useState('')
     const [isPasswordVisible, setisPasswordVisible] = useState(false)
@@ -72,7 +77,11 @@ const RegisterForm = () => {
 
     }
     return (
+        <div className={styles.mainRegisterDiv}>
+
+        
         <main className={styles.registerForm}>
+            <IoMdClose onClick={()=>dispatch(setShowRegister(false))} className={styles.closeButton}/>
             <header>
                 <h1>Create your Account</h1>
                 <h2 className={styles.registerSubheading}>
@@ -150,6 +159,7 @@ const RegisterForm = () => {
 
             </form>
         </main>
+        </div>
     );
 };
 
