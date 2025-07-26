@@ -1,0 +1,77 @@
+/* Problems Page Styles - Black and White Theme - Performance Optimized */
+.problemsPage {
+    position: relative;
+    min-height: 100vh;
+    color: white;
+    overflow-x: hidden;
+}
+
+.problemsContent {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    gap: 1rem;
+    margin : 1rem 1rem 0 1rem;
+    /* Account for fixed navbar */
+}
+
+.problemsContainer {
+    display: flex;
+    flex-direction: column;
+    gap:1em;
+    background-color: #1e1e1e;
+    width: 70vw;
+    height: 100vh;
+    border-radius: 15px;
+    padding: 15px 0 0 15px;
+}
+
+.filtersContainer {
+    background-color: #1e1e1e;
+    width:30vw;
+    height: 100vh;
+    border-radius: 15px;
+    padding: 15px 0 0 15px;
+}
+
+.problemsTable{
+   width: 50em;
+   display: flex;
+   flex-direction: column;
+   gap:1em
+}
+.problemsTableHeadings{
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+}
+.problemTableBody{
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+.problemTableRows{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border-radius: 15px;
+    padding: 2px 5px 2px 5px;
+
+}
+
+.Difficulty{
+    border-radius: 5px;
+    padding: 2px 5px 2px 5px;
+    color:black;
+    font-weight: 600;
+    font-size: small;
+}
+
+
+.solveButton{
+    border-radius: 5px;
+    padding: 2px 5px 2px 5px;
+    background-color: var(--primary-color);
+    border: none;
+}

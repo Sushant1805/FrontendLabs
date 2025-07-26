@@ -9,6 +9,7 @@ import Login from './Pages/Login'
 import Register from './Pages/Register'
 import { useDispatch } from 'react-redux'
 import {loadUser} from '../src/Components/Auth/authThunk'
+import Problems from './Pages/Problems/Problem';
 
 
 
@@ -59,9 +60,8 @@ const App = () => {
             <Features/>
         </>
       }/>
+      <Route path='/problems' element={<Problems/>}/>
 
-      <Route path='/login' element={<Login/>}/>
-      <Route path='/register' element={<Register/>}/>
 
     </Routes>
     

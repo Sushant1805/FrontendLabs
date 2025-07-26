@@ -5,12 +5,14 @@ import HeroBackground from '../Components/HeroBackground'
 import { useSelector } from 'react-redux'
 import Register from './Register'
 import Login from './Login'
+import { useNavigate } from 'react-router-dom'
 
 
 const LandingPage = () => {
   const RegisterModal = useSelector((state)=>state.modal.showRegisterModal)
   const LoginModal = useSelector((state)=>state.modal.showLoginModal)
-  console.log(RegisterModal)
+  
+  
   return (
     <div className='landing-page' style={{ position: 'relative', height: '100vh', overflow: 'hidden' }}>
       {/* Background goes here, behind */}
