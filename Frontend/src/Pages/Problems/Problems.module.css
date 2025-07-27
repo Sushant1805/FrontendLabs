@@ -10,68 +10,101 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 100vh;
     gap: 1rem;
-    margin : 1rem 1rem 0 1rem;
+    margin: 1rem 1rem 0 1rem;
     /* Account for fixed navbar */
 }
 
 .problemsContainer {
-    display: flex;
+    height: 80vh;
+    display: flex
+;
     flex-direction: column;
-    gap:1em;
-    background-color: #1e1e1e;
+    gap: 1em;
     width: 70vw;
-    height: 100vh;
+    /* height: 100vh; */
     border-radius: 15px;
     padding: 15px 0 0 15px;
+    /* position: relative; */
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(1px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .filtersContainer {
     background-color: #1e1e1e;
-    width:30vw;
-    height: 100vh;
+    width: 30vw;
+    height: 80vh;
     border-radius: 15px;
     padding: 15px 0 0 15px;
 }
 
-.problemsTable{
-   width: 50em;
-   display: flex;
-   flex-direction: column;
-   gap:1em
-}
-.problemsTableHeadings{
-    display: flex;
-    justify-content: space-around;
-    align-items: flex-start;
-}
-.problemTableBody{
-    display: flex;
-    flex-direction: column;
+.problemsTable {
+    border-collapse: separate;
+    /* Important */
+    border-spacing: 0 10px;
+    width: 60vw;
+    display: table;
     gap: 1em;
+    margin: 0 2em 0 2em;
+
 }
-.problemTableRows{
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
+
+.problemsTableHeadings {
+    text-align: left;
+    position: fixed;
+
+}
+.problemsTableHeadings th{
+    text-align: center;
+}
+.tableBodyWrapper{
+    width: 60vw;
+    background-color: rgb(213, 129, 20);
+    height: 50vh;
+    overflow-y: scroll;
+}
+
+.problemTableRows {
     border-radius: 15px;
     padding: 2px 5px 2px 5px;
 
 }
 
-.Difficulty{
+.problemTableRows td {
+    text-align: left;
+}
+
+.Difficulty {
+    text-align: center;
+    width: 5em;
     border-radius: 5px;
     padding: 2px 5px 2px 5px;
-    color:black;
+    color: black;
     font-weight: 600;
     font-size: small;
 }
 
+.problemsTable td {
+    padding: 0px 2em 0px 0px;
+    /* or adjust as needed */
+}
 
-.solveButton{
+
+.solveButton {
     border-radius: 5px;
     padding: 2px 5px 2px 5px;
     background-color: var(--primary-color);
     border: none;
+}
+
+.problemTableRows {
+    cursor: pointer;
+
+    height: 3em;
+}
+
+.problemTableRows:hover {
+    background-color: #151515;
+    transition: all 0.2s ease-in-out;
 }

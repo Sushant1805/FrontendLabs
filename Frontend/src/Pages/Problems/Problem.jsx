@@ -27,6 +27,7 @@ const Problems = () => {
                         <header style={{ color: 'var(--primary-color)' }}>
                             <h1>Problems</h1>
                         </header>
+                        
                         <table className={styles.problemsTable}>
                             <thead>
                                 <tr className={styles.problemsTableHeadings}>
@@ -37,22 +38,33 @@ const Problems = () => {
                                     <th>Solve</th>
                                 </tr>
                             </thead>
+                            <div className={styles.tableBodyWrapper}>
                             <tbody className={styles.problemTableBody}>
                                 {
                                     data.map((item, index) => {
                                         return (
                                             <tr key={index} className={styles.problemTableRows}>
-                                                <td>{item['No.']}</td>
-                                                <td>{item.Problem}</td>
-                                                <td className={styles.Difficulty}
+                                                <td style={{width:'5%'}}>{item['No.']}</td>
+                                                <td style={{width:'35%'}}>{item.Problem}</td>
+                                                <td style={{width:'15%'}}>
+                                                    <h1 className={styles.Difficulty}
                                                     style={{
                                                         backgroundColor : item.Difficulty === 'Easy' ? '#D4D925' :
-                                                        item.Difficulty === 'Medium' ? '#FF5B00' : '#990000'
-                                                    }}>
-                                                    {item.Difficulty}
+                                                        item.Difficulty === 'Medium' ? '#FF5B00' : '#990000',
+                                                    }}>{item.Difficulty}</h1>
                                                 </td>
-                                                <td>{item.Status}</td>
-                                                <td ><input  className="button button-primary"type="button" value="Solve" /></td>
+                                                <td 
+                                                    style={
+                                                        {
+                                                            width:'15%',
+                                                            color : item.Status === 'Solved' ? '#D4D925' :
+                                                            item.Status === 'Attempted' ? '#FF5B00' : '#990000'
+
+                                                        }
+                                                    }>
+                                                    {item.Status}
+                                                    </td>
+                                                <td style={{width:'20%'}} ><input  className="button button-primary"type="button" value="Solve" /></td>
                                             </tr>
                                         )
                                     })
@@ -60,6 +72,7 @@ const Problems = () => {
 
 
                             </tbody>
+                            </div>
                         </table>
                     </div>
                     <div className={styles.filtersContainer}>
