@@ -6,9 +6,14 @@ import Register from '../Register'
 import Login from '../Login'
 import styles from './Problems.module.css'
 import data from './data'
+import ProblemsCard from './Components/ProblemsCard'
+import { PiSortAscendingLight } from "react-icons/pi";
 const Problems = () => {
     const RegisterModal = useSelector((state) => state.modal.showRegisterModal)
     const LoginModal = useSelector((state) => state.modal.showLoginModal)
+    const problem = data[0];
+    console.log(problem)
+   
 
     return (
         <div className={styles.problemsPage}>
@@ -27,58 +32,50 @@ const Problems = () => {
                         <header style={{ color: 'var(--primary-color)' }}>
                             <h1>Problems</h1>
                         </header>
-                        
-                        <table className={styles.problemsTable}>
-                            <thead>
-                                <tr className={styles.problemsTableHeadings}>
-                                    <th>No.</th>
-                                    <th>Problem</th>
-                                    <th>Dificulty</th>
-                                    <th>Status</th>
-                                    <th>Solve</th>
-                                </tr>
-                            </thead>
-                            <div className={styles.tableBodyWrapper}>
-                            <tbody className={styles.problemTableBody}>
-                                {
-                                    data.map((item, index) => {
-                                        return (
-                                            <tr key={index} className={styles.problemTableRows}>
-                                                <td style={{width:'5%'}}>{item['No.']}</td>
-                                                <td style={{width:'35%'}}>{item.Problem}</td>
-                                                <td style={{width:'15%'}}>
-                                                    <h1 className={styles.Difficulty}
-                                                    style={{
-                                                        backgroundColor : item.Difficulty === 'Easy' ? '#D4D925' :
-                                                        item.Difficulty === 'Medium' ? '#FF5B00' : '#990000',
-                                                    }}>{item.Difficulty}</h1>
-                                                </td>
-                                                <td 
-                                                    style={
-                                                        {
-                                                            width:'15%',
-                                                            color : item.Status === 'Solved' ? '#D4D925' :
-                                                            item.Status === 'Attempted' ? '#FF5B00' : '#990000'
+                        <div
+                            className={styles.problemsWrapper}
+                            onWheel={(e) => {
+                                // Ensure the scroll happens on the wrapper
+                                e.currentTarget.scrollTop += e.deltaY;
+                            }}
+                        >
+                            {
+                                data.map((item, index) => {
+                                    return (
+                                        <ProblemsCard problem={item} index={index}/>
+                                    )
+                                })
 
-                                                        }
-                                                    }>
-                                                    {item.Status}
-                                                    </td>
-                                                <td style={{width:'20%'}} ><input  className="button button-primary"type="button" value="Solve" /></td>
-                                            </tr>
-                                        )
-                                    })
-                                }
-
-
-                            </tbody>
-                            </div>
-                        </table>
+                                
+                            }
+                        </div>
                     </div>
                     <div className={styles.filtersContainer}>
                         <header>
                             <h1>Filters</h1>
                         </header>
+                        <section className={styles.filtersSection}>
+                            <div className={styles.filterSearch}>
+                                <h3 className={styles.filterText}>Search Problem: </h3>
+                                <input className={styles.filterSearchInput} type="text" name="problemName" id="" placeholder='Enter Problem Name'/>
+                            </div>
+
+                            <div className={styles.filterSortBy}>
+                                <div className={styles.filterSortByHeader}>
+                                    <h3 className={styles.filterText}>Sort By</h3>
+                                    <PiSortAscendingLight/>
+                                </div>
+                                <div className={styles.filterSortByOptions}>
+                                    <div className={styles.filterSortByDificulty}>
+                                        <h3 className={styles.filterText}>Dificulty</h3>
+                                    <select name="" id="">
+                                            <option>{"Easy -> Hard"}</option>
+                                            <option>{"Hard -> Easy"}</option>
+                                    </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
                     </div>
                 </div>
             </div>

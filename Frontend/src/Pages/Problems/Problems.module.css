@@ -17,62 +17,29 @@
 
 .problemsContainer {
     height: 80vh;
-    display: flex
-;
+    display: flex;
     flex-direction: column;
     gap: 1em;
     width: 70vw;
-    /* height: 100vh; */
+    height: 80vh;
     border-radius: 15px;
     padding: 15px 0 0 15px;
     /* position: relative; */
     background: rgba(255, 255, 255, 0.08);
     backdrop-filter: blur(1px);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
 }
 
 .filtersContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 2em;
     background-color: #1e1e1e;
     width: 30vw;
     height: 80vh;
     border-radius: 15px;
     padding: 15px 0 0 15px;
-}
-
-.problemsTable {
-    border-collapse: separate;
-    /* Important */
-    border-spacing: 0 10px;
-    width: 60vw;
-    display: table;
-    gap: 1em;
-    margin: 0 2em 0 2em;
-
-}
-
-.problemsTableHeadings {
-    text-align: left;
-    position: fixed;
-
-}
-.problemsTableHeadings th{
-    text-align: center;
-}
-.tableBodyWrapper{
-    width: 60vw;
-    background-color: rgb(213, 129, 20);
-    height: 50vh;
-    overflow-y: scroll;
-}
-
-.problemTableRows {
-    border-radius: 15px;
-    padding: 2px 5px 2px 5px;
-
-}
-
-.problemTableRows td {
-    text-align: left;
 }
 
 .Difficulty {
@@ -85,26 +52,103 @@
     font-size: small;
 }
 
-.problemsTable td {
-    padding: 0px 2em 0px 0px;
-    /* or adjust as needed */
+.problemsWrapper{
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    width: 100%;
+    height: 60vh;
+    padding: 2em;
+    overflow-y: scroll !important;
+    overflow-x: hidden;
+    z-index: 1000;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    box-sizing: border-box;
+    border-radius: 8px;
+    /* Force scrollbar to always show */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+    /* Ensure pointer events work properly */
+    pointer-events: auto;
 }
 
-
-.solveButton {
-    border-radius: 5px;
-    padding: 2px 5px 2px 5px;
-    background-color: var(--primary-color);
-    border: none;
+/* Custom scrollbar styling for better visibility */
+.problemsWrapper::-webkit-scrollbar {
+    width: 8px;
 }
 
-.problemTableRows {
+.problemsWrapper::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}
+
+.problemsWrapper::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 4px;
+}
+
+.problemsWrapper::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.7);
+}
+
+.problemCard{
+    background-color: #151516;
+    border-radius: 15px;
+    font-size: small;
+    display: flex;
+    gap: 4em;
+    align-items: center;
+    padding: 1em;
     cursor: pointer;
-
-    height: 3em;
+}
+.problemsWrapper div:nth-child(even) {
+  background-color: rgba(255, 255, 255, 0.05); /* Example style */
+}
+.problemsWrapper div:hover {
+  background-color:  var(--secondary-color);
+  transition: all 0.3s ease-in-out;
+}
+.filtersSection{
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+.filterSearch{
+    display: flex;
+    gap:0.5em;
+    justify-content: flex-start;
+    align-items: center;
+}
+.filterText{
+    font-size: small;
+}
+.filterSearchInput{
+    padding: 1em;
+    height: 1em;
+    width: 50%;
+    border-radius: 10px;
+    border: none;
+    outline: 2px solid var(--primary-color);
 }
 
-.problemTableRows:hover {
-    background-color: #151515;
-    transition: all 0.2s ease-in-out;
+.filterSortBy{
+    display: flex;
+    flex-direction: column;
+    gap:1em;
 }
+.filterSortByHeader{
+    display: flex;
+    gap:0.5em;
+}
+.filterSortByOptions{
+    display: flex;
+}
+
+.filterSortByDificulty{
+    display: flex;
+    gap:0.5em;
+    justify-content: flex-start;
+    align-items: center;
+}
+

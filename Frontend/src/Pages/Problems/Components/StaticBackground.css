@@ -8,7 +8,8 @@
      z-index: 0;
      background: #151516;
      overflow: hidden;
- }
+     pointer-events: none;
+}
 
  /* Minimal static orbs with reduced blur for performance */
  .static-background .orb {
