@@ -34,12 +34,14 @@
 .filtersContainer {
     display: flex;
     flex-direction: column;
-    gap: 2em;
+    gap: 1em;
     background-color: #1e1e1e;
     width: 30vw;
     height: 80vh;
     border-radius: 15px;
-    padding: 15px 0 0 15px;
+    padding: 15px 15px 15px 15px;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .Difficulty {
@@ -112,43 +114,358 @@
 .filtersSection{
     display: flex;
     flex-direction: column;
-    gap: 1em;
+    gap: 0.8em;
 }
 .filterSearch{
     display: flex;
-    gap:0.5em;
-    justify-content: flex-start;
+    flex-direction: column;
+    gap: 0.4em;
+}
+.filterSearchHeader{
+    display: flex;
+    gap: 0.4em;
     align-items: center;
 }
 .filterText{
-    font-size: small;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #e0e0e0;
 }
 .filterSearchInput{
-    padding: 1em;
-    height: 1em;
-    width: 50%;
-    border-radius: 10px;
-    border: none;
-    outline: 2px solid var(--primary-color);
+    padding: 0.6em 0.8em;
+    height: auto;
+    width: 90%;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background-color: rgba(255, 255, 255, 0.05);
+    color: white;
+    font-size: 0.85rem;
+    outline: none;
+    transition: all 0.2s ease;
+}
+.filterSearchInput:focus {
+    border-color: var(--primary-color);
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+/* Filter Row for Difficulty and Status */
+.filterRow {
+    display: flex;
+    gap: 1em;
+    width: 100%;
 }
 
 .filterSortBy{
     display: flex;
     flex-direction: column;
-    gap:1em;
+    gap: 0.6em;
+    flex: 1;
 }
 .filterSortByHeader{
     display: flex;
-    gap:0.5em;
+    gap: 0.4em;
+    align-items: center;
 }
 .filterSortByOptions{
     display: flex;
+    gap: 0.8em;
+    flex-wrap: wrap;
 }
 
-.filterSortByDificulty{
+.filterSortByDifficulty{
     display: flex;
     gap:0.5em;
     justify-content: flex-start;
     align-items: center;
+}
+
+/* Sort by Difficulty Options */
+.sortDropdown {
+    width: 100%;
+    padding: 0.5em 0.8em;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background-color: rgba(255, 255, 255, 0.05);
+    color: #e0e0e0;
+    font-size: 0.8rem;
+    outline: none;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.sortDropdown:focus {
+    border-color: var(--primary-color);
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+.sortDropdown option {
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+    padding: 0.5em;
+}
+
+.sortOption {
+    display: flex;
+    align-items: center;
+    gap: 0.4em;
+    padding: 0.4em 0.6em;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    font-size: 0.8rem;
+    background-color: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sortOption:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.sortOption input[type="radio"] {
+    accent-color: var(--primary-color);
+    width: 14px;
+    height: 14px;
+}
+
+.sortOption label {
+    font-size: 0.8rem;
+    cursor: pointer;
+    color: #e0e0e0;
+    margin: 0;
+}
+
+/* Status Filter Section */
+.filterStatus {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6em;
+    flex: 1;
+}
+
+.filterStatusHeader {
+    display: flex;
+    gap: 0.4em;
+    align-items: center;
+}
+
+.statusDropdown {
+    width: 100%;
+    padding: 0.5em 0.8em;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background-color: rgba(255, 255, 255, 0.05);
+    color: #e0e0e0;
+    font-size: 0.8rem;
+    outline: none;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.statusDropdown:focus {
+    border-color: var(--primary-color);
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+.statusDropdown option {
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+    padding: 0.5em;
+}
+
+.filterStatusOptions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3em;
+}
+
+.statusOption {
+    display: flex;
+    align-items: center;
+    gap: 0.4em;
+    padding: 0.3em 0.5em;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    font-size: 0.8rem;
+    background-color: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.statusOption:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.statusOption input[type="checkbox"] {
+    accent-color: var(--primary-color);
+    width: 14px;
+    height: 14px;
+}
+
+.statusOption label {
+    font-size: 0.8rem;
+    cursor: pointer;
+    color: #e0e0e0;
+    margin: 0;
+}
+
+/* Language Filter Section */
+.filterLanguage {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6em;
+}
+
+.filterLanguageHeader {
+    display: flex;
+    gap: 0.4em;
+    align-items: center;
+}
+
+.languageDropdown {
+    width: 100%;
+    padding: 0.5em 0.8em;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background-color: rgba(255, 255, 255, 0.05);
+    color: #e0e0e0;
+    font-size: 0.8rem;
+    outline: none;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.languageDropdown:focus {
+    border-color: var(--primary-color);
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+.languageDropdown option {
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+    padding: 0.5em;
+}
+
+.filterLanguageOptions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3em;
+}
+
+.languageOption {
+    display: flex;
+    align-items: center;
+    gap: 0.4em;
+    padding: 0.3em 0.5em;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    font-size: 0.8rem;
+    background-color: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.languageOption:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.languageOption input[type="checkbox"] {
+    accent-color: var(--primary-color);
+    width: 14px;
+    height: 14px;
+}
+
+.languageOption label {
+    font-size: 0.8rem;
+    cursor: pointer;
+    color: #e0e0e0;
+    margin: 0;
+}
+
+/* Filter Icons */
+.filterIcon {
+    width: 14px;
+    height: 14px;
+    opacity: 0.8;
+    color: var(--primary-color);
+}
+
+/* Filter Section Divider */
+.filterDivider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.15);
+    margin: 0.4em 0;
+}
+
+/* Clear Filters Button */
+.clearFiltersBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4em;
+    padding: 0.6em 1em;
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #e0e0e0;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: all 0.3s ease;
+    margin-top: 0.5em;
+    font-weight: 500;
+}
+
+.clearFiltersBtn:hover {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+    transform: translateY(-1px);
+}
+
+.clearFiltersBtn .filterIcon {
+    width: 12px;
+    height: 12px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .filtersContainer {
+        width: 35vw;
+        padding: 12px;
+    }
+    
+    .filterRow {
+        flex-direction: column;
+        gap: 0.8em;
+    }
+    
+    .filterSearchInput {
+        width: 95%;
+        padding: 0.5em;
+        font-size: 0.8rem;
+    }
+    
+    .sortOption,
+    .statusOption,
+    .languageOption {
+        padding: 0.25em 0.4em;
+        font-size: 0.75rem;
+    }
+    
+    .clearFiltersBtn {
+        padding: 0.5em 0.8em;
+        font-size: 0.75rem;
+    }
+    
+    .filterText {
+        font-size: 0.8rem;
+    }
+    
+    .filterIcon {
+        width: 12px;
+        height: 12px;
+    }
 }
 
