@@ -5,22 +5,30 @@ import { useSelector } from 'react-redux'
 import Register from '../Register'
 import Login from '../Login'
 import styles from './Problems.module.css'
-import data from './data'
 import ProblemsCard from './Components/ProblemsCard'
 import { PiSortAscendingLight, PiSortDescendingLight } from "react-icons/pi";
 import { FiSearch, FiFilter, FiCode, FiCheckSquare } from "react-icons/fi";
+import { useEffect } from 'react'
+import axios from 'axios'
 const Problems = () => {
+    const [problemsData, setProblemsData] = useState([])
     const RegisterModal = useSelector((state) => state.modal.showRegisterModal)
     const LoginModal = useSelector((state) => state.modal.showLoginModal)
-    const problem = data[0];
-    console.log(problem)
+    
    
     // Filter states
     const [searchTerm, setSearchTerm] = useState('');
     const [sortOrder, setSortOrder] = useState('asc'); // 'asc' or 'desc'
     const [statusFilter, setStatusFilter] = useState('all'); // 'all', 'solved', 'unsolved', 'attempted'
     const [languageFilter, setLanguageFilter] = useState('all'); // 'all', 'html', 'javascript', 'react'
-
+    const url = 'http://localhost:5000/api/problems'
+    useEffect(()=>{
+        axios.get(url)
+        .then((res)=>{
+            setProblemsData(res.data);
+            console.log(problemsData)
+        });
+    },[]);
     // Handler functions for filters
     const handleSearchChange = (e) => {
         setSearchTerm(e.target.value);
@@ -71,7 +79,7 @@ const Problems = () => {
                             }}
                         >
                             {
-                                data.map((item, index) => {
+                                problemsData && problemsData.map((item, index) => {
                                     return (
                                         <ProblemsCard problem={item} index={index}/>
                                     )

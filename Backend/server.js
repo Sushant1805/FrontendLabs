@@ -1,10 +1,14 @@
 require('dotenv').config();
 const express = require("express");
 const app = express();
-const Authrouter = require('./router/auth-router')
+const AuthRouter = require('./router/auth-router')
+const ProblemRouter = require('./router/problem-router');
+
+
 const connectDB = require('./utils/db');
 const errorMiddleware = require('./Middlewares/error-middleware');
 const cookieParser = require("cookie-parser");
+
 var cors = require('cors')
 
 const corsOptions = {
@@ -15,8 +19,9 @@ const corsOptions = {
 app.use(cookieParser());
 app.use(cors(corsOptions))
 app.use(express.json());
-app.use('/api/auth',Authrouter)
+app.use('/api/auth',AuthRouter)
 app.use(errorMiddleware)
+app.use('/api/problems', ProblemRouter);
 
 
 

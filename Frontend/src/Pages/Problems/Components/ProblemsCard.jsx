@@ -23,13 +23,13 @@ const ProblemsCard = ({problem,index}) => {
     }
     return (
         <div key={index} className={styles.problemCard}>
-            <h3 style={{width:'5%'}}>{problem["No."]}.</h3>
-            <h3 style={{width:'25%',textAlign:'start'}}>{problem.Problem}</h3>
+            <h3 style={{width:'5%'}}>{index+1}.</h3>
+            <h3 style={{width:'25%',textAlign:'start'}}>{problem.title}</h3>
             <h3 className={styles.Difficulty} style={{
-                backgroundColor: getDificultyColor(problem.Difficulty),
+                backgroundColor: getDificultyColor(problem.difficulty),
                 width:"10%"
-            }}>{problem.Difficulty}</h3>
-            <h3  style={{ color: getStatusColor(problem.Status),width:"15%" }}>{problem.Status}</h3>
+            }}>{problem.difficulty}</h3>
+            <h3  style={{ color: getStatusColor('Solved'),width:"15%" }}>{'Solved'}</h3>
             <input type="button" value="Solve" className='button button-primary' />
         </div>
     )
