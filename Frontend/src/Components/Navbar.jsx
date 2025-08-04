@@ -9,14 +9,15 @@ import axios from "axios"
 import { logout } from "./Auth/authSlice"
 import UserProfileModal from "./Auth/UserProfileModal"
 import { setShowRegister,setShowLogin } from "./Auth/modalSlice"
-
+import { RxHamburgerMenu } from "react-icons/rx";
+import { IoCloseSharp } from "react-icons/io5";
 const Navbar = () => {
   const userData = useSelector((state) => state.auth.user)
   const isLoggedIn = useSelector((state) => state.auth.isAuthenticated)
   const dispatch = useDispatch()
   const [showUserWelcomeModal, setshowUserWelcomeModal] = useState(false)
   const [showProfileModal, setShowProfileModal] = useState(false)
-
+  const [showHamburgerMenu,setShowHamburgerMenu] = useState(false)
   const handleLogout = async () => {
     try {
       await axios.post(
@@ -32,7 +33,15 @@ const Navbar = () => {
       alert("Logout failed")
     }
   }
-
+  const NavbarMenu = ({className}) => {
+  return (
+    <ul className={className}>
+      <li>About</li>
+      <li>Features</li>
+      <li>Blog</li>
+    </ul>
+  );
+};
   return (
     <>
       <div className="navbar glass-effect">
@@ -40,11 +49,8 @@ const Navbar = () => {
           <img className="FrontendLabs-logo" src="./src/assets/FrontendLabs.png" alt="FrontendLabs Logo" />
           <p className="logo"><strong>FrontendLabs</strong></p>
         </div>
-        <ul className="navbar-menu">
-          <li>About</li>
-          <li>Features</li>
-          <li>Blog</li>
-        </ul>
+       
+       <NavbarMenu className={'navbar-menu'}/>
         {!isLoggedIn ? (
           <div className="navbar-buttons">
             <Link>
@@ -79,6 +85,13 @@ const Navbar = () => {
             )}
           </div>
         )}
+         <RxHamburgerMenu className="hamburger" onClick={()=>setShowHamburgerMenu(true)}/>
+          {
+            showHamburgerMenu && <div className="hamburger-menu">
+              <IoCloseSharp className="hamburger-close"onClick={()=>setShowHamburgerMenu((prev)=>!prev)} />
+              <NavbarMenu className={'hamburgerNavMenu'}/>
+            </div>
+          }
       </div>
       
       <UserProfileModal 
