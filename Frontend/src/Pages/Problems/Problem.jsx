@@ -10,25 +10,26 @@ import { PiSortAscendingLight, PiSortDescendingLight } from "react-icons/pi";
 import { FiSearch, FiFilter, FiCode, FiCheckSquare } from "react-icons/fi";
 import { useEffect } from 'react'
 import axios from 'axios'
+import Pagination from './Components/Pagination'
 const Problems = () => {
     const [problemsData, setProblemsData] = useState([])
     const RegisterModal = useSelector((state) => state.modal.showRegisterModal)
     const LoginModal = useSelector((state) => state.modal.showLoginModal)
-    
-   
+    const [currentPage, setCurrentPage] = useState(0);
+
     // Filter states
     const [searchTerm, setSearchTerm] = useState('');
     const [sortOrder, setSortOrder] = useState('asc'); // 'asc' or 'desc'
     const [statusFilter, setStatusFilter] = useState('all'); // 'all', 'solved', 'unsolved', 'attempted'
     const [languageFilter, setLanguageFilter] = useState('all'); // 'all', 'html', 'javascript', 'react'
     const url = 'http://localhost:5000/api/problems'
-    useEffect(()=>{
+    useEffect(() => {
         axios.get(url)
-        .then((res)=>{
-            setProblemsData(res.data);
-            console.log(problemsData)
-        });
-    },[]);
+            .then((res) => {
+                setProblemsData(res.data);
+                console.log(problemsData)
+            });
+    }, []);
     // Handler functions for filters
     const handleSearchChange = (e) => {
         setSearchTerm(e.target.value);
@@ -52,7 +53,7 @@ const Problems = () => {
         setStatusFilter('all');
         setLanguageFilter('all');
     };
-   
+
 
     return (
         <div className={styles.problemsPage}>
@@ -79,15 +80,16 @@ const Problems = () => {
                             }}
                         >
                             {
-                                problemsData && problemsData.map((item, index) => {
-                                    return (
-                                        <ProblemsCard problem={item} index={index}/>
-                                    )
-                                })
+                                <Pagination
+                                    data={problemsData}
+                                    setCurrentPage={setCurrentPage}
+                                    currentPage={currentPage}
+                                />
 
-                                
+
                             }
                         </div>
+
                     </div>
                     <div className={styles.filtersContainer}>
                         <header>
@@ -100,9 +102,9 @@ const Problems = () => {
                                     <FiSearch className={styles.filterIcon} />
                                     <h3 className={styles.filterText}>Search Problem</h3>
                                 </div>
-                                <input 
-                                    className={styles.filterSearchInput} 
-                                    type="text" 
+                                <input
+                                    className={styles.filterSearchInput}
+                                    type="text"
                                     value={searchTerm}
                                     onChange={handleSearchChange}
                                     placeholder='Enter Problem Name'
@@ -119,7 +121,7 @@ const Problems = () => {
                                         <h3 className={styles.filterText}>Difficulty</h3>
                                         {sortOrder === 'asc' ? <PiSortAscendingLight className={styles.filterIcon} /> : <PiSortDescendingLight className={styles.filterIcon} />}
                                     </div>
-                                    <select 
+                                    <select
                                         className={styles.sortDropdown}
                                         value={sortOrder}
                                         onChange={handleSortChange}
@@ -135,7 +137,7 @@ const Problems = () => {
                                         <FiCheckSquare className={styles.filterIcon} />
                                         <h3 className={styles.filterText}>Status</h3>
                                     </div>
-                                    <select 
+                                    <select
                                         className={styles.statusDropdown}
                                         value={statusFilter}
                                         onChange={handleStatusChange}
@@ -156,7 +158,7 @@ const Problems = () => {
                                     <FiCode className={styles.filterIcon} />
                                     <h3 className={styles.filterText}>Filter by Language</h3>
                                 </div>
-                                <select 
+                                <select
                                     className={styles.languageDropdown}
                                     value={languageFilter}
                                     onChange={handleLanguageChange}
