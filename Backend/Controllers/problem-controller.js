@@ -82,8 +82,43 @@ const getProblemBySlug = async (req, res) => {
   }
 };
 
+
+const getProblems = async (req, res) => {
+  try {
+    let { search = "", sort } = req.query;
+
+    // MongoDB filter object
+    let query = {};
+
+    // 1. Search (case-insensitive on title)
+    if (search.trim()) {
+      query.title = { $regex: search, $options: "i" };
+    }
+
+    // 2. Sorting by difficulty (Easy → Hard or Hard → Easy)
+    // We'll keep MongoDB alphabetical order since your values are "Easy", "Medium", "Hard"
+    let sortQuery = {};
+    if (sort === "asc") {
+      sortQuery = { difficulty: 1 }; // Easy → Medium → Hard
+    } else if (sort === "desc") {
+      sortQuery = { difficulty: -1 }; // Hard → Medium → Easy
+    }
+
+    // Fetch filtered & sorted problems
+    const problems = await Problem.find(query).sort(sortQuery);
+
+    res.json(problems);
+  } catch (error) {
+    console.error("Error fetching problems:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+
+
 module.exports = {
   createProblem,
   getAllProblems,
   getProblemBySlug,
+  getProblems
 };
