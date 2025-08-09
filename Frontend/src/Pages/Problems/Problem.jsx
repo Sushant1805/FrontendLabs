@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import Register from "../Register";
 import Login from "../Login";
 import styles from "./Problems.module.css";
-import ProblemsCard from "./Components/ProblemsCard";
+import Pagination from "./Components/Pagination";
 import {
   PiSortAscendingLight,
   PiSortDescendingLight,
@@ -17,34 +17,57 @@ import {
   FiCheckSquare,
 } from "react-icons/fi";
 import axios from "axios";
-import Pagination from "./Components/Pagination";
+import useDebounce from './Hooks/useDebounce';
 
 const Problems = () => {
-  const [problemsData, setProblemsData] = useState([]);
   const RegisterModal = useSelector((state) => state.modal.showRegisterModal);
   const LoginModal = useSelector((state) => state.modal.showLoginModal);
+
   const [currentPage, setCurrentPage] = useState(0);
+  const [problemsData, setProblemsData] = useState([]);
+  const [allProblems, setAllProblems] = useState([]);
 
   const url = "http://localhost:5000/api/problems";
 
+  // Fetch all problems on mount
   useEffect(() => {
     axios.get(url).then((res) => {
       setProblemsData(res.data);
-      console.log(res.data);
+      setAllProblems(res.data);
     });
   }, []);
 
-  // Filter states
+  // Filters
   const [searchTerm, setSearchTerm] = useState("");
-  const [sortOrder, setSortOrder] = useState("asc"); // 'asc' or 'desc'
-  const [statusFilter, setStatusFilter] = useState("all"); // 'all', 'solved', 'unsolved', 'attempted'
-  const [languageFilter, setLanguageFilter] = useState("all"); // 'all', 'html', 'javascript', 'react'
+  const [sortOrder, setSortOrder] = useState("asc");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [languageFilter, setLanguageFilter] = useState("all");
 
-  // Handlers for filters
-  const handleSearchChange = (e) => setSearchTerm(e.target.value);
-  const handleSortChange = (e) => setSortOrder(e.target.value);
-  const handleStatusChange = (e) => setStatusFilter(e.target.value);
-  const handleLanguageChange = (e) => setLanguageFilter(e.target.value);
+  // Debounce all filters
+  const debouncedSearchTerm = useDebounce(searchTerm, 400);
+  const debouncedSortOrder = useDebounce(sortOrder, 400);
+  const debouncedStatusFilter = useDebounce(statusFilter, 400);
+  const debouncedLanguageFilter = useDebounce(languageFilter, 400);
+
+  // Fetch problems whenever any filter changes
+  useEffect(() => {
+    const params = [];
+    if (debouncedSearchTerm.trim()) params.push(`search=${encodeURIComponent(debouncedSearchTerm)}`);
+    if (debouncedSortOrder) params.push(`sort=${debouncedSortOrder}`);
+    if (debouncedStatusFilter && debouncedStatusFilter !== "all") params.push(`status=${debouncedStatusFilter}`);
+    if (debouncedLanguageFilter && debouncedLanguageFilter !== "all") params.push(`language=${debouncedLanguageFilter}`);
+
+    const queryString = params.length ? `?${params.join("&")}` : "";
+
+    axios
+      .get(`${url}${queryString}`)
+      .then((res) => setProblemsData(res.data))
+      .catch((err) => console.error(err));
+  }, [debouncedSearchTerm, debouncedSortOrder, debouncedStatusFilter, debouncedLanguageFilter, allProblems]);
+
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
 
   const clearAllFilters = () => {
     setSearchTerm("");
@@ -53,29 +76,24 @@ const Problems = () => {
     setLanguageFilter("all");
   };
 
-  const PAGE_SIZE = 4; // items per page
+  const PAGE_SIZE = 4;
   const totalPages = Math.ceil(problemsData.length / PAGE_SIZE);
   const page_arr = new Array(totalPages).fill(0);
 
   return (
     <div className={styles.problemsPage}>
-      {/* Background */}
       <StaticBackground />
-
-      {/* Foreground */}
       <div style={{ position: "relative", zIndex: 10 }}>
         <Navbar />
         {RegisterModal && <Register />}
         {LoginModal && <Login />}
 
-        {/* Problems Content */}
         <div className={styles.problemsContent}>
           <div className={styles.problemsContainer}>
             <header style={{ color: "var(--primary-color)" }}>
               <h1>Problems</h1>
             </header>
 
-            {/* Problems List */}
             <div className={styles.problemsWrapper}>
               <Pagination
                 data={problemsData}
@@ -84,7 +102,7 @@ const Problems = () => {
                 PAGE_SIZE={PAGE_SIZE}
               />
             </div>
-            {/* Pagination */}
+
             <div className="pagination-container">
               {page_arr.map((_, index) => (
                 <div
@@ -106,26 +124,25 @@ const Problems = () => {
               <h1>Filters</h1>
             </header>
             <section className={styles.filtersSection}>
-              {/* Search Filter */}
+              {/* Search */}
               <div className={styles.filterSearch}>
                 <div className={styles.filterSearchHeader}>
                   <FiSearch className={styles.filterIcon} />
                   <h3 className={styles.filterText}>Search Problem</h3>
                 </div>
                 <input
-                  className={styles.filterSearchInput}
+                className={styles.filterSearchInput}
                   type="text"
                   value={searchTerm}
                   onChange={handleSearchChange}
-                  placeholder="Enter Problem Name"
+                  placeholder="Search Problem"
                 />
               </div>
 
               <div className={styles.filterDivider}></div>
 
-              {/* Sort & Status */}
+              {/* Sort */}
               <div className={styles.filterRow}>
-                {/* Sort by Difficulty */}
                 <div className={styles.filterSortBy}>
                   <div className={styles.filterSortByHeader}>
                     <h3 className={styles.filterText}>Difficulty</h3>
@@ -138,14 +155,14 @@ const Problems = () => {
                   <select
                     className={styles.sortDropdown}
                     value={sortOrder}
-                    onChange={handleSortChange}
+                    onChange={(e) => setSortOrder(e.target.value)}
                   >
                     <option value="asc">Easy → Hard</option>
                     <option value="desc">Hard → Easy</option>
                   </select>
                 </div>
 
-                {/* Filter by Status */}
+                {/* Status */}
                 <div className={styles.filterStatus}>
                   <div className={styles.filterStatusHeader}>
                     <FiCheckSquare className={styles.filterIcon} />
@@ -154,7 +171,7 @@ const Problems = () => {
                   <select
                     className={styles.statusDropdown}
                     value={statusFilter}
-                    onChange={handleStatusChange}
+                    onChange={(e) => setStatusFilter(e.target.value)}
                   >
                     <option value="all">All</option>
                     <option value="solved">Solved</option>
@@ -166,7 +183,7 @@ const Problems = () => {
 
               <div className={styles.filterDivider}></div>
 
-              {/* Filter by Language */}
+              {/* Language */}
               <div className={styles.filterLanguage}>
                 <div className={styles.filterLanguageHeader}>
                   <FiCode className={styles.filterIcon} />
@@ -175,7 +192,7 @@ const Problems = () => {
                 <select
                   className={styles.languageDropdown}
                   value={languageFilter}
-                  onChange={handleLanguageChange}
+                  onChange={(e) => setLanguageFilter(e.target.value)}
                 >
                   <option value="all">All Languages</option>
                   <option value="html">HTML</option>
@@ -186,7 +203,6 @@ const Problems = () => {
 
               <div className={styles.filterDivider}></div>
 
-              {/* Clear Filters */}
               <button
                 className={styles.clearFiltersBtn}
                 onClick={clearAllFilters}
