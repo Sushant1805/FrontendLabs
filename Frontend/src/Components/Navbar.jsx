@@ -36,8 +36,8 @@ const Navbar = () => {
   const NavbarMenu = ({className}) => {
   return (
     <ul className={className}>
-      <li>About</li>
-      <li>Features</li>
+      <li><Link to="/features" style={{ textDecoration: 'none', color: 'inherit' }}>Features</Link></li>
+      <li><Link to="/problems" style={{ textDecoration: 'none', color: 'inherit' }}>Problems</Link></li>
       <li>Blog</li>
     </ul>
   );
@@ -45,10 +45,12 @@ const Navbar = () => {
   return (
     <>
       <div className="navbar glass-effect">
-        <div className="logo">
-          <img className="FrontendLabs-logo" src="./src/assets/FrontendLabs.png" alt="FrontendLabs Logo" />
-          <p className="logo"><strong>FrontendLabs</strong></p>
-        </div>
+        <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+          <div className="logo">
+            <img className="FrontendLabs-logo" src="./src/assets/FrontendLabs.png" alt="FrontendLabs Logo" />
+            <p className="logo"><strong>FrontendLabs</strong></p>
+          </div>
+        </Link>
        
        <NavbarMenu className={'navbar-menu'}/>
         {!isLoggedIn ? (

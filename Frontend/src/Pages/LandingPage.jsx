@@ -27,7 +27,6 @@ const LandingPage = () => {
         <HeroSection />
       </div>
     </div>
-    
   )
 }
 

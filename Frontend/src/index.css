@@ -55,6 +55,11 @@ a {
   gap: 20px;
 }
 
+.navbar-menu li:hover{
+  cursor: pointer;
+  color:var(--primary-color);
+  transition: all 0.2s ease-in-out;
+}
 .navbar-buttons {
   display: flex;
   gap: 15px;
@@ -196,7 +201,7 @@ a {
 .feature-page {
   height: 100vh;
   background: #031457;
-  background: linear-gradient(180deg, rgba(3, 20, 87, 0.62) 0%, rgba(0, 0, 0, 0) 66%);
+  background: linear-gradient(360deg, #161618 0%, #0b0b23 100%);
   display: flex;
   flex-direction: column;
   justify-content: start;

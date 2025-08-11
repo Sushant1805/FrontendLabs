@@ -1,0 +1,24 @@
+.feature-page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #161618 0%, #0b0b23 100%);
+  color: white;
+  font-family: 'Inter', sans-serif;
+  padding-top: 60px;
+}
+
+
+
+.feature-heading {
+  position: relative;
+  z-index: 1;
+}
+
+.feature-subheading {
+  position: relative;
+  z-index: 1;
+}
+
+.feature-card-container {
+  position: relative;
+  z-index: 1;
+}

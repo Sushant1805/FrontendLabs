@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "../../Components/Navbar";
+import Footer from "../../Components/Footer";
 import StaticBackground from "./Components/StaticBackground";
 import { useSelector } from "react-redux";
 import Register from "../Register";
@@ -81,140 +82,143 @@ const Problems = () => {
   const page_arr = new Array(totalPages).fill(0);
 
   return (
-    <div className={styles.problemsPage}>
-      <StaticBackground />
-      <div style={{ position: "relative", zIndex: 10 }}>
-        <Navbar />
-        {RegisterModal && <Register />}
-        {LoginModal && <Login />}
+    <>
+      <div className={styles.problemsPage}>
+        <StaticBackground />
+        <div style={{ position: "relative", zIndex: 10 }}>
+          <Navbar />
+          {RegisterModal && <Register />}
+          {LoginModal && <Login />}
 
-        <div className={styles.problemsContent}>
-          <div className={styles.problemsContainer}>
-            <header style={{ color: "var(--primary-color)" }}>
-              <h1>Problems</h1>
-            </header>
+          <div className={styles.problemsContent}>
+            <div className={styles.problemsContainer}>
+              <header style={{ color: "var(--primary-color)" }}>
+                <h1>Problems</h1>
+              </header>
 
-            <div className={styles.problemsWrapper}>
-              <Pagination
-                data={problemsData}
-                setCurrentPage={setCurrentPage}
-                currentPage={currentPage}
-                PAGE_SIZE={PAGE_SIZE}
-              />
-            </div>
-
-            <div className="pagination-container">
-              {page_arr.map((_, index) => (
-                <div
-                  key={index}
-                  onClick={() => setCurrentPage(index)}
-                  className={`pagination-number ${
-                    currentPage === index ? "active" : ""
-                  }`}
-                >
-                  {index + 1}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Filters */}
-          <div className={styles.filtersContainer}>
-            <header>
-              <h1>Filters</h1>
-            </header>
-            <section className={styles.filtersSection}>
-              {/* Search */}
-              <div className={styles.filterSearch}>
-                <div className={styles.filterSearchHeader}>
-                  <FiSearch className={styles.filterIcon} />
-                  <h3 className={styles.filterText}>Search Problem</h3>
-                </div>
-                <input
-                className={styles.filterSearchInput}
-                  type="text"
-                  value={searchTerm}
-                  onChange={handleSearchChange}
-                  placeholder="Search Problem"
+              <div className={styles.problemsWrapper}>
+                <Pagination
+                  data={problemsData}
+                  setCurrentPage={setCurrentPage}
+                  currentPage={currentPage}
+                  PAGE_SIZE={PAGE_SIZE}
                 />
               </div>
 
-              <div className={styles.filterDivider}></div>
-
-              {/* Sort */}
-              <div className={styles.filterRow}>
-                <div className={styles.filterSortBy}>
-                  <div className={styles.filterSortByHeader}>
-                    <h3 className={styles.filterText}>Difficulty</h3>
-                    {sortOrder === "asc" ? (
-                      <PiSortAscendingLight className={styles.filterIcon} />
-                    ) : (
-                      <PiSortDescendingLight className={styles.filterIcon} />
-                    )}
-                  </div>
-                  <select
-                    className={styles.sortDropdown}
-                    value={sortOrder}
-                    onChange={(e) => setSortOrder(e.target.value)}
+              <div className="pagination-container">
+                {page_arr.map((_, index) => (
+                  <div
+                    key={index}
+                    onClick={() => setCurrentPage(index)}
+                    className={`pagination-number ${
+                      currentPage === index ? "active" : ""
+                    }`}
                   >
-                    <option value="asc">Easy → Hard</option>
-                    <option value="desc">Hard → Easy</option>
-                  </select>
-                </div>
-
-                {/* Status */}
-                <div className={styles.filterStatus}>
-                  <div className={styles.filterStatusHeader}>
-                    <FiCheckSquare className={styles.filterIcon} />
-                    <h3 className={styles.filterText}>Status</h3>
+                    {index + 1}
                   </div>
-                  <select
-                    className={styles.statusDropdown}
-                    value={statusFilter}
-                    onChange={(e) => setStatusFilter(e.target.value)}
-                  >
-                    <option value="all">All</option>
-                    <option value="solved">Solved</option>
-                    <option value="unsolved">Unsolved</option>
-                    <option value="attempted">Attempted</option>
-                  </select>
-                </div>
+                ))}
               </div>
+            </div>
 
-              <div className={styles.filterDivider}></div>
-
-              {/* Language */}
-              <div className={styles.filterLanguage}>
-                <div className={styles.filterLanguageHeader}>
-                  <FiCode className={styles.filterIcon} />
-                  <h3 className={styles.filterText}>Filter by Language</h3>
+            {/* Filters */}
+            <div className={styles.filtersContainer}>
+              <header>
+                <h1>Filters</h1>
+              </header>
+              <section className={styles.filtersSection}>
+                {/* Search */}
+                <div className={styles.filterSearch}>
+                  <div className={styles.filterSearchHeader}>
+                    <FiSearch className={styles.filterIcon} />
+                    <h3 className={styles.filterText}>Search Problem</h3>
+                  </div>
+                  <input
+                  className={styles.filterSearchInput}
+                    type="text"
+                    value={searchTerm}
+                    onChange={handleSearchChange}
+                    placeholder="Search Problem"
+                  />
                 </div>
-                <select
-                  className={styles.languageDropdown}
-                  value={languageFilter}
-                  onChange={(e) => setLanguageFilter(e.target.value)}
+
+                <div className={styles.filterDivider}></div>
+
+                {/* Sort */}
+                <div className={styles.filterRow}>
+                  <div className={styles.filterSortBy}>
+                    <div className={styles.filterSortByHeader}>
+                      <h3 className={styles.filterText}>Difficulty</h3>
+                      {sortOrder === "asc" ? (
+                        <PiSortAscendingLight className={styles.filterIcon} />
+                      ) : (
+                        <PiSortDescendingLight className={styles.filterIcon} />
+                      )}
+                    </div>
+                    <select
+                      className={styles.sortDropdown}
+                      value={sortOrder}
+                      onChange={(e) => setSortOrder(e.target.value)}
+                    >
+                      <option value="asc">Easy → Hard</option>
+                      <option value="desc">Hard → Easy</option>
+                    </select>
+                  </div>
+
+                  {/* Status */}
+                  <div className={styles.filterStatus}>
+                    <div className={styles.filterStatusHeader}>
+                      <FiCheckSquare className={styles.filterIcon} />
+                      <h3 className={styles.filterText}>Status</h3>
+                    </div>
+                    <select
+                      className={styles.statusDropdown}
+                      value={statusFilter}
+                      onChange={(e) => setStatusFilter(e.target.value)}
+                    >
+                      <option value="all">All</option>
+                      <option value="solved">Solved</option>
+                      <option value="unsolved">Unsolved</option>
+                      <option value="attempted">Attempted</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className={styles.filterDivider}></div>
+
+                {/* Language */}
+                <div className={styles.filterLanguage}>
+                  <div className={styles.filterLanguageHeader}>
+                    <FiCode className={styles.filterIcon} />
+                    <h3 className={styles.filterText}>Filter by Language</h3>
+                  </div>
+                  <select
+                    className={styles.languageDropdown}
+                    value={languageFilter}
+                    onChange={(e) => setLanguageFilter(e.target.value)}
+                  >
+                    <option value="all">All Languages</option>
+                    <option value="html">HTML</option>
+                    <option value="javascript">JavaScript</option>
+                    <option value="react">React</option>
+                  </select>
+                </div>
+
+                <div className={styles.filterDivider}></div>
+
+                <button
+                  className={styles.clearFiltersBtn}
+                  onClick={clearAllFilters}
                 >
-                  <option value="all">All Languages</option>
-                  <option value="html">HTML</option>
-                  <option value="javascript">JavaScript</option>
-                  <option value="react">React</option>
-                </select>
-              </div>
-
-              <div className={styles.filterDivider}></div>
-
-              <button
-                className={styles.clearFiltersBtn}
-                onClick={clearAllFilters}
-              >
-                <FiFilter className={styles.filterIcon} />
-                Clear Filters
-              </button>
-            </section>
+                  <FiFilter className={styles.filterIcon} />
+                  Clear Filters
+                </button>
+              </section>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+      <Footer />
+    </>
   );
 };
 

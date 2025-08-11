@@ -1,6 +1,5 @@
 import React, {useEffect} from 'react'
-import LandingPage from './Pages/LandingPage'
-import Features from './Pages/Features'
+import HomePage from './Pages/HomePage'
 import Lenis from '@studio-freight/lenis';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
@@ -54,14 +53,9 @@ const App = () => {
   return (
     <>
     <Routes>
-      <Route path='/' element={
-        <>
-            <LandingPage/>
-            <Features/>
-        </>
-      }/>
+      <Route path='/' element={<HomePage/>}/>
       <Route path='/problems' element={<Problems/>}/>
-
+     
 
     </Routes>
     
