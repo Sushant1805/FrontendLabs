@@ -1,6 +1,9 @@
 import React from 'react'
 import styles from '../Problems.module.css'
+import { useNavigate } from 'react-router-dom';
+
 const ProblemsCard = ({problem,index}) => {
+    const navigate = useNavigate();
      function getDificultyColor(Difficulty){
         switch(Difficulty){
             case "Easy":
@@ -30,7 +33,15 @@ const ProblemsCard = ({problem,index}) => {
                 width:"10%"
             }}>{problem.difficulty}</h3>
             <h3  style={{ color: getStatusColor('Solved'),width:"15%" }}>{'Solved'}</h3>
-            <input type="button" value="Solve" className='button button-primary' />
+            <button
+                className='button button-primary'
+                onClick={e => {
+                    e.stopPropagation();
+                    navigate(`/codingScreen/${problem._id}`);
+                }}
+            >
+                Solve
+            </button>
         </div>
     )
 }

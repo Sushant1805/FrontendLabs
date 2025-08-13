@@ -3,12 +3,12 @@ const router = express.Router();
 const {
   createProblem,
   getProblems,
-  getProblemBySlug,
+  getProblemById,
 } = require('../Controllers/problem-controller');
 
 // If you're using auth, add middleware here
 router.post('/', createProblem);
 router.get('/', getProblems);
-router.get('/:slug', getProblemBySlug);
+router.get('/:id', getProblemById);
 
 module.exports = router;

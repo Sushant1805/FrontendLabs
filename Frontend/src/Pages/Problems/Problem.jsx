@@ -19,6 +19,7 @@ import {
 } from "react-icons/fi";
 import axios from "axios";
 import useDebounce from './Hooks/useDebounce';
+import { Outlet } from "react-router-dom";
 
 const Problems = () => {
   const RegisterModal = useSelector((state) => state.modal.showRegisterModal);
@@ -218,6 +219,7 @@ const Problems = () => {
         </div>
       </div>
       <Footer />
+      <Outlet/>
     </>
   );
 };

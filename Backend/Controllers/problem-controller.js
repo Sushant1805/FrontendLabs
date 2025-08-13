@@ -66,10 +66,11 @@ const getAllProblems = async (req, res) => {
 // @desc   Get a single problem by slug
 // @route  GET /api/problems/:slug
 // @access Public
-const getProblemBySlug = async (req, res) => {
+const getProblemById = async (req, res) => {
   try {
-    const { slug } = req.params;
-    const problem = await Problem.findOne({ slug });
+    const { id } = req.params; // must match your route definition
+
+    const problem = await Problem.findById(id);
 
     if (!problem) {
       return res.status(404).json({ message: 'Problem not found' });
@@ -119,6 +120,6 @@ const getProblems = async (req, res) => {
 module.exports = {
   createProblem,
   getAllProblems,
-  getProblemBySlug,
+  getProblemById,
   getProblems
 };

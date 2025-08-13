@@ -11,6 +11,7 @@ import UserProfileModal from "./Auth/UserProfileModal"
 import { setShowRegister,setShowLogin } from "./Auth/modalSlice"
 import { RxHamburgerMenu } from "react-icons/rx";
 import { IoCloseSharp } from "react-icons/io5";
+import FrontendLabsLogo from '../assets/FrontendLabs.png';
 const Navbar = () => {
   const userData = useSelector((state) => state.auth.user)
   const isLoggedIn = useSelector((state) => state.auth.isAuthenticated)
@@ -47,7 +48,7 @@ const Navbar = () => {
       <div className="navbar glass-effect">
         <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
           <div className="logo">
-            <img className="FrontendLabs-logo" src="./src/assets/FrontendLabs.png" alt="FrontendLabs Logo" />
+            <img className="FrontendLabs-logo" src={FrontendLabsLogo} alt="FrontendLabs Logo" />
             <p className="logo"><strong>FrontendLabs</strong></p>
           </div>
         </Link>

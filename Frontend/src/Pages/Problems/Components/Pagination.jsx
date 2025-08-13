@@ -1,6 +1,6 @@
+import { Link } from 'react-router-dom';
 import './Pagination.css';
 import ProblemsCard from './ProblemsCard';
-
 const Pagination = ({ data, currentPage,PAGE_SIZE}) => {
 
 
@@ -14,11 +14,13 @@ const Pagination = ({ data, currentPage,PAGE_SIZE}) => {
   return (
     <>
       {paginatedData.map((problem, i) => (
+        <Link key={problem._id} to={`/codingScreen/${problem._id}`} style={{ textDecoration: "none" }}>
         <ProblemsCard
           key={start + i} // Unique key
           problem={problem}
           index={start + i} // Pass global index if needed
         />
+        </Link>
       ))}
     </>
   );
