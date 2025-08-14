@@ -1,0 +1,283 @@
+.profileContainer {
+    min-height: 100vh;
+    background-color: #161618;
+    padding: 80px 20px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.profileCard {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 2rem;
+    max-width: 600px;
+    width: 100%;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.profileHeader {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.backButton {
+    background: none;
+    border: none;
+    color: #8AA5FF;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1rem;
+    transition: color 0.2s ease;
+}
+
+.backButton:hover {
+    color: #2934FF;
+}
+
+.profileHeader h1 {
+    color: white;
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.profileContent {
+    color: white;
+}
+
+.viewMode {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.userInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.infoItem {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.infoIcon {
+    font-size: 1.5rem;
+    color: #8AA5FF;
+    min-width: 24px;
+}
+
+.infoItem div {
+    flex: 1;
+}
+
+.infoItem label {
+    display: block;
+    font-size: 0.9rem;
+    color: #999;
+    margin-bottom: 0.25rem;
+}
+
+.infoItem p {
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin: 0;
+    color: white;
+}
+
+.actionButtons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.actionBtn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 1rem;
+}
+
+.editBtn {
+    background-color: #2934FF;
+    color: white;
+}
+
+.editBtn:hover {
+    background-color: #1e28cc;
+    box-shadow: 0 4px 15px rgba(41, 52, 255, 0.3);
+}
+
+.logoutBtn {
+    background-color: #dc3545;
+    color: white;
+}
+
+.logoutBtn:hover {
+    background-color: #c82333;
+    box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
+}
+
+.editForm {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.inputGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.inputGroup label {
+    font-size: 1rem;
+    font-weight: 500;
+    color: white;
+}
+
+.inputWrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.inputWrapper input {
+    width: 100%;
+    padding: 0.75rem 1rem 0.75rem 3rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    color: white;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+}
+
+.inputWrapper input:focus {
+    outline: none;
+    border-color: #2934FF;
+    box-shadow: 0 0 0 3px rgba(41, 52, 255, 0.1);
+}
+
+.inputWrapper input::placeholder {
+    color: #999;
+}
+
+.inputIcon {
+    position: absolute;
+    left: 1rem;
+    font-size: 1.2rem;
+    color: #8AA5FF;
+    z-index: 1;
+}
+
+.eyeIcon {
+    position: absolute;
+    right: 1rem;
+    font-size: 1.2rem;
+    color: #8AA5FF;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.eyeIcon:hover {
+    color: #2934FF;
+}
+
+.errorMsg {
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+.mainErrorMsg {
+    color: #dc3545;
+    font-size: 1rem;
+    text-align: center;
+    padding: 0.75rem;
+    background: rgba(220, 53, 69, 0.1);
+    border: 1px solid rgba(220, 53, 69, 0.2);
+    border-radius: 8px;
+}
+
+.successMsg {
+    color: #28a745;
+    font-size: 1rem;
+    text-align: center;
+    padding: 0.75rem;
+    background: rgba(40, 167, 69, 0.1);
+    border: 1px solid rgba(40, 167, 69, 0.2);
+    border-radius: 8px;
+}
+
+.formButtons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+.saveBtn {
+    background-color: #28a745;
+    color: white;
+}
+
+.saveBtn:hover {
+    background-color: #218838;
+    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+}
+
+.cancelBtn {
+    background-color: #6c757d;
+    color: white;
+}
+
+.cancelBtn:hover {
+    background-color: #5a6268;
+    box-shadow: 0 4px 15px rgba(108, 117, 125, 0.3);
+}
+
+@media (max-width: 768px) {
+    .profileContainer {
+        padding: 80px 10px 20px;
+    }
+    
+    .profileCard {
+        padding: 1.5rem;
+    }
+    
+    .actionButtons {
+        flex-direction: column;
+    }
+    
+    .formButtons {
+        flex-direction: column;
+    }
+    
+    .profileHeader {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+}

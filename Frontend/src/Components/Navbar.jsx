@@ -1,13 +1,8 @@
 import React, { useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate, useLocation } from "react-router-dom"
 import styles from './Navbar.module.css'
-import { RiArrowDownSLine } from "react-icons/ri"
 import { CgProfile } from "react-icons/cg"
-import { RiLogoutCircleRLine } from "react-icons/ri"
 import { useSelector, useDispatch } from "react-redux"
-import axios from "axios"
-import { logout } from "./Auth/authSlice"
-import UserProfileModal from "./Auth/UserProfileModal"
 import { setShowRegister,setShowLogin } from "./Auth/modalSlice"
 import { RxHamburgerMenu } from "react-icons/rx";
 import { IoCloseSharp } from "react-icons/io5";
@@ -16,23 +11,22 @@ const Navbar = () => {
   const userData = useSelector((state) => state.auth.user)
   const isLoggedIn = useSelector((state) => state.auth.isAuthenticated)
   const dispatch = useDispatch()
-  const [showUserWelcomeModal, setshowUserWelcomeModal] = useState(false)
-  const [showProfileModal, setShowProfileModal] = useState(false)
+  const navigate = useNavigate()
+  const location = useLocation()
+
   const [showHamburgerMenu,setShowHamburgerMenu] = useState(false)
-  const handleLogout = async () => {
-    try {
-      await axios.post(
-        "http://localhost:5000/api/auth/logout",
-        {},
-        {
-          withCredentials: true, // ✅ ensure cookie is sent
-        }
-      )
-      dispatch(logout()) // ✅ update Redux state
-    } catch (err) {
-      console.error("Logout failed", err)
-      alert("Logout failed")
-    }
+
+  // Check if we're on the coding screen page
+  const isCodingScreen = location.pathname.startsWith('/codingScreen/')
+
+  const handleRun = () => {
+    console.log('Run button clicked');
+    // Add your run logic here
+  }
+
+  const handleSubmit = () => {
+    console.log('Submit button clicked');
+    // Add your submit logic here
   }
   const NavbarMenu = ({className}) => {
   return (
@@ -52,8 +46,17 @@ const Navbar = () => {
             <p className="logo"><strong>FrontendLabs</strong></p>
           </div>
         </Link>
-       
-       <NavbarMenu className={'navbar-menu'}/>
+
+        {/* Conditionally render menu or coding buttons */}
+        {isCodingScreen ? (
+          <div className="navbar-buttons">
+            <button onClick={handleRun} className="button button-white">Run</button>
+            <button onClick={handleSubmit} className="button button-primary">Submit</button>
+          </div>
+        ) : (
+          <NavbarMenu className={'navbar-menu'}/>
+        )}
+
         {!isLoggedIn ? (
           <div className="navbar-buttons">
             <Link>
@@ -66,41 +69,28 @@ const Navbar = () => {
         ) : (
           <div className={styles.userWelcome}>
             <h2 className={styles.userWelcomeMessage}>Welcome, {userData.name}</h2>
-            <RiArrowDownSLine onClick={() => setshowUserWelcomeModal(!showUserWelcomeModal)} />
-            {showUserWelcomeModal && (
-              <div className={styles.userWelcomeModal}>
-                <div className={styles.userWelcomeModelOptions} onClick={() => {
-                  setShowProfileModal(true)
-                  setshowUserWelcomeModal(false)
-                }}>
-                  <CgProfile />
-                  <span style={{ color: "white", cursor: "pointer" }}>Profile</span>
-                </div>
-                <div
-                  className={styles.userWelcomeModelOptions}
-                  onClick={handleLogout}
-                  style={{ cursor: "pointer", color: "red" }}
-                >
-                  <RiLogoutCircleRLine />
-                  <span>Logout</span>
-                </div>
-              </div>
-            )}
+            <CgProfile
+              className={styles.profileIcon}
+              onClick={() => navigate('/profile')}
+              title="View Profile"
+            />
           </div>
         )}
          <RxHamburgerMenu className="hamburger" onClick={()=>setShowHamburgerMenu(true)}/>
           {
             showHamburgerMenu && <div className="hamburger-menu">
               <IoCloseSharp className="hamburger-close"onClick={()=>setShowHamburgerMenu((prev)=>!prev)} />
-              <NavbarMenu className={'hamburgerNavMenu'}/>
+              {isCodingScreen ? (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', marginTop: '20px' }}>
+                  <button onClick={handleRun} className="button button-white">Run</button>
+                  <button onClick={handleSubmit} className="button button-primary">Submit</button>
+                </div>
+              ) : (
+                <NavbarMenu className={'hamburgerNavMenu'}/>
+              )}
             </div>
           }
       </div>
-      
-      <UserProfileModal 
-        isOpen={showProfileModal} 
-        onClose={() => setShowProfileModal(false)} 
-      />
     </>
   )
 }

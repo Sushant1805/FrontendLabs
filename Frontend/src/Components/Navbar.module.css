@@ -6,29 +6,22 @@
 
 .userWelcome{
     display: flex;
-    gap:5px;
+    gap: 15px;
     align-items: center;
 }
 
-.userWelcomeModal{
-    border-radius: 15px;
-    position: absolute;
-    height: 5em;
-    width : 10em;
-    background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(1px);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    right:8.5em;
-    top:3em;
-    display: flex;
-    flex-direction: column;
-    color: white;
+.profileIcon {
+    font-size: 1.5rem;
+    color: #8AA5FF;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 5px;
+    border-radius: 50%;
 }
 
-
-.userWelcomeModelOptions{
-    font-size: small;
-    padding: 10px;
-    display: flex;
-    gap: 15px;
+.profileIcon:hover {
+    color: #2934FF;
+    background-color: rgba(41, 52, 255, 0.1);
+    transform: scale(1.1);
 }
+

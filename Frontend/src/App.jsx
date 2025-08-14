@@ -10,6 +10,7 @@ import { useDispatch } from 'react-redux'
 import {loadUser} from '../src/Components/Auth/authThunk'
 import Problems from './Pages/Problems/Problem';
 import CodingScreen from './Pages/CodingScreen/CodingScreen';
+import UserProfile from './Pages/UserProfile/UserProfile';
 
 
 
@@ -57,7 +58,7 @@ const App = () => {
       <Route path='/' element={<HomePage/>}/>
       <Route path='/problems' element={<Problems/>}/>
       <Route path='/codingScreen/:id' element={<CodingScreen/>}/>
-     
+      <Route path='/profile' element={<UserProfile/>}/>
 
     </Routes>
     

@@ -2,7 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     showRegisterModal: false,
-    showLoginModal : false
+    showLoginModal : false,
+    redirectAfterLogin: null // null, '/problems', etc.
 };
 
 const modalSlice = createSlice({
@@ -14,10 +15,13 @@ const modalSlice = createSlice({
         },
         setShowLogin(state,action){
             state.showLoginModal = action.payload;
+        },
+        setRedirectAfterLogin(state, action) {
+            state.redirectAfterLogin = action.payload;
         }
     }
 });
 
 // Correct export
-export const { setShowRegister,setShowLogin } = modalSlice.actions;
+export const { setShowRegister,setShowLogin, setRedirectAfterLogin } = modalSlice.actions;
 export default modalSlice.reducer;

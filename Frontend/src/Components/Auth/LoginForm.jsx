@@ -5,14 +5,15 @@ import { MdOutlineEmail } from 'react-icons/md';
 import { TbLockPassword } from 'react-icons/tb';
 import { HiOutlineEye, HiOutlineEyeOff } from 'react-icons/hi';
 import axios from 'axios';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {login} from './authSlice'
 import { IoMdClose } from "react-icons/io";
-import { setShowLogin } from './modalSlice';
+import { setShowLogin, setRedirectAfterLogin } from './modalSlice';
 
 const LoginForm = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate();
+    const redirectAfterLogin = useSelector((state) => state.modal.redirectAfterLogin);
     const [mainError, setmainError] = useState('')
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
     const [errors, setErrors] = useState({
@@ -88,6 +89,12 @@ const LoginForm = () => {
                 password: '',
             });
             dispatch(setShowLogin(false));
+
+            // Handle redirect after login
+            if (redirectAfterLogin) {
+                navigate(redirectAfterLogin);
+                dispatch(setRedirectAfterLogin(null)); // Clear the redirect
+            }
         } catch (error) {
             console.error("Login Failed:", error.response?.data?.msg || error.message);
             setmainError(error.response?.data?.msg || "Login failed. Try again.");

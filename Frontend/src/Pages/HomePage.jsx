@@ -6,7 +6,7 @@ import Features from './Features'
 import Footer from '../Components/Footer'
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { setShowLogin } from '../Components/Auth/modalSlice'
+import { setShowLogin, setRedirectAfterLogin } from '../Components/Auth/modalSlice'
 import Register from './Register'
 import Login from './Login'
 import './HomePage.css'
@@ -61,7 +61,14 @@ const HomePage = () => {
 
           <div className='cta-buttons' data-aos="fade-up" data-aos-duration="1000" data-aos-delay="600">
             <button className="button button-white" onClick={()=>isLoggedIn? navigate('/problems') : dispatch(setShowLogin(true))}>Get Started</button>
-            <button className="button button-primary" onClick={()=>navigate('/problems')}>See Challenges</button>
+            <button className="button button-primary" onClick={()=>{
+              if(isLoggedIn) {
+                navigate('/problems');
+              } else {
+                dispatch(setRedirectAfterLogin('/problems'));
+                dispatch(setShowLogin(true));
+              }
+            }}>See Challenges</button>
           </div>
         </div>
       </div>

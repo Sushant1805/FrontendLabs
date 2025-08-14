@@ -14,7 +14,7 @@ const Pagination = ({ data, currentPage,PAGE_SIZE}) => {
   return (
     <>
       {paginatedData.map((problem, i) => (
-        <Link key={problem._id} to={`/codingScreen/${problem._id}`} style={{ textDecoration: "none" }}>
+        <Link key={problem._id} to={`/codingScreen/${problem._id}`} style={{ textDecoration: "none",color:'white' }}>
         <ProblemsCard
           key={start + i} // Unique key
           problem={problem}
