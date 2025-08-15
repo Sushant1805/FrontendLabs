@@ -11,13 +11,15 @@ const createProblem = async (req, res) => {
       description,
       difficulty,
       tags,
+      languages,
       functionSignature,
       starterCode,
       constraints,
-      testCases,
-      hiddenTestCases,
+      sampleTestCases,
+      mainTestCases,
       expectedFunctionName,
       solutionCode,
+      solution
     } = req.body;
 
     // Check for duplicate slug or title
@@ -32,14 +34,16 @@ const createProblem = async (req, res) => {
       description,
       difficulty,
       tags,
+      languages,
       functionSignature,
       starterCode,
       constraints,
-      testCases,
-      hiddenTestCases,
+      sampleTestCases,
+      mainTestCases,
       expectedFunctionName,
       solutionCode,
-      author: req.user?._id || null, // Add author if using auth
+      solution,
+      author: req.user?._id || null,
     });
 
     const savedProblem = await newProblem.save();
@@ -49,6 +53,7 @@ const createProblem = async (req, res) => {
     res.status(500).json({ message: 'Server Error' });
   }
 };
+
 
 // @desc   Get all problems
 // @route  GET /api/problems
@@ -115,11 +120,54 @@ const getProblems = async (req, res) => {
   }
 };
 
+// @desc   Update a problem by ID (safe)
+// @route  PATCH /api/problems/:id
+// @access Private (auth recommended)
+const updateProblem = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Fields we don't allow to update
+    const disallowedFields = ['_id', 'createdAt', 'author'];
+    disallowedFields.forEach(field => delete req.body[field]);
+
+    // If title or slug is being updated, check for duplicates
+    if (req.body.title || req.body.slug) {
+      const existing = await Problem.findOne({
+        $or: [
+          req.body.title ? { title: req.body.title } : {},
+          req.body.slug ? { slug: req.body.slug } : {}
+        ],
+        _id: { $ne: id } // exclude current problem from duplicate check
+      });
+
+      if (existing) {
+        return res.status(400).json({ message: 'Another problem with this title or slug already exists' });
+      }
+    }
+
+    const updatedProblem = await Problem.findByIdAndUpdate(
+      id,
+      { $set: req.body },
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedProblem) {
+      return res.status(404).json({ message: 'Problem not found' });
+    }
+
+    res.status(200).json(updatedProblem);
+  } catch (error) {
+    console.error('Error updating problem:', error.message);
+    res.status(500).json({ message: 'Server Error' });
+  }
+};
 
 
 module.exports = {
   createProblem,
   getAllProblems,
   getProblemById,
-  getProblems
+  getProblems,
+  updateProblem
 };

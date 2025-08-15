@@ -24,6 +24,10 @@ const problemsSchema = new mongoose.Schema({
     type: [String],
     default: [],
   },
+  languages: {
+    type: [String], // e.g. ["JavaScript", "Python", "Java"]
+    default: [],
+  },
   functionSignature: {
     type: String, // Signature user sees (e.g. function twoSum(nums, target) {})
     required: true,
@@ -32,23 +36,30 @@ const problemsSchema = new mongoose.Schema({
     type: String, // Pre-filled editor code
     default: '',
   },
-  constraints: {
-    type: String,
-    default: '', // E.g., “O(n) expected”, “No built-in sort”
-  },
-  testCases: [
+  // In problems-model.js
+constraints: {
+  type: [String], // array of strings
+  required: true
+},
+
+  // Public test cases shown to the user
+  sampleTestCases: [
     {
       input: { type: String, required: true }, // "nums = [2,7,11,15], target = 9"
       output: { type: String, required: true }, // "[0,1]"
       explanation: { type: String, default: '' },
     },
   ],
-  hiddenTestCases: [
+
+  // Hidden/private test cases for final validation
+  mainTestCases: [
     {
-      input: { type: String },
-      output: { type: String },
+      input: { type: String, required: true },
+      output: { type: String, required: true },
+      explanation: { type: String, default: '' },
     },
   ],
+
   expectedFunctionName: {
     type: String,
     required: true, // Helps enforce naming for eval
@@ -56,6 +67,10 @@ const problemsSchema = new mongoose.Schema({
   solutionCode: {
     type: String,
     required: true, // Used to run tests against
+  },
+  solution: {
+    type: String, // Human-readable explanation
+    default: '',
   },
   createdAt: {
     type: Date,

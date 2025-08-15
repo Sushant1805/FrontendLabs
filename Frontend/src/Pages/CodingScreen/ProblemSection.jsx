@@ -16,7 +16,7 @@ const ProblemSection = ({problem}) => {
         <p>{problem.description}</p>
         <h3>Examples</h3>
         <ul>
-          {problem.testCases.map((tc, idx) => (
+          {problem.sampleTestCases.map((tc, idx) => (
             <li key={idx} className={styles.testCase}>
               <strong>{`Example ${idx+1} : `}</strong> {tc.input} <br />
               <strong>Input:</strong> {tc.input} <br />
