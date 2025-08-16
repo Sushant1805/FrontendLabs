@@ -15,6 +15,10 @@ const problemsSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  requirements: {
+    type: [String], // Array of structured requirements
+    default: [],
+  },
   difficulty: {
     type: String,
     enum: ['Easy', 'Medium', 'Hard'],

@@ -22,9 +22,9 @@ export default function EditorSection({ starterCode }) {
   }
 
   return (
-    <div style={{ flex: 1, minHeight: "500px" }}>
+    <div style={{ flex: 1,height:'90vh}'}}>
       <Editor
-        height="100vh"
+        height="90vh"
         defaultLanguage="javascript"
         defaultValue={starterCode}
         value={code}

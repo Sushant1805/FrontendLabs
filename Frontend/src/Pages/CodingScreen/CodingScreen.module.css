@@ -1,6 +1,7 @@
 .container {
     display: flex;
     gap: 20px;
+    height: 90vh;
 }
 
 .problemSection {
@@ -9,6 +10,8 @@
     flex-direction: column;
     gap: 1em;
     padding: 1em 1em;
+    height: 90vh;
+    overflow: hidden;
 }
 
 .editorSection {
@@ -16,7 +19,18 @@
 }
 
 .testCase {
+    color:gray;
     margin-bottom: 10px;
+    font-size: 15px;
+}
+
+.requirementsList {
+    padding-left: 1.5em;
+}
+
+.requirementsList li {
+    font-size: small;
+    line-height: 1.4;
 }
 
 .editor {
@@ -33,15 +47,38 @@
     display: flex;
     align-items: center;
     gap: 0.3em;
+     color:gray
 }
 
 .menuTabText {
     font-weight: 600;
     font-size: small;
+   
 }
 
 .menuTab:hover {
-    color: var(--primary-color);
+    color: white;
     transition: all 0.1s ease-in-out;
     cursor: pointer;
+}
+
+.problemInfoContainer{
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    height: calc(90vh - 90px);
+    overflow-y: scroll;
+    overscroll-behavior: contain;
+    scroll-behavior: smooth;
+}
+
+.activeTab{
+    color:yellowgreen;
+}
+.constraintsContainer{
+    font-size: 15px;
+    color: gray;
+    /* Remove display: flex and flex-direction */
+    list-style-type: decimal;
+    padding-left: 1.5em; /* Add some indentation */
 }
