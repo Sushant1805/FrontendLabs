@@ -72,10 +72,6 @@ constraints: {
     type: String,
     required: true, // Used to run tests against
   },
-  solution: {
-    type: String, // Human-readable explanation
-    default: '',
-  },
   createdAt: {
     type: Date,
     default: Date.now,

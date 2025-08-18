@@ -19,8 +19,7 @@ const createProblem = async (req, res) => {
       sampleTestCases,
       mainTestCases,
       expectedFunctionName,
-      solutionCode,
-      solution
+      solutionCode
     } = req.body;
 
     // Check for duplicate slug or title
@@ -44,7 +43,6 @@ const createProblem = async (req, res) => {
       mainTestCases,
       expectedFunctionName,
       solutionCode,
-      solution,
       author: req.user?._id || null,
     });
 

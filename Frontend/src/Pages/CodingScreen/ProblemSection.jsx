@@ -2,6 +2,7 @@ import React, { useEffect, useRef,useState } from 'react'
 import styles from './CodingScreen.module.css';
 import MenuTab from './Components/MenuTab';
 import InfoTab from './Components/InfoTab';
+import SolutionSection from './SolutionSection';
 const ProblemSection = ({problem}) => {
   const [activeTab,setActiveTab] = useState(0);
   const problemInfoRef = useRef(null);
@@ -12,16 +13,30 @@ const ProblemSection = ({problem}) => {
     if (problemInfo) {
       // Add wheel event handler to ensure mouse wheel scrolling works
       const wheelHandler = (e) => {
-        e.stopPropagation(); // Prevent parent elements from handling the wheel event
-        problemInfo.scrollTop += e.deltaY;
+        // Only handle wheel events if the element can scroll
+        if (problemInfo.scrollHeight > problemInfo.clientHeight) {
+          e.stopPropagation(); // Prevent parent elements from handling the wheel event
+
+          // Check if we're at the top or bottom to allow natural scrolling
+          const atTop = problemInfo.scrollTop === 0;
+          const atBottom = problemInfo.scrollTop >= problemInfo.scrollHeight - problemInfo.clientHeight;
+
+          if ((atTop && e.deltaY < 0) || (atBottom && e.deltaY > 0)) {
+            return; // Allow default behavior at boundaries
+          }
+
+          e.preventDefault();
+          problemInfo.scrollTop += e.deltaY;
+        }
       };
+
       problemInfo.addEventListener('wheel', wheelHandler, { passive: false });
 
       return () => {
         problemInfo.removeEventListener('wheel', wheelHandler);
       };
     }
-  }, []);
+  }, [activeTab]); // Re-run when tab changes
 
   return (
      <div className={styles.problemSection}>
@@ -77,9 +92,7 @@ const ProblemSection = ({problem}) => {
         {/*Problem Solution */}
         {
           activeTab === 1 && 
-          <div>
-          
-          </div>
+         <SolutionSection title={problem.title}/>
         }
           
       </div>

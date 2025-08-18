@@ -12,6 +12,7 @@
     padding: 1em 1em;
     height: 90vh;
     overflow: hidden;
+    /* Keep this to prevent the section itself from scrolling */
 }
 
 .editorSection {
@@ -19,7 +20,7 @@
 }
 
 .testCase {
-    color:gray;
+    color: gray;
     margin-bottom: 10px;
     font-size: 15px;
 }
@@ -47,13 +48,13 @@
     display: flex;
     align-items: center;
     gap: 0.3em;
-     color:gray
+    color: gray
 }
 
 .menuTabText {
     font-weight: 600;
     font-size: small;
-   
+
 }
 
 .menuTab:hover {
@@ -62,23 +63,88 @@
     cursor: pointer;
 }
 
-.problemInfoContainer{
+.problemInfoContainer {
     display: flex;
     flex-direction: column;
     gap: 1em;
     height: calc(90vh - 90px);
-    overflow-y: scroll;
+    overflow-y: auto;
     overscroll-behavior: contain;
     scroll-behavior: smooth;
+    padding-right: 10px;
+    /* Custom scrollbar styling */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
 }
 
-.activeTab{
-    color:yellowgreen;
+.solutionInfoContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    height: calc(90vh - 90px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scroll-behavior: smooth;
+    padding-right: 10px;
+    /* Custom scrollbar styling */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
 }
-.constraintsContainer{
+
+.solutionInfoContainer {
+    h1 {
+        font-size: 1.5em;
+        border-bottom: 0.5px solid gray;
+        padding-bottom: 0.5em;
+    }
+
+    h2 {
+        font-size: 1.2em;
+    }
+
+    p {
+        font-size: 1em;
+    }
+
+}
+
+.solutionContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    padding-bottom: 1em;
+
+    border-bottom: 0.5px solid gray;
+}
+
+/* Custom scrollbar styling for webkit browsers */
+.problemInfoContainer::-webkit-scrollbar {
+    width: 8px;
+}
+
+.problemInfoContainer::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}
+
+.problemInfoContainer::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 4px;
+}
+
+.problemInfoContainer::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.7);
+}
+
+.activeTab {
+    color: yellowgreen;
+}
+
+.constraintsContainer {
     font-size: 15px;
     color: gray;
     /* Remove display: flex and flex-direction */
     list-style-type: decimal;
-    padding-left: 1.5em; /* Add some indentation */
+    padding-left: 1.5em;
+    /* Add some indentation */
 }

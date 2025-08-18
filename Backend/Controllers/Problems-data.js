@@ -83,64 +83,7 @@ function twoSum(nums, target) {
         map.set(nums[i], i);
     }
     return [];
-}`,
-    solution: `# Two Sum - Editorial
-
-## Approach 1: Brute Force
-
-**Intuition:**
-The brute force approach is simple. Loop through each element x and find if there is another value that equals to target - x.
-
-**Algorithm:**
-1. For each element nums[i], check every element nums[j] where j > i
-2. If nums[i] + nums[j] == target, return [i, j]
-
-\`\`\`javascript
-function twoSum(nums, target) {
-    for (let i = 0; i < nums.length; i++) {
-        for (let j = i + 1; j < nums.length; j++) {
-            if (nums[i] + nums[j] === target) {
-                return [i, j];
-            }
-        }
-    }
-    return [];
-}
-\`\`\`
-
-**Complexity Analysis:**
-- Time Complexity: O(n²) - For each element, we try to find its complement by looping through the rest of the array
-- Space Complexity: O(1) - No extra space used
-
-## Approach 2: Hash Map (Optimal)
-
-**Intuition:**
-To improve our runtime complexity, we can use a hash map to store the numbers we've seen and their indices. For each number, we check if its complement (target - current number) exists in the hash map.
-
-**Algorithm:**
-1. Create a hash map to store number -> index mapping
-2. For each element nums[i]:
-   - Calculate complement = target - nums[i]
-   - If complement exists in hash map, return [map[complement], i]
-   - Otherwise, store nums[i] -> i in hash map
-
-\`\`\`javascript
-function twoSum(nums, target) {
-    const map = new Map();
-    for (let i = 0; i < nums.length; i++) {
-        const complement = target - nums[i];
-        if (map.has(complement)) {
-            return [map.get(complement), i];
-        }
-        map.set(nums[i], i);
-    }
-    return [];
-}
-\`\`\`
-
-**Complexity Analysis:**
-- Time Complexity: O(n) - We traverse the list containing n elements only once
-- Space Complexity: O(n) - The extra space required depends on the number of items stored in the hash map`
+}`
   },
 
   {
@@ -229,7 +172,7 @@ function isValid(s) {
         '}': '{',
         ']': '['
     };
-    
+
     for (let char of s) {
         if (char in mapping) {
             const topElement = stack.length === 0 ? '#' : stack.pop();
@@ -240,87 +183,24 @@ function isValid(s) {
             stack.push(char);
         }
     }
-    
+
     return stack.length === 0;
-}`,
-    solution: `# Valid Parentheses - Editorial
-
-## Approach: Stack
-
-**Intuition:**
-This problem is a classic use case for stacks. When we encounter an opening bracket, we push it onto the stack. When we encounter a closing bracket, we check if it matches the most recent opening bracket (top of stack).
-
-**Algorithm:**
-1. Initialize an empty stack
-2. Create a mapping of closing brackets to opening brackets
-3. For each character in the string:
-   - If it's a closing bracket:
-     - Pop from stack (or use dummy if empty)
-     - Check if popped element matches the expected opening bracket
-     - If not, return false
-   - If it's an opening bracket, push to stack
-4. Return true if stack is empty (all brackets matched)
-
-\`\`\`javascript
-function isValid(s) {
-    const stack = [];
-    const mapping = {
-        ')': '(',
-        '}': '{', 
-        ']': '['
-    };
-    
-    for (let char of s) {
-        if (char in mapping) {
-            const topElement = stack.length === 0 ? '#' : stack.pop();
-            if (mapping[char] !== topElement) {
-                return false;
-            }
-        } else {
-            stack.push(char);
-        }
-    }
-    
-    return stack.length === 0;
-}
-\`\`\`
-
-**Complexity Analysis:**
-- Time Complexity: O(n) - We traverse the string once
-- Space Complexity: O(n) - In worst case, we push all opening brackets to stack
-
-## Alternative Approach: Replace Method
-
-**Intuition:**
-Keep replacing valid bracket pairs until no more replacements can be made.
-
-\`\`\`javascript
-function isValid(s) {
-    while (s.includes('()') || s.includes('[]') || s.includes('{}')) {
-        s = s.replace('()', '').replace('[]', '').replace('{}', '');
-    }
-    return s === '';
-}
-\`\`\`
-
-**Complexity Analysis:**
-- Time Complexity: O(n²) - In worst case, we might need n/2 iterations, each taking O(n)
-- Space Complexity: O(1) - Only using string replacement`
+}`
   },
 
   {
     title: "Debounce Function",
     slug: "debounce-function",
-    description: `Implement a debounce function that delays the execution of a function until after a specified delay has elapsed since the last time it was invoked.
-
-This is commonly used in frontend development to limit the rate of function execution, such as API calls during user input.`,
+    description: `Create a debounce function that delays the execution of a function until after a specified delay has passed since the last time it was invoked.`,
     requirements: [
-      "Accept a function and a delay (in milliseconds) as parameters",
-      "Return a new function that, when called, will delay the execution of the original function",
-      "If the returned function is called again before the delay has passed, reset the timer"
+      "Return a debounced version of the provided function",
+      "The debounced function should delay execution by the specified delay",
+      "If called again before the delay expires, reset the timer",
+      "Should preserve the original function's context and arguments",
+      "Should return the result of the original function when executed"
     ],
     difficulty: "Medium",
-    tags: ["Function", "Closure", "Timer", "Frontend"],
+    tags: ["Function", "Closure", "Timer", "Higher-Order Function"],
     languages: ["JavaScript"],
     functionSignature: "function debounce(func, delay) {}",
     starterCode: `/**
@@ -333,377 +213,166 @@ function debounce(func, delay) {
 }`,
     constraints: [
       "func is a valid function",
-      "delay >= 0",
-      "The debounced function should preserve 'this' context",
-      "The debounced function should pass through all arguments"
+      "delay is a non-negative integer",
+      "delay <= 10000 (10 seconds)",
+      "The debounced function should work with any number of arguments"
     ],
     sampleTestCases: [
       {
-        input: "debounce(() => 'executed', 100) called twice with 50ms gap",
-        output: "'executed' called once after 100ms from second call",
-        explanation: "First call is cancelled, second call executes after delay."
+        input: "debounce(() => console.log('Hello'), 100)",
+        output: "Function that delays execution by 100ms",
+        explanation: "Returns a debounced version that waits 100ms before executing."
       },
       {
-        input: "debounce((x) => x * 2, 200) called with argument 5",
-        output: "10 after 200ms delay",
-        explanation: "Function executes with passed arguments after delay."
+        input: "Multiple rapid calls within delay period",
+        output: "Only the last call executes after delay",
+        explanation: "Previous calls are cancelled when new calls are made."
       }
     ],
     mainTestCases: [
       {
-        input: "debounce(() => 'test', 100), single call",
-        output: "'test' after 100ms"
+        input: "Basic debounce with 100ms delay",
+        output: "Function executes after delay"
       },
       {
-        input: "debounce(() => 'test', 100), two calls 50ms apart",
-        output: "'test' once, 100ms after second call"
+        input: "Multiple calls within delay period",
+        output: "Only last call executes"
       },
       {
-        input: "debounce((a, b) => a + b, 150), called with (2, 3)",
-        output: "5 after 150ms"
+        input: "Calls with different arguments",
+        output: "Last call's arguments are used"
       },
       {
-        input: "debounce(() => 'immediate', 0)",
-        output: "'immediate' immediately"
+        input: "Function with return value",
+        output: "Return value is preserved"
       },
       {
-        input: "debounce with this context preservation",
-        output: "correct this binding maintained"
-      },
-      {
-        input: "debounce(() => 'test', 200), three rapid calls",
-        output: "'test' once, 200ms after last call"
+        input: "Function with context (this)",
+        output: "Context is preserved"
       }
     ],
     expectedFunctionName: "debounce",
     solutionCode: `function debounce(func, delay) {
     let timeoutId;
-
     return function(...args) {
         const context = this;
-
         clearTimeout(timeoutId);
-
         timeoutId = setTimeout(() => {
             func.apply(context, args);
         }, delay);
     };
-}`,
-    solution: `# Debounce Function - Editorial
-
-## Approach: Closure with setTimeout
-
-**Intuition:**
-Debouncing is achieved by using closures to maintain a timeout ID and clearing/resetting the timer on each function call. The key insight is that we need to cancel the previous timer whenever a new call is made.
-
-**Algorithm:**
-1. Create a closure that maintains a \`timeoutId\` variable
-2. Return a function that:
-   - Clears any existing timeout
-   - Sets a new timeout to execute the original function after the delay
-   - Preserves the \`this\` context and arguments
-
-\`\`\`javascript
-function debounce(func, delay) {
-    let timeoutId;
-
-    return function(...args) {
-        const context = this;
-
-        clearTimeout(timeoutId);
-
-        timeoutId = setTimeout(() => {
-            func.apply(context, args);
-        }, delay);
-    };
-}
-\`\`\`
-
-**Key Points:**
-- **Closure**: The returned function has access to \`timeoutId\` from outer scope
-- **Context Preservation**: We capture \`this\` and use \`apply\` to maintain context
-- **Arguments**: Use rest parameters and spread to pass all arguments
-- **Timer Management**: \`clearTimeout\` cancels previous execution
-
-**Complexity Analysis:**
-- Time Complexity: O(1) - Each call is constant time
-- Space Complexity: O(1) - Only storing timeout ID and context
-
-## Alternative Approach: With Immediate Execution Option
-
-**Enhanced version that supports immediate execution:**
-
-\`\`\`javascript
-function debounce(func, delay, immediate = false) {
-    let timeoutId;
-
-    return function(...args) {
-        const context = this;
-        const callNow = immediate && !timeoutId;
-
-        clearTimeout(timeoutId);
-
-        timeoutId = setTimeout(() => {
-            timeoutId = null;
-            if (!immediate) func.apply(context, args);
-        }, delay);
-
-        if (callNow) func.apply(context, args);
-    };
-}
-\`\`\`
-
-**Use Cases:**
-- **Search Input**: Debounce API calls while user types
-- **Button Clicks**: Prevent double-clicks
-- **Window Resize**: Debounce expensive layout calculations
-- **Scroll Events**: Limit scroll event handlers`
+}`
   },
 
   {
     title: "Deep Clone Object",
     slug: "deep-clone-object",
-    description: `Implement a function that creates a deep clone of a JavaScript object. The cloned object should be completely independent of the original - changes to the clone should not affect the original object.`,
+    description: `Implement a function that creates a deep clone of a JavaScript object, handling nested objects, arrays, and primitive values.`,
     requirements: [
-      "Handle primitive values (string, number, boolean, null, undefined)",
-      "Handle objects (including nested objects)",
-      "Handle arrays (including nested arrays)",
-      "Handle Date objects",
-      "Handle Regular expressions",
-      "Handle circular references without causing infinite recursion"
+      "Create a complete deep copy of the input object",
+      "Handle nested objects and arrays recursively",
+      "Preserve primitive values (string, number, boolean, null, undefined)",
+      "Handle circular references gracefully",
+      "Return a new object that shares no references with the original"
     ],
-    difficulty: "Hard",
+    difficulty: "Medium",
     tags: ["Object", "Recursion", "Deep Copy", "Data Structures"],
     languages: ["JavaScript"],
     functionSignature: "function deepClone(obj) {}",
     starterCode: `/**
- * @param {*} obj - The object to deep clone
- * @return {*} - A deep clone of the input object
+ * @param {any} obj - The object to deep clone
+ * @return {any} - A deep clone of the input object
  */
 function deepClone(obj) {
     // Your code here
 }`,
     constraints: [
-      "Handle all JavaScript primitive types",
-      "Handle nested objects and arrays",
-      "Handle Date and RegExp objects",
-      "Handle circular references without infinite recursion",
-      "Preserve object prototypes where possible"
+      "Input can be any valid JavaScript value",
+      "Object nesting depth <= 100",
+      "Handle Date objects, RegExp, and other built-in objects",
+      "Circular references should not cause infinite loops"
     ],
     sampleTestCases: [
       {
         input: "obj = {a: 1, b: {c: 2}}",
-        output: "{a: 1, b: {c: 2}} (independent copy)",
-        explanation: "Nested object is deeply cloned, not referenced."
+        output: "{a: 1, b: {c: 2}}",
+        explanation: "Creates a deep copy where modifying nested properties doesn't affect the original."
       },
       {
         input: "obj = [1, [2, 3], {a: 4}]",
-        output: "[1, [2, 3], {a: 4}] (independent copy)",
-        explanation: "Array with nested structures is deeply cloned."
+        output: "[1, [2, 3], {a: 4}]",
+        explanation: "Handles arrays with nested objects and arrays."
       }
     ],
     mainTestCases: [
       {
-        input: "obj = null",
-        output: "null"
+        input: "Simple object with primitives",
+        output: "Deep copy of object"
       },
       {
-        input: "obj = undefined",
-        output: "undefined"
+        input: "Nested objects",
+        output: "Deep copy with nested structure"
       },
       {
-        input: "obj = 42",
-        output: "42"
+        input: "Arrays with objects",
+        output: "Deep copy of array structure"
       },
       {
-        input: "obj = 'hello'",
-        output: "'hello'"
+        input: "Mixed nested structures",
+        output: "Complete deep copy"
       },
       {
-        input: "obj = {a: 1, b: 2}",
-        output: "{a: 1, b: 2}"
-      },
-      {
-        input: "obj = [1, 2, 3]",
-        output: "[1, 2, 3]"
-      },
-      {
-        input: "obj = {a: {b: {c: 1}}}",
-        output: "{a: {b: {c: 1}}}"
-      },
-      {
-        input: "obj = new Date('2023-01-01')",
-        output: "new Date('2023-01-01')"
-      },
-      {
-        input: "obj = /test/gi",
-        output: "/test/gi"
-      },
-      {
-        input: "obj with circular reference",
-        output: "cloned object without infinite recursion"
-      },
-      {
-        input: "obj = {arr: [1, {nested: true}]}",
-        output: "{arr: [1, {nested: true}]}"
+        input: "Object with Date and RegExp",
+        output: "Proper cloning of special objects"
       }
     ],
     expectedFunctionName: "deepClone",
-    solutionCode: `function deepClone(obj, visited = new WeakMap()) {
-    // Handle primitives and null
+    solutionCode: `function deepClone(obj) {
     if (obj === null || typeof obj !== 'object') {
         return obj;
     }
 
-    // Handle circular references
-    if (visited.has(obj)) {
-        return visited.get(obj);
-    }
-
-    // Handle Date
     if (obj instanceof Date) {
         return new Date(obj.getTime());
     }
 
-    // Handle RegExp
     if (obj instanceof RegExp) {
-        return new RegExp(obj.source, obj.flags);
+        return new RegExp(obj);
     }
 
-    // Handle Arrays
     if (Array.isArray(obj)) {
-        const clonedArray = [];
-        visited.set(obj, clonedArray);
-
-        for (let i = 0; i < obj.length; i++) {
-            clonedArray[i] = deepClone(obj[i], visited);
-        }
-
-        return clonedArray;
+        return obj.map(item => deepClone(item));
     }
 
-    // Handle Objects
-    const clonedObj = {};
-    visited.set(obj, clonedObj);
-
+    const cloned = {};
     for (let key in obj) {
         if (obj.hasOwnProperty(key)) {
-            clonedObj[key] = deepClone(obj[key], visited);
+            cloned[key] = deepClone(obj[key]);
         }
     }
 
-    return clonedObj;
-}`,
-    solution: `# Deep Clone Object - Editorial
-
-## Approach: Recursive Cloning with Circular Reference Handling
-
-**Intuition:**
-Deep cloning requires recursively copying all nested structures while handling special cases like dates, regular expressions, and circular references. We use a WeakMap to track visited objects and prevent infinite recursion.
-
-**Algorithm:**
-1. Handle primitive types and null (return as-is)
-2. Check for circular references using WeakMap
-3. Handle special object types (Date, RegExp)
-4. Recursively clone arrays and objects
-5. Use WeakMap to store cloned references
-
-\`\`\`javascript
-function deepClone(obj, visited = new WeakMap()) {
-    // Handle primitives and null
-    if (obj === null || typeof obj !== 'object') {
-        return obj;
-    }
-
-    // Handle circular references
-    if (visited.has(obj)) {
-        return visited.get(obj);
-    }
-
-    // Handle Date
-    if (obj instanceof Date) {
-        return new Date(obj.getTime());
-    }
-
-    // Handle RegExp
-    if (obj instanceof RegExp) {
-        return new RegExp(obj.source, obj.flags);
-    }
-
-    // Handle Arrays
-    if (Array.isArray(obj)) {
-        const clonedArray = [];
-        visited.set(obj, clonedArray);
-
-        for (let i = 0; i < obj.length; i++) {
-            clonedArray[i] = deepClone(obj[i], visited);
-        }
-
-        return clonedArray;
-    }
-
-    // Handle Objects
-    const clonedObj = {};
-    visited.set(obj, clonedObj);
-
-    for (let key in obj) {
-        if (obj.hasOwnProperty(key)) {
-            clonedObj[key] = deepClone(obj[key], visited);
-        }
-    }
-
-    return clonedObj;
-}
-\`\`\`
-
-**Key Features:**
-- **Circular Reference Handling**: WeakMap prevents infinite recursion
-- **Type Preservation**: Special handling for Date and RegExp objects
-- **Deep Recursion**: All nested structures are properly cloned
-- **Property Filtering**: Only own properties are cloned
-
-**Complexity Analysis:**
-- Time Complexity: O(n) - Visit each property/element once
-- Space Complexity: O(n) - Store cloned structure + recursion stack
-
-## Alternative Approach: JSON Methods (Limited)
-
-**Simple but limited approach:**
-
-\`\`\`javascript
-function deepClone(obj) {
-    return JSON.parse(JSON.stringify(obj));
-}
-\`\`\`
-
-**Limitations:**
-- Loses functions, undefined, Symbol properties
-- Converts Date to string
-- Cannot handle circular references
-- Loses RegExp objects
-
-**When to use each:**
-- **Full Implementation**: When you need complete object cloning
-- **JSON Method**: For simple objects with primitive values only`
+    return cloned;
+}`
   },
 
   {
     title: "Event Emitter",
     slug: "event-emitter",
-    description: `Implement an EventEmitter class that provides event-driven architecture functionality. This pattern is fundamental in frontend development for handling user interactions, component communication, and asynchronous operations.`,
+    description: `Implement an EventEmitter class that allows subscribing to events, emitting events, and unsubscribing from events.`,
     requirements: [
-      "Implement `on(event, listener)` method to add a listener for an event",
-      "Implement `off(event, listener)` method to remove a specific listener for an event",
-      "Implement `emit(event, ...args)` method to trigger all listeners for an event with arguments",
-      "Implement `once(event, listener)` method to add a listener that only executes once",
-      "Implement `removeAllListeners(event?)` method to remove all listeners for an event (or all events)"
+      "Implement 'on' method to subscribe to events",
+      "Implement 'emit' method to trigger events with data",
+      "Implement 'off' method to unsubscribe from events",
+      "Support multiple listeners for the same event",
+      "Pass data to event listeners when emitting",
+      "Handle edge cases like removing non-existent listeners"
     ],
     difficulty: "Medium",
-    tags: ["Class", "Events", "Observer Pattern", "Frontend Architecture"],
+    tags: ["Class", "Event Handling", "Observer Pattern", "Design Patterns"],
     languages: ["JavaScript"],
     functionSignature: "class EventEmitter {}",
     starterCode: `/**
- * EventEmitter class for handling events
+ * EventEmitter class for handling custom events
  */
 class EventEmitter {
     constructor() {
@@ -711,6 +380,7 @@ class EventEmitter {
     }
 
     /**
+     * Subscribe to an event
      * @param {string} event - Event name
      * @param {Function} listener - Event listener function
      */
@@ -719,95 +389,62 @@ class EventEmitter {
     }
 
     /**
+     * Emit an event with optional data
      * @param {string} event - Event name
-     * @param {Function} listener - Event listener function to remove
-     */
-    off(event, listener) {
-        // Your code here
-    }
-
-    /**
-     * @param {string} event - Event name
-     * @param {...*} args - Arguments to pass to listeners
+     * @param {...any} args - Arguments to pass to listeners
      */
     emit(event, ...args) {
         // Your code here
     }
 
     /**
+     * Unsubscribe from an event
      * @param {string} event - Event name
-     * @param {Function} listener - Event listener function
+     * @param {Function} listener - Event listener function to remove
      */
-    once(event, listener) {
-        // Your code here
-    }
-
-    /**
-     * @param {string} [event] - Event name (optional)
-     */
-    removeAllListeners(event) {
+    off(event, listener) {
         // Your code here
     }
 }`,
     constraints: [
-      "Support multiple listeners per event",
-      "Listeners should be called in the order they were added",
-      "once() listeners should be automatically removed after execution",
-      "emit() should return true if event had listeners, false otherwise",
-      "Handle edge cases like removing non-existent listeners gracefully"
+      "Event names are non-empty strings",
+      "Listeners are valid functions",
+      "Support unlimited number of events and listeners",
+      "Emit should call listeners in the order they were added",
+      "Off should only remove the specific listener function"
     ],
     sampleTestCases: [
       {
-        input: "emitter.on('test', fn); emitter.emit('test', 'data');",
-        output: "fn called with 'data'",
-        explanation: "Listener is registered and called when event is emitted."
+        input: "emitter.on('test', callback); emitter.emit('test', 'data');",
+        output: "callback called with 'data'",
+        explanation: "Basic event subscription and emission."
       },
       {
-        input: "emitter.once('test', fn); emitter.emit('test'); emitter.emit('test');",
-        output: "fn called only once",
-        explanation: "once() listener is automatically removed after first execution."
+        input: "Multiple listeners for same event",
+        output: "All listeners called in order",
+        explanation: "Supports multiple listeners per event."
       }
     ],
     mainTestCases: [
       {
         input: "Basic on/emit functionality",
-        output: "Listeners called correctly"
+        output: "Event listener called correctly"
       },
       {
         input: "Multiple listeners for same event",
-        output: "All listeners called in order"
+        output: "All listeners executed"
       },
       {
-        input: "off() removes specific listener",
-        output: "Only specified listener removed"
-      },
-      {
-        input: "once() listener called only once",
-        output: "Listener auto-removed after execution"
-      },
-      {
-        input: "emit() with multiple arguments",
+        input: "Emit with multiple arguments",
         output: "All arguments passed to listeners"
       },
       {
-        input: "removeAllListeners() for specific event",
-        output: "All listeners for event removed"
+        input: "Remove specific listener with off",
+        output: "Only specified listener removed"
       },
       {
-        input: "removeAllListeners() without arguments",
-        output: "All listeners for all events removed"
-      },
-      {
-        input: "emit() non-existent event",
-        output: "Returns false, no errors"
-      },
-      {
-        input: "off() non-existent listener",
+        input: "Emit event with no listeners",
         output: "No errors, graceful handling"
-      },
-      {
-        input: "Chaining multiple on() calls",
-        output: "All listeners registered correctly"
       }
     ],
     expectedFunctionName: "EventEmitter",
@@ -821,171 +458,24 @@ class EventEmitter {
             this.events[event] = [];
         }
         this.events[event].push(listener);
-        return this;
-    }
-
-    off(event, listener) {
-        if (!this.events[event]) {
-            return this;
-        }
-
-        const index = this.events[event].indexOf(listener);
-        if (index > -1) {
-            this.events[event].splice(index, 1);
-        }
-
-        if (this.events[event].length === 0) {
-            delete this.events[event];
-        }
-
-        return this;
     }
 
     emit(event, ...args) {
-        if (!this.events[event]) {
-            return false;
+        if (this.events[event]) {
+            this.events[event].forEach(listener => {
+                listener(...args);
+            });
         }
-
-        // Create a copy to avoid issues if listeners are modified during emission
-        const listeners = [...this.events[event]];
-
-        listeners.forEach(listener => {
-            listener.apply(this, args);
-        });
-
-        return true;
     }
 
-    once(event, listener) {
-        const onceWrapper = (...args) => {
-            this.off(event, onceWrapper);
-            listener.apply(this, args);
-        };
-
-        this.on(event, onceWrapper);
-        return this;
-    }
-
-    removeAllListeners(event) {
-        if (event) {
-            delete this.events[event];
-        } else {
-            this.events = {};
+    off(event, listenerToRemove) {
+        if (this.events[event]) {
+            this.events[event] = this.events[event].filter(
+                listener => listener !== listenerToRemove
+            );
         }
-        return this;
     }
-}`,
-    solution: `# Event Emitter - Editorial
-
-## Approach: Hash Map with Listener Arrays
-
-**Intuition:**
-An event emitter maintains a mapping of event names to arrays of listener functions. Each method manipulates these arrays to add, remove, or execute listeners.
-
-**Core Data Structure:**
-\`\`\`javascript
-this.events = {
-    'eventName1': [listener1, listener2, ...],
-    'eventName2': [listener3, listener4, ...],
-    // ...
-}
-\`\`\`
-
-**Implementation:**
-
-\`\`\`javascript
-class EventEmitter {
-    constructor() {
-        this.events = {};
-    }
-
-    on(event, listener) {
-        if (!this.events[event]) {
-            this.events[event] = [];
-        }
-        this.events[event].push(listener);
-        return this; // Enable method chaining
-    }
-
-    off(event, listener) {
-        if (!this.events[event]) {
-            return this;
-        }
-
-        const index = this.events[event].indexOf(listener);
-        if (index > -1) {
-            this.events[event].splice(index, 1);
-        }
-
-        // Clean up empty arrays
-        if (this.events[event].length === 0) {
-            delete this.events[event];
-        }
-
-        return this;
-    }
-
-    emit(event, ...args) {
-        if (!this.events[event]) {
-            return false;
-        }
-
-        // Copy array to prevent modification during iteration
-        const listeners = [...this.events[event]];
-
-        listeners.forEach(listener => {
-            listener.apply(this, args);
-        });
-
-        return true;
-    }
-
-    once(event, listener) {
-        const onceWrapper = (...args) => {
-            this.off(event, onceWrapper);
-            listener.apply(this, args);
-        };
-
-        this.on(event, onceWrapper);
-        return this;
-    }
-
-    removeAllListeners(event) {
-        if (event) {
-            delete this.events[event];
-        } else {
-            this.events = {};
-        }
-        return this;
-    }
-}
-\`\`\`
-
-**Key Design Decisions:**
-
-1. **Method Chaining**: Return \`this\` to enable fluent interface
-2. **Array Copying in emit()**: Prevents issues if listeners modify the listener array
-3. **Cleanup**: Remove empty event arrays to prevent memory leaks
-4. **once() Implementation**: Use wrapper function that removes itself
-
-**Complexity Analysis:**
-- **on()**: O(1) - Array push operation
-- **off()**: O(n) - Array search and splice, where n is number of listeners
-- **emit()**: O(n) - Call each listener once
-- **once()**: O(1) - Same as on() with wrapper
-- **removeAllListeners()**: O(1) - Object property deletion
-
-**Use Cases:**
-- **Component Communication**: Parent-child component events
-- **State Management**: Notify subscribers of state changes
-- **API Responses**: Handle asynchronous operation completion
-- **User Interactions**: Custom event handling beyond DOM events
-
-**Advanced Features** (not implemented but could be added):
-- **Error Handling**: Catch and handle listener errors
-- **Max Listeners**: Prevent memory leaks with listener limits
-- **Prepend**: Add listeners to beginning of array
-- **Event Wildcards**: Support pattern matching for event names`
+}`
   }
 ];
 
