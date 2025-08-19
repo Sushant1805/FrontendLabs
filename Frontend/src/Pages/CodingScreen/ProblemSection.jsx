@@ -1,10 +1,18 @@
-import React, { useEffect, useRef,useState } from 'react'
+import React, { useEffect, useRef } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { setActiveTab } from './codeSlice'
 import styles from './CodingScreen.module.css';
 import MenuTab from './Components/MenuTab';
 import InfoTab from './Components/InfoTab';
 import SolutionSection from './SolutionSection';
+import TestResultsSection from './TestResultsSection';
 const ProblemSection = ({problem}) => {
-  const [activeTab,setActiveTab] = useState(0);
+  const dispatch = useDispatch()
+  const activeTab = useSelector(state => state.code.activeTab)
+
+  const handleSetActiveTab = (tabIndex) => {
+    dispatch(setActiveTab(tabIndex))
+  }
   const problemInfoRef = useRef(null);
 
   useEffect(() => {
@@ -42,7 +50,7 @@ const ProblemSection = ({problem}) => {
      <div className={styles.problemSection}>
         {/* Navigation Menus  */}
         <div className={styles.menuContainer}>
-            <MenuTab activeTab={activeTab} setActiveTab={setActiveTab}/>
+            <MenuTab activeTab={activeTab} setActiveTab={handleSetActiveTab}/>
         </div>
 
         {/*Problem Description */}
@@ -70,7 +78,7 @@ const ProblemSection = ({problem}) => {
         <h3>Examples</h3>
         <ul>
           {problem.sampleTestCases.map((tc, idx) => (
-            <li key={idx} className={styles.testCase}>
+            <li key={idx} className={styles.examples}>
               <strong>{`Example ${idx+1} : `}</strong> {tc.input} <br />
               <strong>Input:</strong> {tc.input} <br />
               <strong>Explanation:</strong> {tc.explanation}
@@ -91,10 +99,25 @@ const ProblemSection = ({problem}) => {
 
         {/*Problem Solution */}
         {
-          activeTab === 1 && 
-         <SolutionSection title={problem.title}/>
+          activeTab === 1 &&
+         <SolutionSection title={problem.title}id={problem._id}/>
         }
-          
+
+        {/*Test Results */}
+        {
+          activeTab === 2 &&
+         <TestResultsSection />
+        }
+
+        {/*Submissions */}
+        {
+          activeTab === 3 &&
+         <div ref={problemInfoRef} className={styles.problemInfoContainer}>
+           <h2>Submissions</h2>
+           <p>Submissions feature coming soon...</p>
+         </div>
+        }
+
       </div>
   )
 }

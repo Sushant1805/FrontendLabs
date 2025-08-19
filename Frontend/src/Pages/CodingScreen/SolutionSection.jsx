@@ -13,7 +13,7 @@ import {
   tomorrow,
   funky
 } from "react-syntax-highlighter/dist/esm/styles/prism";
-const SolutionSection = ({ title }) => {
+const SolutionSection = ({ title,id }) => {
     const solutionInfoRef = useRef(null);
 
     useEffect(() => {
@@ -46,7 +46,7 @@ const SolutionSection = ({ title }) => {
             };
         }
     }, [title]); // Re-run when tab changes
-    const URL = 'http://localhost:5000/api/editorials/68a2bf5241e409e4352575c8';
+    const URL = `http://localhost:5000/api/editorials/${id}`;
     const [editorial, setEditorial] = useState([])
     useEffect(() => {
         axios.get(URL)

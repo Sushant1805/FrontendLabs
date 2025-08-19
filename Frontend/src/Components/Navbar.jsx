@@ -4,6 +4,7 @@ import styles from './Navbar.module.css'
 import { CgProfile } from "react-icons/cg"
 import { useSelector, useDispatch } from "react-redux"
 import { setShowRegister,setShowLogin } from "./Auth/modalSlice"
+import { setTestResults, setTestType, setActiveTab, setShowSuccessToast } from '../Pages/CodingScreen/codeSlice'
 import { RxHamburgerMenu } from "react-icons/rx";
 import { IoCloseSharp } from "react-icons/io5";
 import FrontendLabsLogo from '../assets/FrontendLabs.png';
@@ -14,7 +15,8 @@ const Navbar = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const code = useSelector((state)=>state.code.code)
-  const testCases = useSelector((state)=>state.code.testCases)
+  const sampleTestCases = useSelector((state)=>state.code.sampleTestCases)
+  const mainTestCases = useSelector((state)=>state.code.mainTestCases)
 
   const [showHamburgerMenu,setShowHamburgerMenu] = useState(false)
 
@@ -22,8 +24,26 @@ const Navbar = () => {
   const isCodingScreen = location.pathname.startsWith('/codingScreen/')
   function runTests(code, testCases) {
   const results = [];
+
+  // Check if testCases is valid
+  if (!testCases || !Array.isArray(testCases) || testCases.length === 0) {
+    return [{ error: "No Test Cases", message: "No test cases available to run." }];
+  }
+
+  // Check if code is valid
+  if (!code || code.trim() === '') {
+    return [{ error: "No Code", message: "Please write some code to test." }];
+  }
+
   try {
-    const userFn = new Function(code + "; return " + code.match(/function\s+(\w+)/)[1] + ";")();
+    // Extract function name with better error handling
+    const functionMatch = code.match(/function\s+(\w+)/);
+    if (!functionMatch) {
+      return [{ error: "Function Not Found", message: "Could not find a function declaration in your code." }];
+    }
+
+    const functionName = functionMatch[1];
+    const userFn = new Function(code + "; return " + functionName + ";")();
 
     for (const testCase of testCases) {
       let result;
@@ -32,7 +52,7 @@ const Navbar = () => {
         const parsedInput = parseTestInput(testCase.input);
         // Parse the string output into actual expected value
         const parsedOutput = JSON.parse(testCase.output);
-        
+
         result = userFn(...parsedInput);
         results.push({
           input: testCase.input,  // Keep original string for display
@@ -171,13 +191,30 @@ function intelligentParse(value) {
 
   const handleRun = () => {
     console.log('Run button clicked');
-    const result = runTests(code,testCases)
-    console.log(result)
+    const result = runTests(code, sampleTestCases);
+    console.log('Sample test results:', result);
+
+    dispatch(setTestResults(result));
+    dispatch(setTestType('sample'));
+    dispatch(setActiveTab(2)); // Switch to Results tab (index 2)
   }
 
   const handleSubmit = () => {
     console.log('Submit button clicked');
-    // Add your submit logic here
+    const result = runTests(code, mainTestCases);
+    console.log('Main test results:', result);
+
+    dispatch(setTestResults(result));
+    dispatch(setTestType('main'));
+    dispatch(setActiveTab(2)); // Switch to Results tab (index 2)
+
+    // Check if all tests passed and show success toast
+    const hasErrors = result.some(test => test.error);
+    const allPassed = result.every(test => test.pass) && !hasErrors && result.length > 0;
+
+    if (allPassed) {
+      dispatch(setShowSuccessToast(true));
+    }
   }
   const NavbarMenu = ({className}) => {
   return (
