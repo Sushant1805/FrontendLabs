@@ -42,7 +42,7 @@ export default function CodingScreen() {
 
   return (
     <>
-    <Navbar/>
+    <Navbar problemId={id}/>
     <div className={styles.container}>
       {/* Problem Details */}
      <ProblemSection problem={problem}/>

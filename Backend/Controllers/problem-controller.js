@@ -131,6 +131,31 @@ const updateProblem = async (req, res) => {
     const disallowedFields = ['_id', 'createdAt', 'author'];
     disallowedFields.forEach(field => delete req.body[field]);
 
+    // Validate and fix performance tests if present
+    if (req.body.performanceTests && Array.isArray(req.body.performanceTests)) {
+      req.body.performanceTests = req.body.performanceTests.map(test => ({
+        name: test.name || 'Performance Test',
+        description: test.description || '',
+        input: test.input || '',
+        expectedOutput: test.expectedOutput || '',
+        maxExecutionTime: test.maxExecutionTime || 5000, // Ensure this required field is present
+        testCode: test.testCode || ''
+        // Remove _id field - MongoDB will auto-generate ObjectId
+      }));
+    }
+
+    // Validate and fix edge cases if present
+    if (req.body.edgeCases && Array.isArray(req.body.edgeCases)) {
+      req.body.edgeCases = req.body.edgeCases.map(test => ({
+        name: test.name || 'Edge Case Test',
+        description: test.description || '',
+        input: test.input || '',
+        expectedOutput: test.expectedOutput || '',
+        testCode: test.testCode || ''
+        // Remove _id field - MongoDB will auto-generate ObjectId
+      }));
+    }
+
     // If title or slug is being updated, check for duplicates
     if (req.body.title || req.body.slug) {
       const existing = await Problem.findOne({

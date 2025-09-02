@@ -6,6 +6,30 @@ const TestResultsSection = () => {
   const { testResults, testType } = useSelector(state => state.code);
   const resultsInfoRef = useRef(null);
 
+  // Helper function to format objects in JavaScript object literal format (without quotes around keys)
+  const formatObjectForDisplay = (obj) => {
+    if (obj === null) return 'null';
+    if (obj === undefined) return 'undefined';
+    
+    if (Array.isArray(obj)) {
+      return '[' + obj.map(item => formatObjectForDisplay(item)).join(', ') + ']';
+    }
+    
+    if (typeof obj === 'object') {
+      const entries = Object.entries(obj).map(([key, value]) => {
+        const formattedValue = formatObjectForDisplay(value);
+        return `${key}: ${formattedValue}`;
+      });
+      return '{' + entries.join(', ') + '}';
+    }
+    
+    if (typeof obj === 'string') {
+      return `"${obj}"`;
+    }
+    
+    return String(obj);
+  };
+
   useEffect(() => {
     const resultsInfo = resultsInfoRef.current;
 
@@ -78,44 +102,94 @@ const TestResultsSection = () => {
         )}
       </div>
 
-      {!hasErrors && (
-        <div className={styles.testCasesList}>
-          {testResults.map((result, index) => (
-            <div key={index} className={`${styles.testCase} ${result.pass ? styles.passed : styles.failed}`}>
-              <div className={styles.testCaseHeader}>
-                <span className={styles.testCaseNumber}>Test Case {index + 1}</span>
-                <span className={`${styles.status} ${result.pass ? styles.statusPassed : styles.statusFailed}`}>
-                  {result.pass ? 'PASSED' : 'FAILED'}
-                </span>
-              </div>
-              
-              <div className={styles.testCaseDetails}>
+      <div className={styles.testCasesList}>
+  {testResults.map((result, index) => (
+          <div key={index} className={`${styles.testCase} ${result.pass ? styles.passed : styles.failed}`}>
+            <div className={styles.testCaseHeader}>
+              <span className={styles.testCaseNumber}>Test Case {index + 1}</span>
+              <span className={`${styles.status} ${result.pass ? styles.statusPassed : styles.statusFailed}`}>
+                {result.pass ? 'PASSED' : 'FAILED'}
+              </span>
+            </div>
+
+            <div className={styles.testCaseDetails}>
+              { /* Hide the input/test name when there are structured failures to keep output minimal */ }
+              {(!result.failures || result.failures.length === 0) && (
                 <div className={styles.inputSection}>
                   <strong>Input:</strong>
                   <div className={styles.codeBlock}>{result.input || 'No input provided'}</div>
                 </div>
-                
-                <div className={styles.outputSection}>
-                  <div className={styles.expectedOutput}>
-                    <strong>Expected Output:</strong>
-                    <div className={styles.codeBlock}>{result.expected || 'No expected output'}</div>
+              )}
+
+              <div className={styles.outputSection}>
+                <div className={styles.expectedOutput}>
+                  <strong>Expected Output:</strong>
+                  <div className={styles.codeBlock}>
+                    {result.expected !== undefined && result.expected !== null 
+                      ? (typeof result.expected === 'object' ? formatObjectForDisplay(result.expected) : String(result.expected))
+                      : 'No expected output'
+                    }
                   </div>
-                  
-                  <div className={styles.actualOutput}>
-                    <strong>Your Output:</strong>
-                    <div className={`${styles.codeBlock} ${result.pass ? styles.correctOutput : styles.incorrectOutput}`}>
-                      {result.received !== undefined && result.received !== null 
-                        ? (typeof result.received === 'object' ? JSON.stringify(result.received, null, 2) : String(result.received))
-                        : 'No output'
-                      }
-                    </div>
+                </div>
+
+                <div className={styles.actualOutput}>
+                  <strong>Your Output:</strong>
+                  <div className={`${styles.codeBlock} ${result.pass ? styles.correctOutput : styles.incorrectOutput}`}>
+                    { /* If structured failures with concise summaries exist, show only those summaries */ }
+                    {result.failures && result.failures.length > 0 && result.failures.some(f => f.summary) ? (
+                      <div>
+                        {result.failures.map((f, fi) => (
+                          <div key={fi} style={{ marginBottom: '8px' }}>
+                            {/* Only show the concise summary lines when summary exists */}
+                            <pre style={{ whiteSpace: 'pre-wrap', margin: 0 }}>{f.summary}</pre>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div>
+                        { /* No concise summary available - extract only Expected/Received lines and show maximum of 3 lines */ }
+                        {result.failures && result.failures.length > 0 ? (
+                          <div>
+                            {result.failures.map((f, fi) => {
+                              // Compute a concise set of lines to show: prefer f.summary, else extract Expected/Received lines
+                              let conciseLines = [];
+                              if (f.summary && f.summary.trim()) {
+                                conciseLines = f.summary.trim().split('\n').map(l => l.trim()).filter(l => l);
+                              } else {
+                                const fm = (f.failureMessages || []).join('\n');
+                                const lines = fm.split('\n').map(l => l.trim()).filter(l => l);
+                                const matched = lines.filter(l => /^(Expected|Received|Received array|Expected length|Received length)/i.test(l) || /^\[.*\]$/.test(l));
+                                if (matched.length) conciseLines = matched;
+                                else conciseLines = lines.slice(-3);
+                              }
+
+                              // Limit to first 3 lines
+                              conciseLines = conciseLines.slice(0, 3);
+
+                              return (
+                                <div key={fi} style={{ marginBottom: '8px' }}>
+                                  <pre style={{ whiteSpace: 'pre-wrap', margin: '4px 0' }}>{conciseLines.join('\n')}</pre>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        ) : null}
+
+                        { /* Show the concise 'received' summary if present (limit lines) */ }
+                        {result.received ? (
+                          <div style={{ marginTop: 8 }}>
+                            <pre style={{ whiteSpace: 'pre-wrap', margin: 0 }}>{String(result.received).split('\n').slice(0,3).join('\n')}</pre>
+                          </div>
+                        ) : null}
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
             </div>
-          ))}
-        </div>
-      )}
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

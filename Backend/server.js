@@ -4,6 +4,7 @@ const app = express();
 const AuthRouter = require('./router/auth-router')
 const ProblemRouter = require('./router/problem-router');
 const EditorialRouter = require('./router/editorial-router');
+const ExecutionRouter = require('./router/execution-router');
 
 const connectDB = require('./utils/db');
 const errorMiddleware = require('./Middlewares/error-middleware');
@@ -23,6 +24,7 @@ app.use('/api/auth',AuthRouter)
 app.use(errorMiddleware)
 app.use('/api/problems', ProblemRouter);
 app.use('/api/editorials',EditorialRouter)
+app.use('/api/execute', ExecutionRouter);
 
 
 const PORT = 5000;
