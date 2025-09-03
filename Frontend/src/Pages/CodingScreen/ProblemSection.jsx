@@ -77,13 +77,15 @@ const ProblemSection = ({problem}) => {
 
         <h3>Examples</h3>
         <ul>
-          {problem.sampleTestCases.map((tc, idx) => (
+          {problem.exampleTestCases.map((tc, idx) => (
             <li key={idx} className={styles.examples}>
               <strong>{`Example ${idx+1} : `}</strong> {tc.input} <br />
-              <strong>Input:</strong> {tc.input} <br />
+              <strong>Output:</strong> {tc.output} <br />
               <strong>Explanation:</strong> {tc.explanation}
             </li>
           ))}
+
+          
         </ul>
         <h3>Constraints</h3>
         <ol className={styles.constraintsContainer}>

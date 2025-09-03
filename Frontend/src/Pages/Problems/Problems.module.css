@@ -1,3 +1,20 @@
+/* Modern badge for Coming Soon */
+.comingSoonBadge {
+    position: absolute;
+    top: 12px;
+    right: 18px;
+    background: linear-gradient(90deg, #ffb347 0%, #ffcc80 100%);
+    color: #222;
+    font-weight: 600;
+    padding: 4px 14px;
+    border-radius: 16px;
+    font-size: 0.95rem;
+    box-shadow: 0 2px 8px rgba(255, 188, 60, 0.15);
+    letter-spacing: 0.5px;
+    border: none;
+    z-index: 2;
+    pointer-events: none;
+}
 /* Problems Page Styles - Black and White Theme - Performance Optimized */
 .problemsPage {
     position: relative;

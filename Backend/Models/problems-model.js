@@ -16,7 +16,7 @@ const problemsSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  
+
   // Problem Classification
   problemType: {
     type: String,
@@ -24,26 +24,26 @@ const problemsSchema = new mongoose.Schema({
     required: true,
     default: 'function'
   },
-  
+
   // Technical Specifications
   difficulty: {
     type: String,
     enum: ['Easy', 'Medium', 'Hard', 'Expert'],
     required: true,
   },
-  
+
   category: {
     type: String,
     enum: ['JavaScript', 'React', 'DOM', 'Algorithms', 'Data Structures', 'Browser APIs', 'Performance', 'Testing'],
     required: true,
     default: 'JavaScript'
   },
-  
+
   tags: {
     type: [String],
     default: [],
   },
-  
+
   // Execution Environment
   executionEnvironment: {
     type: String,
@@ -51,34 +51,34 @@ const problemsSchema = new mongoose.Schema({
     required: true,
     default: 'node'
   },
-  
+
   // Code Specifications
   functionSignature: {
     type: String, // Signature user sees (e.g. function twoSum(nums, target) {})
     required: true,
   },
-  
+
   starterCode: {
     type: String, // Pre-filled editor code
     default: '',
   },
-  
+
   expectedFunctionName: {
     type: String,
     required: true, // Helps enforce naming for eval
   },
-  
+
   // Requirements and Constraints
   requirements: {
     type: [String], // Array of structured requirements
     default: [],
   },
-  
+
   constraints: {
     type: [String], // array of strings
     required: true
   },
-  
+
   // Performance Requirements
   performanceRequirements: {
     timeComplexity: {
@@ -100,13 +100,13 @@ const problemsSchema = new mongoose.Schema({
       default: 128
     }
   },
-  
+
   // Code Quality and Validation
   validationRules: {
     type: [String],
     enum: [
       'no-global-variables',
-      'no-infinite-loops', 
+      'no-infinite-loops',
       'no-eval',
       'no-innerHTML',
       'no-document-write',
@@ -131,14 +131,20 @@ const problemsSchema = new mongoose.Schema({
     ],
     default: ['no-infinite-loops', 'no-eval']
   },
-  
+
   // Test Framework Configuration
   testFramework: {
     type: String,
     enum: ['jest', 'mocha', 'custom', 'none'],
     default: 'jest'
   },
-  
+  exampleTestCases: [
+    {
+      input: { type: String, required: true },
+      output: { type: String, required: true },
+      explanation: { type: String, required: true }
+    },
+  ],
   // Enhanced Test Cases
   sampleTestCases: [
     {
@@ -152,7 +158,7 @@ const problemsSchema = new mongoose.Schema({
       _id: { type: mongoose.Schema.Types.ObjectId, auto: true }
     },
   ],
-  
+
   mainTestCases: [
     {
       name: { type: String, required: true },
@@ -166,7 +172,7 @@ const problemsSchema = new mongoose.Schema({
       _id: { type: mongoose.Schema.Types.ObjectId, auto: true }
     },
   ],
-  
+
   // Edge Cases and Special Tests
   edgeCases: [
     {
@@ -178,7 +184,7 @@ const problemsSchema = new mongoose.Schema({
       _id: { type: mongoose.Schema.Types.ObjectId, auto: true }
     }
   ],
-  
+
   // Performance Tests
   performanceTests: [
     {
@@ -191,29 +197,29 @@ const problemsSchema = new mongoose.Schema({
       _id: { type: mongoose.Schema.Types.ObjectId, auto: true }
     }
   ],
-  
+
   // Solution and Reference
   solutionCode: {
     type: String,
     required: true, // Used to run tests against
   },
-  
+
   // Metadata
   createdAt: {
     type: Date,
     default: Date.now,
   },
-  
+
   updatedAt: {
     type: Date,
     default: Date.now,
   },
-  
+
   author: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
   },
-  
+
   // Statistics
   stats: {
     totalSubmissions: { type: Number, default: 0 },
@@ -222,13 +228,13 @@ const problemsSchema = new mongoose.Schema({
     successRate: { type: Number, default: 0 }, // percentage
     difficultyRating: { type: Number, default: 0 }, // user-rated difficulty 1-5
   },
-  
+
   // Version Control
   version: {
     type: Number,
     default: 1
   },
-  
+
   isActive: {
     type: Boolean,
     default: true
@@ -239,18 +245,18 @@ const problemsSchema = new mongoose.Schema({
 function validateTestCase(testCase) {
   const hasInputOutput = testCase.input !== undefined && testCase.expectedOutput !== undefined;
   const hasTestCode = testCase.testCode && testCase.testCode.trim() !== '';
-  
+
   if (!hasInputOutput && !hasTestCode) {
     throw new Error('Test case must have either (input and expectedOutput) or testCode');
   }
-  
+
   return true;
 }
 
 // Validate test cases before saving
-problemsSchema.pre('save', function(next) {
+problemsSchema.pre('save', function (next) {
   this.updatedAt = new Date();
-  
+
   // Validate all test case arrays
   const allTestCases = [
     ...(this.sampleTestCases || []),
@@ -258,7 +264,7 @@ problemsSchema.pre('save', function(next) {
     ...(this.edgeCases || []),
     ...(this.performanceTests || [])
   ];
-  
+
   for (const testCase of allTestCases) {
     try {
       validateTestCase(testCase);
@@ -266,7 +272,7 @@ problemsSchema.pre('save', function(next) {
       return next(error);
     }
   }
-  
+
   next();
 });
 

@@ -13,7 +13,10 @@ import { setSampleTestCases, setMainTestCases, clearTestResults, setActiveTab, s
 export default function CodingScreen() {
   const { id } = useParams();
   const [problem, setProblem] = useState(null);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+  // Fixed widths
+  const problemWidth = 50; // percent
+  const editorWidth = 50; // percent
 
   // Clear test results when problem ID changes (when navigating between problems)
   useEffect(() => {
@@ -24,33 +27,48 @@ export default function CodingScreen() {
 
   useEffect(() => {
     axios.get(`http://localhost:5000/api/problems/${id}`)
-    .then(data => setProblem(data.data));
+      .then(data => {
+        setProblem(data.data);
+        console.log(data.data);
+      });
   }, [id]);
+
   useEffect(() => {
     if (problem) {
       dispatch(setSampleTestCases(problem.sampleTestCases || []));
       dispatch(setMainTestCases(problem.mainTestCases || []));
-      // Clear previous test results when switching problems
       dispatch(clearTestResults());
-      // Reset to Description tab when switching problems
       dispatch(setActiveTab(0));
-      // Hide success toast when switching problems
       dispatch(setShowSuccessToast(false));
     }
   }, [problem, dispatch]);
+
+  // ...no dragging logic...
+
   if (!problem) return <div>Loading...</div>;
 
   return (
     <>
-    <Navbar problemId={id}/>
-    <div className={styles.container}>
-      {/* Problem Details */}
-     <ProblemSection problem={problem}/>
-      {/* Code Editor */}
-      <EditorSection starterCode={problem.starterCode}/>
-    </div>
-    {/* Success Toast */}
-    <SuccessToast />
+      <Navbar problemId={id} />
+      <div
+        className={styles.container}
+        id="coding-container"
+        style={{ position: 'relative' }}
+      >
+        <div
+          className={styles.problemSection}
+         
+        >
+          <ProblemSection problem={problem} />
+        </div>
+        <div
+          className={styles.editorSection}
+          
+        >
+          <EditorSection starterCode={problem.starterCode} />
+        </div>
+      </div>
+      <SuccessToast />
     </>
   );
 }
