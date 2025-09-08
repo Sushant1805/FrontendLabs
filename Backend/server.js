@@ -1,6 +1,8 @@
 require('dotenv').config();
 const express = require("express");
 const app = express();
+require('./config/passport')
+
 const AuthRouter = require('./router/auth-router')
 const ProblemRouter = require('./router/problem-router');
 const EditorialRouter = require('./router/editorial-router');
@@ -25,6 +27,7 @@ app.use(errorMiddleware)
 app.use('/api/problems', ProblemRouter);
 app.use('/api/editorials',EditorialRouter)
 app.use('/api/execute', ExecutionRouter);
+
 
 
 const PORT = 5000;

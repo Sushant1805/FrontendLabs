@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { Link, useNavigate, useLocation } from "react-router-dom"
 import styles from './Navbar.module.css'
 import { CgProfile } from "react-icons/cg"
@@ -12,6 +12,21 @@ import FrontendLabsLogo from '../assets/FrontendLabs.png';
 const Navbar = () => {
   const userData = useSelector((state) => state.auth.user)
   const isLoggedIn = useSelector((state) => state.auth.isAuthenticated)
+  useEffect(() => {
+    console.log('[Navbar] userData:', userData, 'isLoggedIn:', isLoggedIn);
+  }, [userData, isLoggedIn]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // If userData is null and user is not logged in, show loading for a short time
+    if (userData === null && !isLoggedIn) {
+      setLoading(true);
+      const timer = setTimeout(() => setLoading(false), 1000); // 1s fallback
+      return () => clearTimeout(timer);
+    } else {
+      setLoading(false);
+    }
+  }, [userData, isLoggedIn]);
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const location = useLocation()
@@ -185,7 +200,9 @@ const Navbar = () => {
           <NavbarMenu className={'navbar-menu'}/>
         )}
 
-        {!isLoggedIn ? (
+        {loading ? (
+          <div className={styles.userWelcome}><h2 className={styles.userWelcomeMessage}>Loading...</h2></div>
+        ) : !isLoggedIn ? (
           <div className="navbar-buttons">
             <Link>
               <button onClick={()=>dispatch(setShowLogin(true))} className="button button-white">Login</button>
@@ -195,14 +212,18 @@ const Navbar = () => {
             </Link>
           </div>
         ) : (
-          <div className={styles.userWelcome}>
-            <h2 className={styles.userWelcomeMessage}>Welcome, {userData.name}</h2>
-            <CgProfile
-              className={styles.profileIcon}
-              onClick={() => navigate('/profile')}
-              title="View Profile"
-            />
-          </div>
+          userData && (
+            <div className={styles.userWelcome}>
+              <h2 className={styles.userWelcomeMessage}>
+                Welcome, {userData.name && userData.name.split(' ')[0].charAt(0).toUpperCase() + userData.name.split(' ')[0].slice(1).toLowerCase()}
+              </h2>
+              <CgProfile
+                className={styles.profileIcon}
+                onClick={() => navigate('/profile')}
+                title="View Profile"
+              />
+            </div>
+          )
         )}
          <RxHamburgerMenu className="hamburger" onClick={()=>setShowHamburgerMenu(true)}/>
           {

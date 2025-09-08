@@ -6,7 +6,8 @@ const JWT = require('jsonwebtoken')
 const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true },
-  password: { type: String, required: true },
+  googleId: { type: String, unique: true },
+  password: { type: String, required: false },
   isAdmin: { type: Boolean, default: false },
 });
 
@@ -28,21 +29,21 @@ userSchema.pre('save', async function (next) {
 
 
 // JSON WEB TOKEN
-userSchema.methods.generateToken = async function(){
-    try {
-      return JWT.sign({
-        id: this._id,
-        name : this.name,
-        email : this.email,
-        isAdmin : this.isAdmin
-      },
-      process.env.JWT_SECRET_KEY,{
-        expiresIn:'1d'
-      }
-    )
-    } catch (error) {
-        console.error(error)
+userSchema.methods.generateToken = async function () {
+  try {
+    return JWT.sign({
+      id: this._id,
+      name: this.name,
+      email: this.email,
+      isAdmin: this.isAdmin
+    },
+      process.env.JWT_SECRET_KEY, {
+      expiresIn: '1d'
     }
+    )
+  } catch (error) {
+    console.error(error)
+  }
 }
 
 

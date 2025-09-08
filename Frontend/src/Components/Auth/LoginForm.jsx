@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styles from './RegisterForm.module.css';
 import { Link, useNavigate } from 'react-router-dom';
+import { FcGoogle } from "react-icons/fc";
 import { MdOutlineEmail } from 'react-icons/md';
 import { TbLockPassword } from 'react-icons/tb';
 import { HiOutlineEye, HiOutlineEyeOff } from 'react-icons/hi';
@@ -106,14 +107,12 @@ const LoginForm = () => {
         <div className={styles.mainRegisterDiv}>
         <main className={styles.registerForm}>
             <IoMdClose onClick={()=>dispatch(setShowLogin(false))} className={styles.closeButton}/>
-            
             <header>
                 <h1>Welcome Back</h1>
                 <h2 className={styles.registerSubheading}>
                     Enter your credentials to log in
                 </h2>
             </header>
-
             <form onSubmit={handleSubmit} className={styles.registerFormFields}>
                 <div className={styles.inputCell}>
                     <label className={styles.labels} htmlFor="login-email">
@@ -133,7 +132,6 @@ const LoginForm = () => {
                     </div>
                     <p className={styles.errorMsg}>{errors.email}</p>
                 </div>
-
                 <div className={styles.inputCell}>
                     <label className={styles.labels} htmlFor="login-password">
                         Password <span className={styles.inputRequired}>*</span>
@@ -167,7 +165,30 @@ const LoginForm = () => {
                 <button type="submit" className="button button-primary authbuttons">
                     Log In
                 </button>
-
+                                <button
+                                    type="button"
+                                    onClick={() => window.location.href = 'http://localhost:5000/api/auth/google'}
+                                    style={{
+                                        marginTop: '1rem',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        width: '100%',
+                                        background: '#181818',
+                                        color: '#fff',
+                                        border: '1px solid #444',
+                                        borderRadius: '2rem',
+                                        padding: '0.5rem 1.5rem',
+                                        fontSize: '1.1rem',
+                                        fontWeight: 600,
+                                        cursor: 'pointer',
+                                        transition: 'background 0.2s',
+                                    }}
+                                    className="google-auth-btn"
+                                >
+                                    <FcGoogle style={{ width: '28px', height: '28px', marginRight: '16px', background: '#fff', borderRadius: '50%', padding: '2px' }} />
+                                    Continue with Google
+                                </button>
                 <h4 className={styles.alreadyText}>
                     Don't have an account?
                     <Link to="/register">

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styles from './RegisterForm.module.css';
 import { Link, useNavigate } from 'react-router-dom';
+import { FcGoogle } from "react-icons/fc";
 import { BiUser } from "react-icons/bi";
 import { MdOutlineEmail } from "react-icons/md";
 import { TbLockPassword } from "react-icons/tb";
@@ -108,7 +109,6 @@ const RegisterForm = () => {
                     </div>
                     <p className={styles.errorMsg}>{errors.name}</p>
                 </div>
-
                 <div className={styles.inputCell}>
                     <label className={styles.labels} htmlFor="register-email">
                         Email <span className={styles.inputRequired}>*</span>
@@ -149,14 +149,36 @@ const RegisterForm = () => {
                 </div>
                 {mainError && <p className={styles.mainErrorMsg}>{mainError}</p>}
                 <button type="submit" className="button button-primary authbuttons">Sign Up</button>
-
+                                <button
+                                    type="button"
+                                    onClick={() => window.location.href = 'http://localhost:5000/api/auth/google'}
+                                    style={{
+                                        marginTop: '1rem',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        width: '100%',
+                                        background: '#181818',
+                                        color: '#fff',
+                                        border: '1px solid #444',
+                                        borderRadius: '2rem',
+                                        padding: '0.5rem 1.5rem',
+                                        fontSize: '1.1rem',
+                                        fontWeight: 600,
+                                        cursor: 'pointer',
+                                        transition: 'background 0.2s',
+                                    }}
+                                    className="google-auth-btn"
+                                >
+                                    <FcGoogle style={{ width: '28px', height: '28px', marginRight: '16px', background: '#fff', borderRadius: '50%', padding: '2px' }} />
+                                    Continue with Google
+                                </button>
                 <h4 className={styles.alreadyText}>
                     Already have an account?
                     <Link to="/login">
                         <span className={styles.already}> Sign In</span>
                     </Link>
                 </h4>
-
             </form>
         </main>
         </div>

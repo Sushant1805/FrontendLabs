@@ -2,7 +2,7 @@ import React from 'react'
 import styles from '../Problems.module.css'
 import { useNavigate } from 'react-router-dom';
 
-const ProblemsCard = ({problem,index,disableSolve}) => {
+const ProblemsCard = ({problem,index}) => {
     const navigate = useNavigate();
      function getDificultyColor(Difficulty){
         switch(Difficulty){
@@ -32,15 +32,13 @@ const ProblemsCard = ({problem,index,disableSolve}) => {
                 backgroundColor: getDificultyColor(problem.difficulty),
                 width:"10%"
             }}>{problem.difficulty}</h3>
-            <h3  style={{ color: getStatusColor(problem.Status),width:"15%" }}>{problem.Status}</h3>
+            <h3  style={{ color: getStatusColor('Solved'),width:"15%" }}>{'Solved'}</h3>
             <button
                 className='button button-primary'
                 onClick={e => {
                     e.stopPropagation();
                     navigate(`/codingScreen/${problem._id}`);
                 }}
-                disabled={disableSolve}
-                style={disableSolve ? {background:'#222', color:'#aaa', cursor:'not-allowed'} : {}}
             >
                 Solve
             </button>
