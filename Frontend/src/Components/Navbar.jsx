@@ -4,12 +4,12 @@ import styles from './Navbar.module.css'
 import { CgProfile } from "react-icons/cg"
 import { useSelector, useDispatch } from "react-redux"
 import { setShowRegister,setShowLogin } from "./Auth/modalSlice"
-import { setTestResults, setTestType, setActiveTab, setShowSuccessToast } from '../Pages/CodingScreen/codeSlice'
+import { setTestResults, setTestType, setActiveTab, setShowSuccessToast, setIsLoading, clearSubmissions } from '../Pages/CodingScreen/codeSlice'
 import { RxHamburgerMenu } from "react-icons/rx";
 import { IoCloseSharp } from "react-icons/io5";
 import FrontendLabsLogo from '../assets/FrontendLabs.png';
 // Removed complex test execution imports - using simple server-side approach
-const Navbar = () => {
+const Navbar = ({ problemId }) => {
   const userData = useSelector((state) => state.auth.user)
   const isLoggedIn = useSelector((state) => state.auth.isAuthenticated)
   useEffect(() => {
@@ -33,8 +33,21 @@ const Navbar = () => {
   const code = useSelector((state)=>state.code.code)
   const sampleTestCases = useSelector((state)=>state.code.sampleTestCases)
   const mainTestCases = useSelector((state)=>state.code.mainTestCases)
+  const isLoading = useSelector((state)=>state.code.isLoading)
+  const activeTab = useSelector((state)=>state.code.activeTab)
 
   const [showHamburgerMenu,setShowHamburgerMenu] = useState(false)
+
+  useEffect(() => {
+    if (showHamburgerMenu) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [showHamburgerMenu]);
 
   // Check if we're on the coding screen page
   const isCodingScreen = location.pathname.startsWith('/codingScreen/')
@@ -88,9 +101,55 @@ const Navbar = () => {
 
   // All parsing logic removed - server handles everything
 
+  // Function to save submission after successful test execution
+  const saveSubmission = async (code, results, testType) => {
+    try {
+      if (!userData || !problemId) {
+        console.log('Cannot save submission: missing user or problem data');
+        return;
+      }
+
+      // Determine if submission is accepted (all tests passed)
+      const hasErrors = results.some(test => test.error && !test.pass);
+      const allPassed = results.every(test => test.pass) && !hasErrors && results.length > 0;
+      const status = allPassed ? 'Accepted' : 'Wrong Answer';
+
+      const submissionData = {
+        userId: userData._id,
+        problemId: problemId,
+        code: code,
+        status: status
+      };
+
+      console.log('Saving submission:', submissionData);
+
+      const response = await fetch('http://localhost:5000/api/submissions/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(submissionData)
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to save submission: ${response.status}`);
+      }
+
+      const savedSubmission = await response.json();
+      console.log('Submission saved successfully:', savedSubmission);
+    } catch (error) {
+      console.error('Error saving submission:', error);
+    }
+  };
 
   const handleRun = async () => {
-    console.log('Run button clicked');
+    console.log('Run button clicked - switching to Results tab');
+
+    // Immediately switch to results tab and set loading state
+    dispatch(setActiveTab(2)); // Switch to Results tab first
+    dispatch(setTestType('sample'));
+    dispatch(setIsLoading(true));
+    dispatch(setTestResults([])); // Clear previous results
 
     // Validate inputs
     const validation = validateInputs(code, sampleTestCases);
@@ -100,8 +159,7 @@ const Navbar = () => {
         message: validation.message,
         pass: false
       }]));
-      dispatch(setTestType('sample'));
-      dispatch(setActiveTab(2));
+      dispatch(setIsLoading(false));
       return;
     }
 
@@ -112,8 +170,6 @@ const Navbar = () => {
       console.log('Sample test results:', results);
 
       dispatch(setTestResults(results));
-      dispatch(setTestType('sample'));
-      dispatch(setActiveTab(2)); // Switch to Results tab
     } catch (error) {
       console.error('Error in handleRun:', error);
       dispatch(setTestResults([{
@@ -121,13 +177,19 @@ const Navbar = () => {
         message: error.message,
         pass: false
       }]));
-      dispatch(setTestType('sample'));
-      dispatch(setActiveTab(2));
+    } finally {
+      dispatch(setIsLoading(false));
     }
   }
 
   const handleSubmit = async () => {
-    console.log('Submit button clicked');
+    console.log('Submit button clicked - switching to Results tab');
+
+    // Immediately switch to results tab and set loading state
+    dispatch(setActiveTab(2)); // Switch to Results tab first
+    dispatch(setTestType('main'));
+    dispatch(setIsLoading(true));
+    dispatch(setTestResults([])); // Clear previous results
 
     // Validate inputs
     const validation = validateInputs(code, mainTestCases);
@@ -137,8 +199,7 @@ const Navbar = () => {
         message: validation.message,
         pass: false
       }]));
-      dispatch(setTestType('main'));
-      dispatch(setActiveTab(2));
+      dispatch(setIsLoading(false));
       return;
     }
 
@@ -149,8 +210,12 @@ const Navbar = () => {
       console.log('Main test results:', results);
 
       dispatch(setTestResults(results));
-      dispatch(setTestType('main'));
-      dispatch(setActiveTab(2)); // Switch to Results tab
+
+      // Save submission after test execution (regardless of pass/fail)
+      await saveSubmission(code, results, 'main');
+
+      // Clear submissions cache to force refresh when submissions tab is viewed
+      dispatch(clearSubmissions());
 
       // Check if all tests passed and show success toast
       const hasErrors = results.some(test => test.error && !test.pass);
@@ -161,13 +226,20 @@ const Navbar = () => {
       }
     } catch (error) {
       console.error('Error in handleSubmit:', error);
-      dispatch(setTestResults([{
+      const errorResults = [{
         error: "Execution Error",
         message: error.message,
         pass: false
-      }]));
-      dispatch(setTestType('main'));
-      dispatch(setActiveTab(2));
+      }];
+      dispatch(setTestResults(errorResults));
+      
+      // Save submission even on error
+      await saveSubmission(code, errorResults, 'main');
+
+      // Clear submissions cache to force refresh when submissions tab is viewed
+      dispatch(clearSubmissions());
+    } finally {
+      dispatch(setIsLoading(false));
     }
   }
   const NavbarMenu = ({className}) => {
@@ -193,8 +265,12 @@ const Navbar = () => {
         {/* Conditionally render menu or coding buttons */}
         {isCodingScreen ? (
           <div className="navbar-buttons">
-            <button onClick={handleRun} className="button button-white">Run</button>
-            <button onClick={handleSubmit} className="button button-primary">Submit</button>
+            <button onClick={handleRun} className="button button-white" disabled={isLoading}>
+              {isLoading ? 'Running...' : 'Run'}
+            </button>
+            <button onClick={handleSubmit} className="button button-primary" disabled={isLoading}>
+              {isLoading ? 'Submitting...' : 'Submit'}
+            </button>
           </div>
         ) : (
           <NavbarMenu className={'navbar-menu'}/>
@@ -225,20 +301,44 @@ const Navbar = () => {
             </div>
           )
         )}
-         <RxHamburgerMenu className="hamburger" onClick={()=>setShowHamburgerMenu(true)}/>
-          {
-            showHamburgerMenu && <div className="hamburger-menu">
-              <IoCloseSharp className="hamburger-close"onClick={()=>setShowHamburgerMenu((prev)=>!prev)} />
+         <RxHamburgerMenu className="hamburger" onClick={()=>setShowHamburgerMenu((v)=>!v)}/>
+          {showHamburgerMenu && (
+            <div className="nav-dropdown">
+              <IoCloseSharp className="nav-dropdown-close" onClick={()=>setShowHamburgerMenu(false)} />
               {isCodingScreen ? (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', marginTop: '20px' }}>
-                  <button onClick={handleRun} className="button button-white">Run</button>
-                  <button onClick={handleSubmit} className="button button-primary">Submit</button>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                  <button 
+                    onClick={()=>{handleRun(); setShowHamburgerMenu(false);}} 
+                    className="button button-white" 
+                    style={{ width: '100%' }}
+                    disabled={isLoading}
+                  >
+                    {isLoading ? 'Running...' : 'Run'}
+                  </button>
+                  <button 
+                    onClick={()=>{handleSubmit(); setShowHamburgerMenu(false);}} 
+                    className="button button-primary" 
+                    style={{ width: '100%' }}
+                    disabled={isLoading}
+                  >
+                    {isLoading ? 'Submitting...' : 'Submit'}
+                  </button>
                 </div>
               ) : (
-                <NavbarMenu className={'hamburgerNavMenu'}/>
+                <>
+                  <NavbarMenu className={'nav-dropdown-menu'} />
+                  {!isLoggedIn ? (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '12px' }}>
+                      <button onClick={()=>{dispatch(setShowLogin(true)); setShowHamburgerMenu(false);}} className="button button-white" style={{ width: '100%' }}>Login</button>
+                      <button onClick={()=>{dispatch(setShowRegister(true)); setShowHamburgerMenu(false);}} className="button button-primary" style={{ width: '100%' }}>Sign up</button>
+                    </div>
+                  ) : (
+                    <button onClick={()=>{navigate('/profile'); setShowHamburgerMenu(false);}} className="button button-primary" style={{ width: '100%', marginTop: '12px' }}>Profile</button>
+                  )}
+                </>
               )}
             </div>
-          }
+          )}
       </div>
     </>
   )

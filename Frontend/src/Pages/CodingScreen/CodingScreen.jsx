@@ -7,13 +7,14 @@ import ProblemSection from "./ProblemSection";
 import axios from "axios";
 import EditorSection from "./EditorSection";
 import SuccessToast from './Components/SuccessToast';
-import { useDispatch } from "react-redux";
-import { setSampleTestCases, setMainTestCases, clearTestResults, setActiveTab, setShowSuccessToast } from "./codeSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { setSampleTestCases, setMainTestCases, clearTestResults, setActiveTab, setShowSuccessToast, clearSubmissions, setSubmissions, setIsLoadingSubmissions } from "./codeSlice";
 
 export default function CodingScreen() {
   const { id } = useParams();
   const [problem, setProblem] = useState(null);
   const dispatch = useDispatch();
+  const userData = useSelector((state) => state.auth.user);
   // Fixed widths
   const problemWidth = 50; // percent
   const editorWidth = 50; // percent
@@ -21,6 +22,7 @@ export default function CodingScreen() {
   // Clear test results when problem ID changes (when navigating between problems)
   useEffect(() => {
     dispatch(clearTestResults());
+    dispatch(clearSubmissions());
     dispatch(setActiveTab(0));
     dispatch(setShowSuccessToast(false));
   }, [id, dispatch]);
@@ -38,6 +40,7 @@ export default function CodingScreen() {
       dispatch(setSampleTestCases(problem.sampleTestCases || []));
       dispatch(setMainTestCases(problem.mainTestCases || []));
       dispatch(clearTestResults());
+      dispatch(clearSubmissions());
       dispatch(setActiveTab(0));
       dispatch(setShowSuccessToast(false));
     }

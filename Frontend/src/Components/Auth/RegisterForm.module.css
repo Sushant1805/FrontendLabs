@@ -1,3 +1,4 @@
+/* Container overlay */
 .mainRegisterDiv{
     position: fixed;
     top: 0;
@@ -10,24 +11,37 @@
     justify-content: center;
     align-items: center;
     z-index: 1000;
+    padding: 1rem; /* prevent content touching viewport edges */
+    overflow: auto; /* allow scroll on small screens */
 }
+
+/* Close button */
 .closeButton{
     position: absolute;
-    top:-20px;    
-    right:0;
+    top: 12px;    
+    right: 12px;
+    cursor: pointer;
 }
+
+/* Card */
 .registerForm{
     position: relative;
     display: flex;
     flex-direction: column;
-    gap:15px;
+    gap:10px;
     align-items: center;
-    justify-content: center;
-    height: 80vh;
-    width: 40vw;
+    justify-content: flex-start;
+    max-height: calc(100vh - 2rem); /* ensure it never exceeds viewport */
+    width: 100%;
+    max-width: 440px; /* narrower card */
     background-color: #151516;
     border-radius: 15px;
+    padding: 24px 20px 20px; /* reduced overall padding */
+    box-sizing: border-box; /* include padding in width */
+    overflow-y: auto; /* allow internal scroll when content is long */
+    -webkit-overflow-scrolling: touch;
 }
+
 .registerSubheading{
     margin-top: 5px;
     font-size: small;
@@ -35,45 +49,55 @@
     color:gray;
     text-align: center;
 }
+
+/* Form */
 .registerFormFields{
     display: flex;
     flex-direction: column;
-    gap:20px;
-    margin-top: 25px;
+    gap:14px;
+    margin-top: 8px;
+    width: 100%;
+    max-width: 360px; /* match inputs and buttons */
 }
+
 .labels{
     font-size: small;
     font-weight: 500;
 }
+
 .inputCell{
     display: flex;
     flex-direction: column;
-    gap:5px;
+    gap:4px;
 }
+
 .inputText{
-    width: 20em;
-    height: 2.5em;
+    width: 100%;
+    height: 2.75em;
     border-radius: 15px;
     border:none;
     padding-left: 2.2rem;
+    padding-right: 2.2rem; /* ensure room for icons */
+    box-sizing: border-box;
 }
 
 .inputText:focus{
     outline: 2px solid var(--primary-color);
      box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2);
-    
 }
 
 .inputRequired{
     font-size: 0.8em;
     color:red;
 }
+
 .alreadyText{
     font-size: small;
     text-align: center;
-    margin-top: 15px;
+    margin-top: 6px;
     font-weight: 400;
 }
+
 .already{
     color:var(--primary-color);
     text-decoration: none;
@@ -109,12 +133,35 @@
     color: red;
     font-size: 0.7em;
     font-weight: 400 ;
+    min-height: 1em; /* reserve space to prevent layout shift */
 }
+
 .mainErrorMsg{
     color: red;
-    font-size: 0.7em;
-    font-weight: 400 ;
+    font-size: 0.8em;
+    font-weight: 500 ;
     text-align: center;
+}
+
+/* Buttons inside auth */
+:global(.authbuttons){
+    width: 100% !important;
+    max-width: 100% !important; /* ensure it matches input width */
+    border-radius: 2rem;
+}
+
+/* Responsive tweaks */
+@media (max-width: 640px){
+    .registerForm{
+        max-width: 100%;
+        border-radius: 12px;
+        padding: 20px 14px 16px;
+        max-height: calc(100vh - 1rem);
+    }
+    .registerFormFields{
+        max-width: 100%;
+        gap:12px;
+    }
 }
 
 

@@ -126,7 +126,7 @@ const LoginForm = () => {
                             name="email"
                             className={styles.inputText}
                             id="login-email"
-                            type="text"
+                            type="email"
                             placeholder="Enter your email"
                         />
                     </div>
@@ -165,11 +165,17 @@ const LoginForm = () => {
                 <button type="submit" className="button button-primary authbuttons">
                     Log In
                 </button>
+                <h4 className={styles.alreadyText}>
+                    Don't have an account?
+                    <Link to="/register">
+                        <span className={styles.already}> Sign Up</span>
+                    </Link>
+                </h4>
                                 <button
                                     type="button"
                                     onClick={() => window.location.href = 'http://localhost:5000/api/auth/google'}
                                     style={{
-                                        marginTop: '1rem',
+                                        marginTop: '0.75rem',
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center',
@@ -189,12 +195,6 @@ const LoginForm = () => {
                                     <FcGoogle style={{ width: '28px', height: '28px', marginRight: '16px', background: '#fff', borderRadius: '50%', padding: '2px' }} />
                                     Continue with Google
                                 </button>
-                <h4 className={styles.alreadyText}>
-                    Don't have an account?
-                    <Link to="/register">
-                        <span className={styles.already}> Sign Up</span>
-                    </Link>
-                </h4>
             </form>
         </main>
         </div>

@@ -92,7 +92,7 @@ const RegisterForm = () => {
 
             <form onSubmit={handleSubmit} className={styles.registerFormFields}>
                 <div className={styles.inputCell}>
-                    <label className={styles.labels} htmlFor="register-email">
+                    <label className={styles.labels} htmlFor="register-name">
                         Name <span className={styles.inputRequired}>*</span>
                     </label>
                     <div className={styles.inputGroup}>
@@ -121,7 +121,7 @@ const RegisterForm = () => {
                             name="email"
                             className={styles.inputText}
                             id="register-email"
-                            type="text"
+                            type="email"
                             placeholder="Enter your email"
                         />
                     </div>
@@ -149,11 +149,17 @@ const RegisterForm = () => {
                 </div>
                 {mainError && <p className={styles.mainErrorMsg}>{mainError}</p>}
                 <button type="submit" className="button button-primary authbuttons">Sign Up</button>
+                <h4 className={styles.alreadyText}>
+                    Already have an account?
+                    <Link to="/login">
+                        <span className={styles.already}> Sign In</span>
+                    </Link>
+                </h4>
                                 <button
                                     type="button"
                                     onClick={() => window.location.href = 'http://localhost:5000/api/auth/google'}
                                     style={{
-                                        marginTop: '1rem',
+                                        marginTop: '0.75rem',
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center',
@@ -173,12 +179,6 @@ const RegisterForm = () => {
                                     <FcGoogle style={{ width: '28px', height: '28px', marginRight: '16px', background: '#fff', borderRadius: '50%', padding: '2px' }} />
                                     Continue with Google
                                 </button>
-                <h4 className={styles.alreadyText}>
-                    Already have an account?
-                    <Link to="/login">
-                        <span className={styles.already}> Sign In</span>
-                    </Link>
-                </h4>
             </form>
         </main>
         </div>

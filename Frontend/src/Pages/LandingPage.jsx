@@ -5,7 +5,6 @@ import HeroBackground from '../Components/HeroBackground'
 import { useSelector } from 'react-redux'
 import Register from './Register'
 import Login from './Login'
-import { useNavigate } from 'react-router-dom'
 
 
 const LandingPage = () => {
@@ -14,16 +13,12 @@ const LandingPage = () => {
   
   
   return (
-    <div className='landing-page' style={{ position: 'relative', height: '100vh', overflow: 'hidden' }}>
-      {/* Background goes here, behind */}
+    <div className='landing-page'>
       <HeroBackground />
-
-      {/* Foreground content */}
-      <div style={{ position: 'relative', zIndex: 10 }}>
+      <div className='landing-foreground'>
         <Navbar />
         {RegisterModal && <Register/>}
         {LoginModal && <Login/>}
-
         <HeroSection />
       </div>
     </div>

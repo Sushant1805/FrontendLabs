@@ -1,11 +1,12 @@
 import React, { useEffect, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { setActiveTab } from './codeSlice'
+import { setActiveTab, clearSubmissions } from './codeSlice'
 import styles from './CodingScreen.module.css';
 import MenuTab from './Components/MenuTab';
 import InfoTab from './Components/InfoTab';
 import SolutionSection from './SolutionSection';
 import TestResultsSection from './TestResultsSection';
+import SubmissionsSection from './SubmissionsSection';
 const ProblemSection = ({problem}) => {
   const dispatch = useDispatch()
   const activeTab = useSelector(state => state.code.activeTab)
@@ -114,10 +115,7 @@ const ProblemSection = ({problem}) => {
         {/*Submissions */}
         {
           activeTab === 3 &&
-         <div ref={problemInfoRef} className={styles.problemInfoContainer}>
-           <h2>Submissions</h2>
-           <p>Submissions feature coming soon...</p>
-         </div>
+         <SubmissionsSection problemId={problem._id} />
         }
 
       </div>

@@ -21,9 +21,9 @@ const HomePage = () => {
   return (
     <>
       {/* Page 1: Hero Section */}
-      <div className='landing-page' style={{ position: 'relative', height: '100vh', overflow: 'hidden' }}>
+      <div className='landing-page'>
         <HeroBackground />
-        <div style={{ position: 'relative', zIndex: 10 }}>
+        <div className='landing-foreground'>
           <Navbar />
           {RegisterModal && <Register />}
           {LoginModal && <Login />}

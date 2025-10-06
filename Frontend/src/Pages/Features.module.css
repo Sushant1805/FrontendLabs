@@ -1,22 +1,102 @@
-.feature-page {
-  min-height: 100vh;
+/* Feature section (scoped styles) */
+.featureSection {
+  min-height: 100svh;
   background: linear-gradient(180deg, #161618 0%, #0b0b23 100%);
   color: white;
   font-family: 'Inter', sans-serif;
-  padding-top: 60px;
+  padding: 60px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
-.feature-heading {
-  position: relative;
-  z-index: 1;
+.featureHeading {
+  font-size: clamp(1.8rem, 2vw + 1rem, 2.4rem);
+  margin-bottom: 0.7rem;
+  text-align: center;
+  max-width: 800px;
 }
 
-.feature-subheading {
-  position: relative;
-  z-index: 1;
+.featureSubheading {
+  font-size: clamp(1rem, 1vw + 0.7rem, 1.2rem);
+  margin-bottom: 1.5rem;
+  text-align: center;
+  max-width: 800px;
+  color: rgb(180, 180, 180);
 }
 
-.feature-card-container {
-  position: relative;
-  z-index: 1;
+.featureCards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.2rem;
+  max-width: 1000px;
+  width: 100%;
+  margin-top: 2rem; /* add space between text and cards on desktop */
+}
+
+.featureCard {
+  min-width: 220px;
+  max-width: 280px;
+  flex: 1 1 220px;
+  padding: 1.2rem 1rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  height: auto;
+}
+
+.featureIcon {
+  font-size: 2rem;
+  margin-bottom: 0.7rem;
+  color: var(--primary-color);
+}
+
+.featureTitle {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.featureDesc {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin-bottom: 0;
+  color: rgb(200, 200, 200);
+}
+
+@media (max-width: 768px) {
+  .featureSection {
+    padding: 40px 16px;
+  }
+
+  .featureCards {
+    gap: 1.6rem; /* extra vertical space between stacked cards */
+    flex-direction: column;
+    align-items: center; /* center cards in mobile */
+  }
+
+  .featureCard {
+    width: min(92%, 360px); /* keep a readable width and center */
+    height: 260px; /* uniform card height on mobile */
+  }
+
+  /* Normalize global card styles used by these cards on mobile */
+  :global(.card) {
+    height: 260px;
+    margin-top: 0;
+  }
+  :global(.card-1) {
+    height: 260px;
+    margin-top: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .featureCards {
+    gap: 1.4rem; /* ensure comfortable spacing on very small screens */
+  }
 }

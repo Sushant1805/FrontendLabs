@@ -457,16 +457,6 @@ class UniversalExecutionController {
     });
   }
 
-
-
-
-
-
-
-
-
-
-
   /**
    * Detect infinite loops in code
    */
