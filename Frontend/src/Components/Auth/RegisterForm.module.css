@@ -10,7 +10,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    z-index: 1000;
+    z-index: 10020;
     padding: 1rem; /* prevent content touching viewport edges */
     overflow: auto; /* allow scroll on small screens */
 }
@@ -162,6 +162,45 @@
         max-width: 100%;
         gap:12px;
     }
+}
+
+/* Google Auth Button Styles */
+.googleAuthBtn {
+    margin-top: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    background: #181818;
+    color: #fff;
+    border: 1px solid #444;
+    border-radius: 2rem;
+    padding: 0.4rem 1rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.googleAuthBtn:hover {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(41, 52, 255, 0.3);
+}
+
+.googleIcon {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    background: #fff;
+    border-radius: 50%;
+    padding: 1px;
+    transition: transform 0.3s ease;
+}
+
+.googleAuthBtn:hover .googleIcon {
+    transform: scale(1.1);
 }
 
 

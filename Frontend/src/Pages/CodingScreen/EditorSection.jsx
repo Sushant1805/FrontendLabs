@@ -32,7 +32,7 @@ export default function EditorSection({ starterCode }) {
         left: 0,
         width: "100vw",
         height: "100vh",
-        zIndex: 9999,
+        zIndex: 10020,
         background: "#222",
       }
     : { flex: 1, height: "90vh" };

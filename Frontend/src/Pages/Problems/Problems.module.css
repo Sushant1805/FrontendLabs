@@ -19,15 +19,16 @@
     height: 80vh;
     display: flex;
     flex-direction: column;
-    gap: 1em;
+    gap: 0.5em;
     width: 70vw;
     border-radius: 15px;
-    padding: 15px 0 0 15px;
-    /* position: relative; */
+    padding: 15px;
+    position: relative;
     background: rgba(255, 255, 255, 0.08);
     backdrop-filter: blur(1px);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     overflow: visible;
+    box-sizing: border-box;
 }
 
 .filtersContainer {
@@ -47,19 +48,22 @@
     text-align: center;
     width: 5em;
     border-radius: 5px;
-    padding: 2px 5px 2px 5px;
+    padding: 2px 5px;
     color: black;
     font-weight: 600;
     font-size: small;
+    margin: 0;
+    flex-shrink: 0;
 }
 
 .problemsWrapper{
     display: flex;
     flex-direction: column;
-    gap: 1em;
+    gap: 0.8em;
     width: 100%;
     height: auto; /* let content define height */
-    padding: 2em;
+    padding: 1em;
+    padding-bottom: 4em; /* space for pagination */
     overflow-y: visible; /* page scrolls instead of internal scroll */
     z-index: 1000;
     scroll-behavior: smooth;
@@ -93,16 +97,52 @@
     border-radius: 15px;
     font-size: small;
     display: flex;
-    gap: 4em;
+    justify-content: space-between;
     align-items: center;
-    padding: 1em;
+    padding: 1em 1.5em;
     cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.problemCardContent {
+    display: flex;
+    align-items: center;
+    gap: 3em;
+    flex: 1;
+}
+
+.problemNumber {
+    width: 2em;
+    margin: 0;
+    text-align: left;
+    font-weight: 600;
+    color: #b0b0b0;
+}
+
+.problemTitle {
+    width: 250px;
+    margin: 0;
+    text-align: left;
+    font-weight: 600;
+    color: white;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.problemStatus {
+    width: 80px;
+    margin: 0;
+    text-align: center;
+    font-weight: 600;
 }
 .problemsWrapper .problemCard:nth-child(even) {
     background-color: rgba(255, 255, 255, 0.05);
 }
 .problemsWrapper .problemCard:hover {
-    background-color: var(--secondary-color);
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
     transition: all 0.3s ease-in-out;
 }
 .filtersSection{
@@ -435,7 +475,8 @@
         width: 100%;
         height: auto;
         padding: 12px; /* normalize padding to match filters */
-        overflow: visible; /* allow child to manage scrolling */
+        overflow: visible; /* allow pagination to be visible */
+        box-sizing: border-box;
     }
 
     .filtersContainer {
@@ -494,13 +535,26 @@
 @media (max-width: 600px) {
     .problemCard{
         flex-direction: column;
-        align-items: flex-start;
+        align-items: stretch;
         gap: 0.6em;
     }
 
-    .problemCard h3{
+    .problemCardContent {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.4em;
+    }
+
+    .problemNumber,
+    .problemTitle,
+    .problemStatus {
         width: 100% !important;
         text-align: left !important;
+    }
+
+    .Difficulty {
+        align-self: flex-start;
+        width: auto !important;
     }
 
     .problemsWrapper{

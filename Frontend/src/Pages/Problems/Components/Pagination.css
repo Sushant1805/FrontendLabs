@@ -3,20 +3,36 @@
   flex-direction: row;
   justify-content: flex-end;
   align-items: center;
-  gap: 1em;
+  gap: 0.5em;
   width: 100%;
-  padding: 0.75rem 1.5rem;
+  padding: 1rem 30px 1rem 30px;
+  box-sizing: border-box;
+  overflow: hidden;
+  flex-wrap: nowrap;
+  max-width: 100%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }
 
 .pagination-number {
-  border-radius: 5px;
+  border-radius: 6px;
   height: 2em;
+  width: 2em;
   min-width: 2em;
-  padding: 0 0.5rem;
+  max-width: 2em;
+  padding: 0;
   display: inline-flex;
   justify-content: center;
   align-items: center;
   border: 1px solid #D4D925;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  font-size: 0.9rem;
+  font-weight: 500;
+  white-space: nowrap;
+  margin: 0;
 }
 
 .pagination-number:hover{
@@ -29,4 +45,73 @@
 .active {
   background-color: #D4D925;
   color: black;
+}
+
+/* Responsive pagination */
+@media (max-width: 768px) {
+  .pagination-container {
+    gap: 0.4em;
+    padding: 0.75rem 20px;
+    justify-content: center;
+    width: 100%;
+    max-width: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+  
+  .pagination-number {
+    height: 1.8em;
+    width: 1.8em;
+    min-width: 1.8em;
+    max-width: 1.8em;
+    font-size: 0.8rem;
+    font-weight: 500;
+  }
+}
+
+@media (max-width: 480px) {
+  .pagination-container {
+    gap: 0.3em;
+    padding: 0.5rem 15px;
+    flex-wrap: nowrap;
+    justify-content: center;
+    overflow-x: auto;
+    scrollbar-width: thin;
+    width: 100%;
+    max-width: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+  
+  .pagination-number {
+    height: 1.6em;
+    width: 1.6em;
+    min-width: 1.6em;
+    max-width: 1.6em;
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+}
+
+/* Custom scrollbar for pagination overflow */
+.pagination-container::-webkit-scrollbar {
+  height: 4px;
+}
+
+.pagination-container::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+}
+
+.pagination-container::-webkit-scrollbar-thumb {
+  background: rgba(212, 217, 37, 0.6);
+  border-radius: 2px;
+}
+
+.pagination-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(212, 217, 37, 0.8);
 }

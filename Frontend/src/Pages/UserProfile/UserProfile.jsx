@@ -139,28 +139,44 @@ const UserProfile = () => {
                         onClick={() => navigate(-1)} 
                         className={styles.backButton}
                     >
-                        <FiArrowLeft /> Back
+                        <FiArrowLeft />
+                        <span>Back</span>
                     </button>
-                    <h1>User Profile</h1>
                 </div>
+
+                {!isEditing && (
+                    <div className={styles.profileHero}>
+                        <div className={styles.avatarSection}>
+                            <div className={styles.avatarCircle}>
+                                <FiUser className={styles.avatarIcon} />
+                            </div>
+                            <div className={styles.userMeta}>
+                                <h1 className={styles.userName}>{userData?.name}</h1>
+                                <p className={styles.userEmail}>{userData?.email}</p>
+                            </div>
+                        </div>
+                    </div>
+                )}
 
                 <div className={styles.profileContent}>
                     {!isEditing ? (
                         // View Mode
                         <div className={styles.viewMode}>
-                            <div className={styles.userInfo}>
-                                <div className={styles.infoItem}>
-                                    <FiUser className={styles.infoIcon} />
-                                    <div>
-                                        <label>Full Name</label>
-                                        <p>{userData?.name}</p>
+                            <div className={styles.infoGrid}>
+                                <div className={styles.infoCard}>
+                                    <div className={styles.cardHeader}>
+                                        <FiUser className={styles.cardIcon} />
+                                        <span className={styles.cardTitle}>Personal Information</span>
                                     </div>
-                                </div>
-                                <div className={styles.infoItem}>
-                                    <FiMail className={styles.infoIcon} />
-                                    <div>
-                                        <label>Email</label>
-                                        <p>{userData?.email}</p>
+                                    <div className={styles.cardContent}>
+                                        <div className={styles.infoRow}>
+                                            <span className={styles.infoLabel}>Full Name</span>
+                                            <span className={styles.infoValue}>{userData?.name}</span>
+                                        </div>
+                                        <div className={styles.infoRow}>
+                                            <span className={styles.infoLabel}>Email Address</span>
+                                            <span className={styles.infoValue}>{userData?.email}</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -170,76 +186,90 @@ const UserProfile = () => {
                                     onClick={() => setIsEditing(true)}
                                     className={`${styles.actionBtn} ${styles.editBtn}`}
                                 >
-                                    <FiEdit3 /> Edit Profile
+                                    <FiEdit3 />
+                                    <span>Edit Profile</span>
                                 </button>
                                 <button 
                                     onClick={handleLogout}
                                     className={`${styles.actionBtn} ${styles.logoutBtn}`}
                                 >
-                                    <FiLogOut /> Logout
+                                    <FiLogOut />
+                                    <span>Sign Out</span>
                                 </button>
                             </div>
                         </div>
                     ) : (
                         // Edit Mode
-                        <form onSubmit={handleSubmit} className={styles.editForm}>
-                            <div className={styles.inputGroup}>
-                                <label>Full Name</label>
-                                <div className={styles.inputWrapper}>
-                                    <FiUser className={styles.inputIcon} />
-                                    <input
-                                        name="name"
-                                        type="text"
-                                        value={profileData.name}
-                                        onChange={handleChange}
-                                        placeholder="Enter your full name"
-                                    />
-                                </div>
-                                {errors.name && <span className={styles.errorMsg}>{errors.name}</span>}
+                        <div className={styles.editMode}>
+                            <div className={styles.editHeader}>
+                                <h2>Edit Profile</h2>
+                                <p>Update your personal information</p>
                             </div>
 
-                            <div className={styles.inputGroup}>
-                                <label>New Password (optional)</label>
-                                <div className={styles.inputWrapper}>
-                                    <TbLockPassword className={styles.inputIcon} />
-                                    <input
-                                        name="password"
-                                        type={isPasswordVisible ? 'text' : 'password'}
-                                        value={profileData.password}
-                                        onChange={handleChange}
-                                        placeholder="Enter new password"
-                                    />
-                                    {isPasswordVisible ? (
-                                        <HiOutlineEyeOff
-                                            className={styles.eyeIcon}
-                                            onClick={() => setIsPasswordVisible(false)}
+                            <form onSubmit={handleSubmit} className={styles.editForm}>
+                                <div className={styles.inputGroup}>
+                                    <label className={styles.inputLabel}>Full Name</label>
+                                    <div className={styles.inputWrapper}>
+                                        <FiUser className={styles.inputIcon} />
+                                        <input
+                                            name="name"
+                                            type="text"
+                                            value={profileData.name}
+                                            onChange={handleChange}
+                                            placeholder="Enter your full name"
+                                            className={styles.modernInput}
                                         />
-                                    ) : (
-                                        <HiOutlineEye
-                                            className={styles.eyeIcon}
-                                            onClick={() => setIsPasswordVisible(true)}
-                                        />
-                                    )}
+                                    </div>
+                                    {errors.name && <span className={styles.errorMsg}>{errors.name}</span>}
                                 </div>
-                                {errors.password && <span className={styles.errorMsg}>{errors.password}</span>}
-                            </div>
 
-                            {mainError && <p className={styles.mainErrorMsg}>{mainError}</p>}
-                            {successMessage && <p className={styles.successMsg}>{successMessage}</p>}
+                                <div className={styles.inputGroup}>
+                                    <label className={styles.inputLabel}>New Password <span className={styles.optional}>(optional)</span></label>
+                                    <div className={styles.inputWrapper}>
+                                        <TbLockPassword className={styles.inputIcon} />
+                                        <input
+                                            name="password"
+                                            type={isPasswordVisible ? 'text' : 'password'}
+                                            value={profileData.password}
+                                            onChange={handleChange}
+                                            placeholder="Enter new password"
+                                            className={styles.modernInput}
+                                        />
+                                        <button
+                                            type="button"
+                                            className={styles.eyeButton}
+                                            onClick={() => setIsPasswordVisible(!isPasswordVisible)}
+                                        >
+                                            {isPasswordVisible ? (
+                                                <HiOutlineEyeOff className={styles.eyeIcon} />
+                                            ) : (
+                                                <HiOutlineEye className={styles.eyeIcon} />
+                                            )}
+                                        </button>
+                                    </div>
+                                    {errors.password && <span className={styles.errorMsg}>{errors.password}</span>}
+                                </div>
 
-                            <div className={styles.formButtons}>
-                                <button type="submit" className={`${styles.actionBtn} ${styles.saveBtn}`}>
-                                    Save Changes
-                                </button>
-                                <button 
-                                    type="button" 
-                                    onClick={handleCancel}
-                                    className={`${styles.actionBtn} ${styles.cancelBtn}`}
-                                >
-                                    Cancel
-                                </button>
-                            </div>
-                        </form>
+                                {mainError && <div className={styles.alertError}>{mainError}</div>}
+                                {successMessage && <div className={styles.alertSuccess}>{successMessage}</div>}
+
+                                <div className={styles.formActions}>
+                                    <button 
+                                        type="button" 
+                                        onClick={handleCancel}
+                                        className={`${styles.actionBtn} ${styles.cancelBtn}`}
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button 
+                                        type="submit" 
+                                        className={`${styles.actionBtn} ${styles.saveBtn}`}
+                                    >
+                                        Save Changes
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
                     )}
                 </div>
             </div>

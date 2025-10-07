@@ -158,25 +158,9 @@ const RegisterForm = () => {
                                 <button
                                     type="button"
                                     onClick={() => window.location.href = 'http://localhost:5000/api/auth/google'}
-                                    style={{
-                                        marginTop: '0.75rem',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        width: '100%',
-                                        background: '#181818',
-                                        color: '#fff',
-                                        border: '1px solid #444',
-                                        borderRadius: '2rem',
-                                        padding: '0.5rem 1.5rem',
-                                        fontSize: '1.1rem',
-                                        fontWeight: 600,
-                                        cursor: 'pointer',
-                                        transition: 'background 0.2s',
-                                    }}
-                                    className="google-auth-btn"
+                                    className={styles.googleAuthBtn}
                                 >
-                                    <FcGoogle style={{ width: '28px', height: '28px', marginRight: '16px', background: '#fff', borderRadius: '50%', padding: '2px' }} />
+                                    <FcGoogle className={styles.googleIcon} />
                                     Continue with Google
                                 </button>
             </form>

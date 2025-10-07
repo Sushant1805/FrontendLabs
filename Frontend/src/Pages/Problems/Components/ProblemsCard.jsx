@@ -26,13 +26,14 @@ const ProblemsCard = ({problem,index}) => {
     }
     return (
         <div key={index} className={styles.problemCard}>
-            <h3 style={{width:'5%'}}>{index+1}.</h3>
-            <h3 style={{width:'25%',textAlign:'start'}}>{problem.title}</h3>
-            <h3 className={styles.Difficulty} style={{
-                backgroundColor: getDificultyColor(problem.difficulty),
-                width:"10%"
-            }}>{problem.difficulty}</h3>
-            <h3  style={{ color: getStatusColor('Solved'),width:"15%" }}>{'Solved'}</h3>
+            <div className={styles.problemCardContent}>
+                <h3 className={styles.problemNumber}>{index+1}.</h3>
+                <h3 className={styles.problemTitle}>{problem.title}</h3>
+                <h3 className={styles.Difficulty} style={{
+                    backgroundColor: getDificultyColor(problem.difficulty)
+                }}>{problem.difficulty}</h3>
+                <h3 className={styles.problemStatus} style={{ color: getStatusColor('Solved') }}>{'Solved'}</h3>
+            </div>
             <button
                 className='button button-primary'
                 onClick={e => {

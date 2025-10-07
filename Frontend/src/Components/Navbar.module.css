@@ -11,17 +11,46 @@
 }
 
 .profileIcon {
-    font-size: 1.5rem;
-    color: #8AA5FF;
+    font-size: 1rem !important;
+    color: #ffffff !important;
     cursor: pointer;
-    transition: all 0.2s ease;
-    padding: 5px;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 0;
+    margin: 0;
     border-radius: 50%;
+    background: linear-gradient(135deg, #2934FF 0%, #8AA5FF 100%);
+    box-shadow: 
+        0 8px 24px rgba(41, 52, 255, 0.3),
+        0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 36px;
+    height: 36px;
+    position: relative;
+    overflow: hidden;
+}
+
+.profileIcon::before {
+    content: '';
+    position: absolute;
+    inset: 1px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(41, 52, 255, 0.9) 0%, rgba(138, 165, 255, 0.9) 100%);
+    z-index: 1;
+}
+
+.profileIcon > * {
+    position: relative;
+    z-index: 2;
 }
 
 .profileIcon:hover {
-    color: #2934FF;
-    background-color: rgba(41, 52, 255, 0.1);
-    transform: scale(1.1);
+    background: linear-gradient(135deg, #1e28cc 0%, #6b7bff 100%);
+    box-shadow: 
+        0 12px 32px rgba(41, 52, 255, 0.4),
+        0 6px 12px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px) scale(1.1);
+    color: #ffffff !important;
 }
 

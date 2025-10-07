@@ -114,7 +114,7 @@ const UserProfileModal = ({ isOpen, onClose }) => {
             display: 'flex', 
             alignItems: 'center', 
             justifyContent: 'center',
-            zIndex: 1100,
+            zIndex: 10020,
             display : "flex",
                 flexDirection:'column',
                 justifyContent:'center',
