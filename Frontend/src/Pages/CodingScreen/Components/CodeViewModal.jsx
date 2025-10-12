@@ -88,12 +88,13 @@ const CodeViewModal = () => {
     if (showCodeModal) {
       document.addEventListener('keydown', handleKeyDown);
       // Prevent body scroll when modal is open
-      document.body.style.overflow = 'hidden';
+      // add class so CSS can handle any other layout needs
+      document.body.classList.add('modal-open');
     }
 
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
-      document.body.style.overflow = '';
+      document.body.classList.remove('modal-open');
     };
   }, [showCodeModal]);
 

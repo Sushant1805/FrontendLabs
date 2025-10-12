@@ -109,7 +109,7 @@ const ProblemSection = ({problem}) => {
         {/*Test Results */}
         {
           activeTab === 2 &&
-         <TestResultsSection />
+         <TestResultsSection problem={problem} />
         }
 
         {/*Submissions */}

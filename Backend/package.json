@@ -21,6 +21,8 @@
     "express-session": "^1.18.2",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.16.3",
+    
+  "@google/genai": "^0.4.0",
     "nodemon": "^3.1.10",
     "passport": "^0.7.0",
     "passport-facebook": "^3.0.0",

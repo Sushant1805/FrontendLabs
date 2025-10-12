@@ -398,10 +398,107 @@
 
 .modalContent {
     flex: 1;
-    padding: 1.5rem;
-    min-height: 0;
+    /* ensure content area handles its own scrolling without scrolling the page */
+    overflow: hidden;
     display: flex;
     flex-direction: column;
+    min-height: 0; /* allow children to shrink properly in flex container */
+
+}
+
+.askAiContainer {
+    margin: 1rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: flex-start;
+    width: 100%;
+}
+
+.askAiButton {
+    background: linear-gradient(180deg, #111827 0%, #0f1724 100%);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.06);
+    padding: 0.45rem 0.9rem;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 6px 14px rgba(2,6,23,0.6);
+    font-weight: 600;
+    transition: transform 160ms ease, box-shadow 160ms ease, opacity 120ms ease;
+}
+
+.askAiButton:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.askAiButton:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(2,6,23,0.6);
+}
+
+.aiExplanation {
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    color: #e6eef8;
+    padding: 0.8rem 0.9rem;
+    border-radius: 10px;
+    width: 100%;
+    box-sizing: border-box;
+    white-space: pre-wrap;
+    font-family: 'Courier New', monospace;
+    align-self: stretch;
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: calc(40vh); /* cap height relative to viewport so it stays scrollable */
+    min-height: 64px;
+    border-left: 4px solid rgba(59,130,246,0.9); /* subtle blue accent */
+    box-shadow: 0 8px 24px rgba(2,6,23,0.55);
+    transition: opacity 220ms ease, transform 200ms ease;
+    opacity: 0;
+    transform: translateY(6px);
+    padding-top: 0.6rem;
+    padding-bottom: 0.6rem;
+    touch-action: pan-y; /* allow vertical touch scrolling inside */
+    -webkit-overflow-scrolling: touch;
+}
+
+.aiExplanation h4 {
+    margin: 0 0 0.5rem 0;
+    font-size: 0.95rem;
+}
+
+.aiExplanation pre {
+    margin: 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+    font-family: inherit;
+    font-size: 0.9rem;
+    display: block;
+    /* Let the outer .aiExplanation handle scrolling to avoid nested scrollbars */
+    max-height: none;
+    overflow: visible;
+}
+
+/* Custom scrollbar for the AI explanation box */
+.aiExplanation::-webkit-scrollbar {
+    width: 10px;
+}
+.aiExplanation::-webkit-scrollbar-track {
+    background: rgba(255,255,255,0.02);
+    border-radius: 6px;
+}
+.aiExplanation::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.08);
+    border-radius: 6px;
+}
+.aiExplanation::-webkit-scrollbar-thumb:hover {
+    background: rgba(255,255,255,0.14);
+}
+
+/* Reveal animation when content inserted */
+.askAiContainer .aiExplanation {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .modalCodeBlock {
@@ -422,6 +519,15 @@
     scrollbar-color: #6b7280 #374151;
     /* Ensure scrolling works */
     -webkit-overflow-scrolling: touch;
+
+    /* cap the height to the modal so this block is the scroll container */
+    max-height: calc(85vh - 120px);
+}
+
+/* Prevent the page from scrolling when modal is open */
+body.modal-open {
+    overflow: hidden !important;
+    touch-action: none;
 }
 
 .modalCodeBlock::-webkit-scrollbar {

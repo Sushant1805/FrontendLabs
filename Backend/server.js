@@ -8,6 +8,7 @@ const ProblemRouter = require('./router/problem-router');
 const EditorialRouter = require('./router/editorial-router');
 const ExecutionRouter = require('./router/execution-router');
 const SubmissionRouter = require('./router/submission-router')
+const AiRouter = require('./router/ai-router')
 
 
 const connectDB = require('./utils/db');
@@ -30,6 +31,7 @@ app.use('/api/problems', ProblemRouter);
 app.use('/api/editorials',EditorialRouter)
 app.use('/api/execute', ExecutionRouter);
 app.use('/api/submissions',SubmissionRouter)
+app.use('/api/ai', AiRouter)
 
 
 const PORT = 5000;
