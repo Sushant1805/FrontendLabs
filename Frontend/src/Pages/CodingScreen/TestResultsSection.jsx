@@ -213,6 +213,8 @@ const TestResultsSection = (props) => {
 
   // Show loading state
   if (isLoading) {
+    const loadingMessage = aiLoading ? 'Asking help from AI, please wait...' : 'Executing your code, please wait...';
+
     return (
       <div ref={resultsInfoRef} className={styles.problemInfoContainer}>
         <h2>
@@ -220,7 +222,7 @@ const TestResultsSection = (props) => {
         </h2>
         <div className={styles.loadingContainer}>
           <div className={styles.spinner}></div>
-          <p>Executing your code, please wait...</p>
+          <p>{loadingMessage}</p>
         </div>
       </div>
     );

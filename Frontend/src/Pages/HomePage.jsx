@@ -44,18 +44,33 @@ const HomePage = () => {
             Join thousands of developers who are already mastering frontend development with FrontendLabs
           </p>
           
-          <div className='cta-stats' data-aos="fade-up" data-aos-duration="1000" data-aos-delay="400">
-            <div className='stat-item'>
-              <h3>500+</h3>
-              <p>Challenges</p>
+          <div className='cta-stats comparison-cards two-cards' data-aos="fade-up" data-aos-duration="1000" data-aos-delay="400">
+            <div className='comparison-card feature-card'>
+              <div className='card-head'>
+                <h4>FrontendLabs</h4>
+                <span className='badge winner'>Recommended</span>
+              </div>
+              <ul className='feature-list'>
+                <li>AI Assistant <span className='feature-icon success'>✅</span></li>
+                <li>Curated Challenges <span className='feature-icon success'>✅</span></li>
+                <li>Interactive Editor <span className='feature-icon success'>✅</span></li>
+                <li>Detailed Editorials <span className='feature-icon success'>✅</span></li>
+                <li>Community Support <span className='feature-icon success'>✅</span></li>
+              </ul>
             </div>
-            <div className='stat-item'>
-              <h3>10K+</h3>
-              <p>Developers</p>
-            </div>
-            <div className='stat-item'>
-              <h3>95%</h3>
-              <p>Success Rate</p>
+
+            <div className='comparison-card feature-card other-card'>
+              <div className='card-head'>
+                <h4>Other Platforms</h4>
+                <span className='badge muted'>Typical</span>
+              </div>
+              <ul className='feature-list'>
+                <li>AI Assistant <span className='feature-icon fail'>❌</span></li>
+                <li>Curated Challenges <span className='feature-icon fail'>❌</span></li>
+                <li>Interactive Editor <span className='feature-icon success'>✅</span></li>
+                <li>Detailed Editorials <span className='feature-icon fail'>❌</span></li>
+                <li>Community Support <span className='feature-icon fail'>❌</span></li>
+              </ul>
             </div>
           </div>
 
