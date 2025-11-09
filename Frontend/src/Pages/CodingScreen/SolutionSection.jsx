@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react'
 import axios from 'axios'
+import api, { endpoint } from '../../utils/apiClient';
 import styles from './CodingScreen.module.css';
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { 
@@ -46,10 +47,10 @@ const SolutionSection = ({ title,id }) => {
             };
         }
     }, [title]); // Re-run when tab changes
-    const URL = `http://localhost:5000/api/editorials/${id}`;
+    const URL = endpoint(`/api/editorials/${id}`);
     const [editorial, setEditorial] = useState([])
     useEffect(() => {
-        axios.get(URL)
+        api.get(`/api/editorials/${id}`)
             .then((data) => setEditorial(data.data.data.solutions));
     }, [])
     if (!editorial) return <p>Loading Solutions..</p>

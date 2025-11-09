@@ -18,6 +18,7 @@ import {
   FiCheckSquare,
 } from "react-icons/fi";
 import axios from "axios";
+import api, { endpoint } from '../../utils/apiClient';
 import useDebounce from './Hooks/useDebounce';
 import { Outlet } from "react-router-dom";
 
@@ -29,11 +30,11 @@ const Problems = () => {
   const [problemsData, setProblemsData] = useState([]);
   const [allProblems, setAllProblems] = useState([]);
 
-  const url = "http://localhost:5000/api/problems";
+  const url = endpoint('/api/problems');
 
   // Fetch all problems on mount
   useEffect(() => {
-    axios.get(url).then((res) => {
+    api.get('/api/problems').then((res) => {
       setProblemsData(res.data);
       setAllProblems(res.data);
     });
@@ -61,8 +62,8 @@ const Problems = () => {
 
     const queryString = params.length ? `?${params.join("&")}` : "";
 
-    axios
-      .get(`${url}${queryString}`)
+    api
+      .get(`/api/problems${queryString}`)
       .then((res) => setProblemsData(res.data))
       .catch((err) => console.error(err));
   }, [debouncedSearchTerm, debouncedSortOrder, debouncedStatusFilter, debouncedLanguageFilter, allProblems]);

@@ -2,10 +2,12 @@
  * Enhanced Test Executor for Frontend
  * Provides unified interface for all problem types
  */
+import { API_BASE } from './apiClient';
 
 class EnhancedTestExecutor {
   constructor() {
-    this.apiBaseUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+    // Use centralized API base URL
+    this.apiBaseUrl = API_BASE || (process.env.REACT_APP_API_URL || 'http://localhost:5000');
     this.supportedProblemTypes = [
       'function', 'class', 'react-component', 'dom-manipulation', 
       'algorithm', 'data-structure', 'utility', 'hook', 'custom'
@@ -212,7 +214,7 @@ class EnhancedTestExecutor {
    */
   async executeOnBackend(code, testCases, testType, problemId) {
     try {
-      const response = await fetch(`${this.apiBaseUrl}/api/execute/code`, {
+  const response = await fetch(`${this.apiBaseUrl}/api/execute/code`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

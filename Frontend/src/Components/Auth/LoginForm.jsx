@@ -6,6 +6,7 @@ import { MdOutlineEmail } from 'react-icons/md';
 import { TbLockPassword } from 'react-icons/tb';
 import { HiOutlineEye, HiOutlineEyeOff } from 'react-icons/hi';
 import axios from 'axios';
+import api, { endpoint } from '../../utils/apiClient';
 import { useDispatch, useSelector } from 'react-redux';
 import {login} from './authSlice'
 import { IoMdClose } from "react-icons/io";
@@ -64,18 +65,12 @@ const LoginForm = () => {
         }
 
         try {
-            const response = await axios.post(
-                'http://localhost:5000/api/auth/login',
-                loginData,
-                {
-                    withCredentials: true, // ⬅️ Send cookie from server
-                }
-            );
+            const response = await api.post('/api/auth/login', loginData);
 
             console.log("Login Successful:", response.data);
 
             // Fetch user profile after login
-            const res = await fetch("http://localhost:5000/api/auth/user-profile", {
+            const res = await fetch(endpoint('/api/auth/user-profile'), {
                 method: "GET",
                 credentials: "include", // <- VERY IMPORTANT to include cookies
             });
@@ -173,7 +168,7 @@ const LoginForm = () => {
                 </h4>
                                 <button
                                     type="button"
-                                    onClick={() => window.location.href = 'http://localhost:5000/api/auth/google'}
+                                    onClick={() => window.location.href = endpoint('/api/auth/google')}
                                     className={styles.googleAuthBtn}
                                 >
                                     <FcGoogle className={styles.googleIcon} />

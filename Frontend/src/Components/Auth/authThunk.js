@@ -1,12 +1,10 @@
 // src/features/auth/authThunks.js
 import { createAsyncThunk } from '@reduxjs/toolkit'
-import axios from 'axios'
+import api from '../../utils/apiClient'
 
 export const loadUser = createAsyncThunk('auth/loadUser', async (_, thunkAPI) => {
   try {
-    const res = await axios.get('http://localhost:5000/api/auth/user-profile', {
-      withCredentials: true,
-    })
+    const res = await api.get('/api/auth/user-profile')
     console.log('[loadUser] /api/auth/user-profile response:', res.data);
     return res.data.user // or adjust based on your backend shape
   } catch (err) {

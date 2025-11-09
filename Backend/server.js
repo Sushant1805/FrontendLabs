@@ -17,10 +17,15 @@ const cookieParser = require("cookie-parser");
 
 var cors = require('cors')
 
+// Allow configuring frontend origins via env var FRONTEND_URLS (comma-separated).
+// Example: FRONTEND_URLS="https://your-frontend.vercel.app,https://staging.example.com"
+const FRONTEND_URLS = (process.env.FRONTEND_URLS && process.env.FRONTEND_URLS.split(',')) || ["http://localhost:5173", "https://frontend-labs-dev.vercel.app"];
+console.log('Allowed frontend origins:', FRONTEND_URLS);
+
 const corsOptions = {
-    origin : ["http://localhost:5173", "http://localhost:5174"],
-    methods:"GET,POST,PUT,PATCH,DELETE,HEAD",
-    credentials : true
+    origin: FRONTEND_URLS,
+    methods: "GET,POST,PUT,PATCH,DELETE,HEAD",
+    credentials: true
 }
 app.use(cookieParser());
 app.use(cors(corsOptions))
@@ -34,7 +39,8 @@ app.use('/api/submissions',SubmissionRouter)
 app.use('/api/ai', AiRouter)
 
 
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
+
 connectDB().then(()=>{
     app.listen(PORT,()=>console.log(`Server is Runnig at ${PORT}`));
 })

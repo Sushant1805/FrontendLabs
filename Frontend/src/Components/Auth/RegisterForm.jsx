@@ -9,6 +9,7 @@ import { HiOutlineEye } from "react-icons/hi";
 import { HiOutlineEyeOff } from "react-icons/hi";
 import { IoMdClose } from "react-icons/io";
 import axios from 'axios';
+import api, { endpoint } from '../../utils/apiClient';
 import { setShowRegister } from './modalSlice';
 import { useDispatch } from 'react-redux';
 
@@ -61,7 +62,7 @@ const RegisterForm = () => {
         e.preventDefault();
         if (!Object.values(userData).some(val => val === '')) {
             console.log("Form Submitted", userData);
-            axios.post('http://localhost:5000/api/auth/register',userData)
+            api.post('/api/auth/register', userData)
             .then((res)=>{
                 console.log(res)
                 navigate('/login');         
@@ -157,7 +158,7 @@ const RegisterForm = () => {
                 </h4>
                                 <button
                                     type="button"
-                                    onClick={() => window.location.href = 'http://localhost:5000/api/auth/google'}
+                                    onClick={() => window.location.href = endpoint('/api/auth/google')}
                                     className={styles.googleAuthBtn}
                                 >
                                     <FcGoogle className={styles.googleIcon} />

@@ -26,7 +26,7 @@ router.get('/google',
 ));
 
 router.get('/google/callback', passport.authenticate('google',{
-  session:false, failureRedirect:'http://localhost:5173/login'
+  session:false, failureRedirect:'https://frontend-labs-dev.vercel.app'
 }),async (req,res)=>{
   const profile = req.user;
   //check user is available or not using google id
@@ -57,6 +57,6 @@ router.get('/google/callback', passport.authenticate('google',{
       maxAge: 2 * 60 * 60 * 1000 // 2 hours
     });
     // Redirect to frontend
-    res.redirect('http://localhost:5173/');
+    res.redirect('https://frontend-labs-dev.vercel.app');
 })
 module.exports = router;

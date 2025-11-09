@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { setSubmissions, setIsLoadingSubmissions, clearSubmissions, openCodeModal } from './codeSlice';
 import styles from './CodingScreen.module.css';
+import { endpoint } from '../../utils/apiClient';
 import CodeViewModal from './Components/CodeViewModal';
 
 const SubmissionsSection = ({ problemId }) => {
@@ -24,8 +25,8 @@ const SubmissionsSection = ({ problemId }) => {
     try {
       dispatch(setIsLoadingSubmissions(true));
 
-      const url = `http://localhost:5000/api/submissions/${userData._id}/${problemId}`;
-      const response = await fetch(url);
+  const url = endpoint(`/api/submissions/${userData._id}/${problemId}`);
+  const response = await fetch(url, { credentials: 'include' });
       
       if (!response.ok) {
         throw new Error(`Failed to fetch submissions: ${response.status}`);

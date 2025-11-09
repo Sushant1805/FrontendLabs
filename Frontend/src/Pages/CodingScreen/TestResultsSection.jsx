@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { endpoint } from '../../utils/apiClient';
 import { setIsLoading } from './codeSlice';
 import styles from './CodingScreen.module.css';
 
@@ -163,25 +164,7 @@ const TestResultsSection = (props) => {
         // ignore
       }
 
-      // Build API base URL safely for different environments (CRA uses process.env, Vite uses import.meta.env)
-      let apiBase = 'http://localhost:5000';
-      try {
-        if (process && process.env && process.env.REACT_APP_API_URL) {
-          apiBase = process.env.REACT_APP_API_URL;
-        }
-      } catch (e) {
-        // process may be undefined in modern bundlers/runtime — ignore
-      }
-
-      try {
-        if (import.meta && import.meta.env && (import.meta.env.VITE_API_URL || import.meta.env.REACT_APP_API_URL)) {
-          apiBase = import.meta.env.VITE_API_URL || import.meta.env.REACT_APP_API_URL;
-        }
-      } catch (e) {
-        // import.meta may not be available in some runtimes — ignore
-      }
-
-      const res = await fetch(`${apiBase}/api/ai/explain`, {
+      const res = await fetch(endpoint('/api/ai/explain'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)

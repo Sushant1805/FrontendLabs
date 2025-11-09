@@ -8,6 +8,7 @@ import { setTestResults, setTestType, setActiveTab, setShowSuccessToast, setIsLo
 import { RxHamburgerMenu } from "react-icons/rx";
 import { IoCloseSharp } from "react-icons/io5";
 import FrontendLabsLogo from '../assets/FrontendLabs.png';
+import { endpoint } from '../utils/apiClient';
 // Removed complex test execution imports - using simple server-side approach
 const Navbar = ({ problemId }) => {
   const userData = useSelector((state) => state.auth.user)
@@ -57,11 +58,12 @@ const Navbar = ({ problemId }) => {
     try {
       console.log('Executing tests on server...');
 
-      const response = await fetch('http://localhost:5000/api/execute/code', {
+      const response = await fetch(endpoint('/api/execute/code'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'include',
         body: JSON.stringify({
           code: code,
           testCases: testCases
@@ -123,11 +125,12 @@ const Navbar = ({ problemId }) => {
 
       console.log('Saving submission:', submissionData);
 
-      const response = await fetch('http://localhost:5000/api/submissions/', {
+      const response = await fetch(endpoint('/api/submissions/'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'include',
         body: JSON.stringify(submissionData)
       });
 

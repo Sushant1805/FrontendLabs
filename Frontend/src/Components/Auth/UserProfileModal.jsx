@@ -5,6 +5,7 @@ import { TbLockPassword } from 'react-icons/tb';
 import { HiOutlineEye, HiOutlineEyeOff } from 'react-icons/hi';
 import { FiUser, FiX } from 'react-icons/fi';
 import axios from 'axios';
+import api, { endpoint } from '../../utils/apiClient';
 import { useDispatch, useSelector } from 'react-redux';
 import { login } from './authSlice';
 
@@ -75,7 +76,7 @@ const UserProfileModal = ({ isOpen, onClose }) => {
 
         try {
             const response = await axios.put(
-                'http://localhost:5000/api/auth/update-profile',
+                endpoint('/api/auth/update-profile'),
                 updateData,
                 {
                     withCredentials: true,

@@ -5,6 +5,7 @@ import Navbar from "../../Components/Navbar";
 import styles from './CodingScreen.module.css';
 import ProblemSection from "./ProblemSection";
 import axios from "axios";
+import api from '../../utils/apiClient';
 import EditorSection from "./EditorSection";
 import SuccessToast from './Components/SuccessToast';
 import { useDispatch, useSelector } from "react-redux";
@@ -28,7 +29,7 @@ export default function CodingScreen() {
   }, [id, dispatch]);
 
   useEffect(() => {
-    axios.get(`http://localhost:5000/api/problems/${id}`)
+    api.get(`/api/problems/${id}`)
       .then(data => {
         setProblem(data.data);
         console.log(data.data);

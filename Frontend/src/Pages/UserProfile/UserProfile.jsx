@@ -6,6 +6,7 @@ import { FiUser, FiMail, FiEdit3, FiLogOut, FiArrowLeft } from 'react-icons/fi';
 import { TbLockPassword } from 'react-icons/tb';
 import { HiOutlineEye, HiOutlineEyeOff } from 'react-icons/hi';
 import axios from 'axios';
+import api, { endpoint } from '../../utils/apiClient';
 import styles from './UserProfile.module.css';
 
 const UserProfile = () => {
@@ -76,13 +77,7 @@ const UserProfile = () => {
         }
 
         try {
-            const response = await axios.put(
-                'http://localhost:5000/api/auth/update-profile',
-                updateData,
-                {
-                    withCredentials: true,
-                }
-            );
+            const response = await api.put('/api/auth/update-profile', updateData);
 
             console.log("Profile Updated:", response.data);
             
@@ -105,13 +100,7 @@ const UserProfile = () => {
 
     const handleLogout = async () => {
         try {
-            await axios.post(
-                "http://localhost:5000/api/auth/logout",
-                {},
-                {
-                    withCredentials: true,
-                }
-            );
+            await api.post('/api/auth/logout');
             dispatch(logout());
             navigate('/');
         } catch (err) {
