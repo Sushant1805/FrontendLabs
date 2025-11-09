@@ -14,9 +14,9 @@ const getUser = async (req, res) => {
 
 const logout = (req, res) => {
   res.clearCookie("token", {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "Lax"
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "none"
   });
   res.status(200).json({ msg: "Logged out successfully" });
 };
@@ -126,11 +126,13 @@ const login = async (req, res, next) => {
         res.cookie("token", token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production", // true in production
-            sameSite: "Lax", // Changed from Strict to Lax for cross-origin requests
+            sameSite: "none", // allow cross-site cookie
             maxAge: 1000 * 60 * 60 * 24, // 1 day
         });
 
-        res.status(200).json({ msg: "Login successful" });
+    // Also return token in response body so clients that cannot accept cookies
+    // (e.g., strict browser privacy settings) can still use the token as a fallback.
+    res.status(200).json({ msg: "Login successful", token });
 
     } catch (error) {
         console.error(error);

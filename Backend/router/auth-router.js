@@ -52,11 +52,13 @@ router.get('/google/callback', passport.authenticate('google',{
     // Set JWT as cookie
     res.cookie('token', token, {
       httpOnly: true,
-      secure: false, // set to true if using HTTPS
-      sameSite: 'lax',
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'none',
       maxAge: 2 * 60 * 60 * 1000 // 2 hours
     });
     // Redirect to frontend
-    res.redirect('https://frontend-labs-dev.vercel.app');
+    // Redirect to frontend - respect FRONTEND_URLS[0] if available
+    const redirectTo = (process.env.FRONTEND_URLS && process.env.FRONTEND_URLS.split(',')[0]) || 'https://frontend-labs-dev.vercel.app';
+    res.redirect(redirectTo);
 })
 module.exports = router;
