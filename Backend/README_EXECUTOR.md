@@ -70,4 +70,12 @@ docker run --rm frontendlabs-executor:latest node executor.js $code $time $test
 - Map `/tmp/execution` to a host path if you need to inspect artifacts.
 - Ensure Docker daemon is available on the host where you deploy.
 
+## Using the remote HTTP executor
+
+- When you deploy the executor on Render (or any container host) it exposes an HTTP endpoint at `/execute`.
+- Configure your backend to forward execution requests by setting environment variable `EXECUTOR_URL` to the executor's base URL (for example `https://frontendlabs-docker-executor.onrender.com`).
+- An example `.env.example` with this value is included at `Backend/.env.example`.
+- The backend will send a single test case per request in the shape: `{ code: string, testCase: object, timeout: number, problemType: string }`.
+
+
 If you'd like, I can add a `docker-compose.yml` to orchestrate the executor alongside the backend server and provide a simple API test route to call the executor container. Would you like me to add that?
