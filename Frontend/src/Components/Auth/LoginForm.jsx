@@ -67,16 +67,16 @@ const LoginForm = () => {
         try {
             const response = await api.post('/api/auth/login', loginData);
 
-            console.log("Login Successful:", response.data);
 
-            // Fetch user profile after login
-            const res = await fetch(endpoint('/api/auth/user-profile'), {
-                method: "GET",
-                credentials: "include", // <- VERY IMPORTANT to include cookies
-            });
+            // If server returned a token in the response body, set it as Authorization header
+            if (response.data && response.data.token) {
+                api.defaults.headers.common.Authorization = `Bearer ${response.data.token}`;
+            }
 
-            const data = await res.json();
-            console.log("User Data:", data.user); // <== Should see { user: { ... } }
+            // Fetch user profile after login (will use cookie or Authorization header)
+            const userRes = await api.get('/api/auth/user-profile');
+            // Login successful; token (if any) already stored in axios defaults
+            const data = userRes.data;
             dispatch(login(data.user))
 
             // Reset login form

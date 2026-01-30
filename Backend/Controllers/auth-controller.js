@@ -13,12 +13,13 @@ const getUser = async (req, res) => {
 };
 
 const logout = (req, res) => {
-  res.clearCookie("token", {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "none"
-  });
-  res.status(200).json({ msg: "Logged out successfully" });
+    const isProd = process.env.NODE_ENV === "production";
+    res.clearCookie("token", {
+                httpOnly: true,
+                secure: isProd,
+                sameSite: isProd ? 'none' : 'lax'
+    });
+    res.status(200).json({ msg: "Logged out successfully" });
 };
 
 const updateProfile = async (req, res) => {
@@ -123,10 +124,11 @@ const login = async (req, res, next) => {
         const token = await userExist.generateToken();
 
         // Set cookie with token
+        const isProd = process.env.NODE_ENV === "production";
         res.cookie("token", token, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === "production", // true in production
-            sameSite: "none", // allow cross-site cookie
+            secure: isProd,
+            sameSite: isProd ? 'none' : 'lax',
             maxAge: 1000 * 60 * 60 * 24, // 1 day
         });
 

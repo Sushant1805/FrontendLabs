@@ -32,7 +32,6 @@ export default function CodingScreen() {
     api.get(`/api/problems/${id}`)
       .then(data => {
         setProblem(data.data);
-        console.log(data.data);
       });
   }, [id]);
 

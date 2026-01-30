@@ -14,7 +14,7 @@ const Navbar = ({ problemId }) => {
   const userData = useSelector((state) => state.auth.user)
   const isLoggedIn = useSelector((state) => state.auth.isAuthenticated)
   useEffect(() => {
-    console.log('[Navbar] userData:', userData, 'isLoggedIn:', isLoggedIn);
+  // Navbar initialized
   }, [userData, isLoggedIn]);
   const [loading, setLoading] = useState(true);
 
@@ -56,8 +56,7 @@ const Navbar = ({ problemId }) => {
   // Simple server-side test execution
   const executeTests = async (code, testCases) => {
     try {
-      console.log('Executing tests on server...');
-
+      // Execute tests on server
       const response = await fetch(endpoint('/api/execute/code'), {
         method: 'POST',
         headers: {
@@ -75,11 +74,12 @@ const Navbar = ({ problemId }) => {
       }
 
       const results = await response.json();
-      console.log('Server execution results:', results);
+  // Server execution results received
 
       return results;
     } catch (error) {
-      console.error('Server execution failed:', error);
+      // Server execution failed (details omitted from client logs)
+      console.error('Server execution failed');
       return [{
         error: "Server Error",
         message: `Failed to execute code: ${error.message}`,
@@ -107,7 +107,7 @@ const Navbar = ({ problemId }) => {
   const saveSubmission = async (code, results, testType) => {
     try {
       if (!userData || !problemId) {
-        console.log('Cannot save submission: missing user or problem data');
+  // Missing data; cannot save submission
         return;
       }
 
@@ -123,7 +123,7 @@ const Navbar = ({ problemId }) => {
         status: status
       };
 
-      console.log('Saving submission:', submissionData);
+  // Saving submission
 
       const response = await fetch(endpoint('/api/submissions/'), {
         method: 'POST',
@@ -139,14 +139,15 @@ const Navbar = ({ problemId }) => {
       }
 
       const savedSubmission = await response.json();
-      console.log('Submission saved successfully:', savedSubmission);
+  // Submission saved successfully
     } catch (error) {
-      console.error('Error saving submission:', error);
+      // Error saving submission (details omitted)
+      console.error('Error saving submission');
     }
   };
 
   const handleRun = async () => {
-    console.log('Run button clicked - switching to Results tab');
+  // Run button clicked - switching to Results tab
 
     // Immediately switch to results tab and set loading state
     dispatch(setActiveTab(2)); // Switch to Results tab first
@@ -170,11 +171,12 @@ const Navbar = ({ problemId }) => {
       // Execute tests on server
       const results = await executeTests(code, sampleTestCases);
 
-      console.log('Sample test results:', results);
+  // Sample test results processed
 
       dispatch(setTestResults(results));
     } catch (error) {
-      console.error('Error in handleRun:', error);
+      // Error during run (details omitted)
+      console.error('Error in handleRun');
       dispatch(setTestResults([{
         error: "Execution Error",
         message: error.message,
@@ -186,7 +188,7 @@ const Navbar = ({ problemId }) => {
   }
 
   const handleSubmit = async () => {
-    console.log('Submit button clicked - switching to Results tab');
+  // Submit button clicked - switching to Results tab
 
     // Immediately switch to results tab and set loading state
     dispatch(setActiveTab(2)); // Switch to Results tab first
@@ -210,7 +212,7 @@ const Navbar = ({ problemId }) => {
       // Execute tests on server
       const results = await executeTests(code, mainTestCases);
 
-      console.log('Main test results:', results);
+  // Main test results processed
 
       dispatch(setTestResults(results));
 
@@ -228,7 +230,8 @@ const Navbar = ({ problemId }) => {
         dispatch(setShowSuccessToast(true));
       }
     } catch (error) {
-      console.error('Error in handleSubmit:', error);
+      // Error during submit (details omitted)
+      console.error('Error in handleSubmit');
       const errorResults = [{
         error: "Execution Error",
         message: error.message,

@@ -2,6 +2,9 @@ const { execSync } = require('child_process');
 const path = require('path');
 const fs = require('fs');
 const { EvaluatorRegistry } = require('../executors/EvaluatorRegistry');
+const logger = require('../utils/logger');
+// evaluatorRegistry used by both Docker and local execution paths
+const evaluatorRegistry = new EvaluatorRegistry();
 
 /**
  * Execute user code in Docker container
@@ -14,103 +17,61 @@ const executeCode = async (req, res) => {
 
     // Validate input
     if (!code || typeof code !== 'string') {
-      return res.status(400).json([{
-        error: "Invalid Code",
-        message: "Code is required and must be a string",
-        pass: false
-      }]);
+      return res.status(400).json({ error: "Invalid Code", message: "Code is required and must be a string", pass: false });
     }
 
     if (!testCases || !Array.isArray(testCases)) {
-      return res.status(400).json([{
-        error: "Invalid Test Cases",
-        message: "Test cases are required and must be an array",
-        pass: false
-      ]);
+      return res.status(400).json({ error: "Invalid Test Cases", message: "Test cases are required and must be an array", pass: false });
     }
 
-    console.log('Executing code for', testCases.length, 'test cases with problem type:', problemType);
+  const logger = require('../utils/logger');
+  logger.info('Executing code for', testCases.length, 'test cases with problem type:', problemType);
     
-    // Initialize the new evaluator system
-    const evaluatorRegistry = new EvaluatorRegistry();
+  // Evaluator registry initialized at module scope
 
-    // Check if Docker is available
-    try {
-      execSync('docker --version', { stdio: 'ignore' });
-      // Also check if Docker daemon is running
-      execSync('docker info', { stdio: 'ignore' });
-    } catch (error) {
-      console.warn('Docker not available, falling back to local execution');
-      return executeLocally(code, testCases, problemType, res);
-    }
-
-    // Build Docker image if it doesn't exist
-    const dockerImageName = 'code-executor';
-    try {
-      execSync(`docker image inspect ${dockerImageName}`, { stdio: 'ignore' });
-    } catch (error) {
-      console.log('Building Docker image...');
-      const dockerfilePath = path.join(__dirname, '../docker-executor');
-      execSync(`docker build -t ${dockerImageName} ${dockerfilePath}`, { stdio: 'inherit' });
-    }
-
-    // Execute code in Docker container
-    const containerId = `exec-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-    
-    try {
-      const dockerCommand = [
-        'docker', 'run',
-        '--name', containerId,
-        '--rm',                          // Remove container after execution
-        '--memory=128m',                 // Limit memory to 128MB
-        '--cpus=0.5',                   // Limit CPU usage
-        '--network=none',               // No network access
-        '--read-only',                  // Read-only filesystem
-        '--tmpfs', '/tmp:exec,size=10m', // Temporary filesystem for execution
-        '--user', '1001:1001',          // Run as non-root user
-        dockerImageName,
-        'node', 'executor.js',
-        Buffer.from(JSON.stringify(code)).toString('base64'),
-        Buffer.from(JSON.stringify(5000)).toString('base64'), // timeout
-        Buffer.from(JSON.stringify(testCases[0])).toString('base64'), // single test case
-        Buffer.from(JSON.stringify(problemType)).toString('base64') // problem type
-      ];
-
-      console.log('Running Docker container:', containerId);
-      
-      const output = execSync(dockerCommand.join(' '), {
-        timeout: 10000, // 10 second timeout
-        encoding: 'utf8',
-        maxBuffer: 1024 * 1024 // 1MB buffer
-      });
-
-      const results = JSON.parse(output.trim());
-      console.log('Execution completed successfully');
-      
-      res.json(results);
-
-    } catch (error) {
-      console.error('Docker execution failed:', error.message);
-      
-      // Clean up container if it exists
+    // If EXECUTOR_URL is provided (Render deployment), forward execution to that service
+    const executorUrl = process.env.EXECUTOR_URL;
+    if (executorUrl) {
       try {
-        execSync(`docker rm -f ${containerId}`, { stdio: 'ignore' });
-      } catch (e) {
-        // Ignore cleanup errors
-      }
+        const url = executorUrl.replace(/\/$/, '') + '/execute';
+        logger.info('Forwarding execution to remote executor:', url);
 
-      // Return execution error
-      res.json([{
-        error: "Execution Error",
-        message: error.message.includes('timeout') ? 
-          'Code execution timed out (10 seconds limit)' : 
-          'Code execution failed',
-        pass: false
-      }]);
+        // Use global fetch (Node 18+). Construct first testCase only (original behavior)
+        const payload = {
+          code,
+          testCase: testCases[0],
+          timeout: 5000,
+          problemType
+        };
+
+        const controller = new AbortController();
+        const fetchTimeout = parseInt(process.env.EXECUTOR_FETCH_TIMEOUT_MS || '15000', 10);
+        const timeoutId = setTimeout(() => controller.abort(), fetchTimeout);
+
+        const resp = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+          signal: controller.signal
+        });
+        clearTimeout(timeoutId);
+
+        if (!resp.ok) {
+          const text = await resp.text().catch(() => '');
+          logger.error('Remote executor returned non-OK:', resp.status, text);
+          return res.status(502).json([{ error: 'Remote executor error', message: text, pass: false }]);
+        }
+
+        const results = await resp.json();
+        return res.json(results);
+      } catch (err) {
+        logger.error('Remote executor call failed:', err?.message || err);
+        return res.status(502).json([{ error: 'Remote executor unavailable', message: err?.message || 'Request failed', pass: false }]);
+      }
     }
 
   } catch (error) {
-    console.error('Server error in executeCode:', error);
+    logger.error('Server error in executeCode:', error?.message || error);
     res.status(500).json([{
       error: "Server Error",
       message: "Internal server error occurred",
@@ -125,7 +86,7 @@ const executeCode = async (req, res) => {
  */
 const executeLocally = async (code, testCases, problemType, res) => {
   try {
-    console.log('Executing code locally (fallback mode)');
+  logger.info('Executing code locally (fallback mode)');
     
     const results = [];
     
@@ -155,8 +116,8 @@ const executeLocally = async (code, testCases, problemType, res) => {
     
     res.json(results);
     
-  } catch (error) {
-    console.error('Local execution failed:', error);
+    } catch (error) {
+    logger.error('Local execution failed:', error?.message || error);
     res.json([{
       error: "Execution Error",
       message: error.message,

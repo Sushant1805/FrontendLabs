@@ -45,7 +45,7 @@ const Navbar = ({ problemId }) => {
     if (isRunning) return
     
     setIsRunning(true)
-    console.log('Run button clicked')
+  // Run button clicked
 
     try {
       // Validate inputs
@@ -73,10 +73,10 @@ const Navbar = ({ problemId }) => {
 
       // Detect problem type and execute tests
       const problemType = detectProblemType(code)
-      console.log('Detected problem type:', problemType)
+  // Detected problem type
 
       const results = await testExecutor.executeTests(code, sampleTestCases, problemType, 'sample', problemId)
-      console.log('Sample test results:', results)
+  // Sample test results processed
 
       // Transform results to match your existing format
       const transformedResults = results.map((result, index) => ({
@@ -112,7 +112,7 @@ const Navbar = ({ problemId }) => {
     if (isSubmitting) return
     
     setIsSubmitting(true)
-    console.log('Submit button clicked')
+  // Submit button clicked
 
     try {
       // Validate inputs
@@ -140,10 +140,10 @@ const Navbar = ({ problemId }) => {
 
       // Detect problem type and execute tests
       const problemType = detectProblemType(code)
-      console.log('Detected problem type:', problemType)
+  // Detected problem type
 
       const results = await testExecutor.executeTests(code, mainTestCases, problemType, 'main', problemId)
-      console.log('Main test results:', results)
+  // Main test results processed
 
       // Transform results to match your existing format
       const transformedResults = results.map((result, index) => ({

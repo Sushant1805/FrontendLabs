@@ -61,13 +61,13 @@ const RegisterForm = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (!Object.values(userData).some(val => val === '')) {
-            console.log("Form Submitted", userData);
             api.post('/api/auth/register', userData)
             .then((res)=>{
-                console.log(res)
                 navigate('/login');         
             })
-            .catch(err=>console.log(err))
+            .catch(err=>{
+                console.error('Registration error:', err?.message || err);
+            })
             setUserData({
                 name: '',
                 email: '',

@@ -83,7 +83,7 @@ const UserProfileModal = ({ isOpen, onClose }) => {
                 }
             );
 
-            console.log("Profile Updated:", response.data);
+            // Profile updated; avoid logging user data
             
             // Update Redux state with new user data
             dispatch(login(response.data.user));

@@ -10,19 +10,21 @@ async function seedProblems() {
   try {
     await mongoose.connect(URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
-    console.log('Connected to MongoDB');
+  const logger = require('../utils/logger');
+  logger.info('Connected to MongoDB');
 
     // Optional: Clear old data first
     await Problem.deleteMany({});
-    console.log('Old problems deleted');
+  logger.info('Old problems deleted');
 
     // Insert all problems
     await Problem.insertMany(problems);
-    console.log('Problems inserted successfully!');
+  logger.info('Problems inserted successfully!');
 
     mongoose.disconnect();
   } catch (err) {
-    console.error('Error seeding problems:', err);
+  const logger = require('../utils/logger');
+  logger.error('Error seeding problems:', err?.message || err);
     process.exit(1);
   }
 }

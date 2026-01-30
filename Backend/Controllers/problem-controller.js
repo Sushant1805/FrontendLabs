@@ -101,18 +101,34 @@ const getProblems = async (req, res) => {
       query.title = { $regex: search, $options: "i" };
     }
 
-    // 2. Sorting by difficulty (Easy → Hard or Hard → Easy)
-    // We'll keep MongoDB alphabetical order since your values are "Easy", "Medium", "Hard"
-    let sortQuery = {};
-    if (sort === "asc") {
-      sortQuery = { difficulty: 1 }; // Easy → Medium → Hard
-    } else if (sort === "desc") {
-      sortQuery = { difficulty: -1 }; // Hard → Medium → Easy
+    // 2. Sorting by difficulty (Easy → Medium → Hard)
+    // Difficulty is stored as strings; use aggregation to map to numeric order
+    if (sort === 'asc' || sort === 'desc') {
+      const order = sort === 'asc' ? 1 : -1;
+      const pipeline = [
+        { $match: query },
+        { $addFields: {
+            difficultyOrder: {
+              $switch: {
+                branches: [
+                  { case: { $eq: ["$difficulty", "Easy"] }, then: 1 },
+                  { case: { $eq: ["$difficulty", "Medium"] }, then: 2 },
+                  { case: { $eq: ["$difficulty", "Hard"] }, then: 3 }
+                ],
+                default: 99
+              }
+            }
+        } },
+        { $sort: { difficultyOrder: order } },
+        { $project: { difficultyOrder: 0 } }
+      ];
+
+      const problems = await Problem.aggregate(pipeline);
+      return res.json(problems);
     }
 
-    // Fetch filtered & sorted problems
-    const problems = await Problem.find(query).sort(sortQuery);
-
+    // Default: no difficulty sort requested — return normal find
+    const problems = await Problem.find(query);
     res.json(problems);
   } catch (error) {
     console.error("Error fetching problems:", error);

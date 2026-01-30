@@ -6,7 +6,7 @@ const authMiddleware = async (req, res, next) => {
     const header = req.headers && (req.headers.authorization || req.headers.Authorization);
     const headerToken = header && header.split(' ')[0] && header.split(' ')[1] ? header.split(' ')[1] : null;
     const token = cookieToken || headerToken;
-    console.log("Token from cookie:", cookieToken, "header:", headerToken);
+    // Avoid logging tokens to protect sensitive data
 
     if (!token) {
         return res.status(401).json({ msg: "No token provided" });
@@ -14,7 +14,7 @@ const authMiddleware = async (req, res, next) => {
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
-        console.log("Decoded JWT:", decoded); // 🧠 ADD THIS
+    // Decoded token available on req.user (sensitive information not logged)
 
         req.user = decoded;
         next();

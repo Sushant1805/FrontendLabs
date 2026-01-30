@@ -16,11 +16,12 @@ const SubmissionsSection = ({ problemId }) => {
   // Function to fetch submissions
   const fetchSubmissions = async () => {
     if (!userData || !problemId) {
-      console.log('Cannot fetch submissions: missing user or problem data', { userData: !!userData, problemId });
+      // Missing user or problem data; nothing to fetch
+      // console debug removed to avoid logging user identifiers
       return;
     }
 
-    console.log('Fetching submissions for user:', userData._id, 'problem:', problemId);
+      // Fetching submissions
 
     try {
       dispatch(setIsLoadingSubmissions(true));
@@ -33,7 +34,7 @@ const SubmissionsSection = ({ problemId }) => {
       }
 
       const data = await response.json();
-      console.log('Submissions fetched:', data.submissions ? data.submissions.length : 0, 'submissions');
+  // Submissions fetched
 
       if (data.submissions && Array.isArray(data.submissions)) {
         dispatch(setSubmissions(data.submissions));

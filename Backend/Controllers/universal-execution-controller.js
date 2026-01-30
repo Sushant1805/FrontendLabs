@@ -2,6 +2,7 @@ const { execSync } = require('child_process');
 const path = require('path');
 const fs = require('fs');
 const EvaluatorRegistry = require('../executors/EvaluatorRegistry');
+const logger = require('../utils/logger');
 
 /**
  * Universal Code Execution Controller
@@ -112,7 +113,7 @@ class UniversalExecutionController {
       res.json(results);
 
     } catch (error) {
-      console.error('Execution error:', error);
+      logger.error('Execution error:', error?.message || error);
       res.status(500).json([{
         error: "Execution Error",
         message: "An unexpected error occurred during execution",
@@ -152,7 +153,7 @@ class UniversalExecutionController {
       const problem = await Problem.findById(problemId);
       return problem;
     } catch (error) {
-      console.error('Error fetching problem:', error);
+      logger.error('Error fetching problem:', error?.message || error);
       return null;
     }
   }
@@ -360,15 +361,15 @@ class UniversalExecutionController {
     // Check if Docker is available and try Docker execution first
     try {
       execSync('docker --version', { stdio: 'ignore' });
-      console.log('🐳 Docker available, attempting Docker execution...');
+      logger.info('Docker available — attempting Docker execution');
       try {
         return await this.executeInDocker(code, timeout, testCase);
       } catch (dockerError) {
-        console.log('🐳 Docker execution failed, falling back to local execution:', dockerError.message);
+        logger.warn('Docker execution failed — falling back to local execution', dockerError?.message || dockerError);
         return await this.executeLocally(code, timeout, testCase);
       }
     } catch (error) {
-      console.log('🐳 Docker not available, using local execution');
+      logger.info('Docker not available — using local execution');
       return await this.executeLocally(code, timeout, testCase);
     }
   }

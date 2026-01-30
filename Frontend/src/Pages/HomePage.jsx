@@ -40,7 +40,7 @@ const HomePage = () => {
           <h1 className='cta-heading' data-aos="fade-up" data-aos-duration="1000">
             Ready to Start Your Journey?
           </h1>
-          <p className='cta-subheading' data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
+            <p className='cta-subheading' data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
             Join thousands of developers who are already mastering frontend development with FrontendLabs
           </p>
           

@@ -6,7 +6,7 @@ WORKDIR /app
 
 # Install dependencies for code execution
 RUN npm init -y
-RUN npm install --save-dev jest
+RUN npm install --save-dev jest express
 
 # Install Jest globally for easier access
 RUN npm install -g jest
@@ -18,8 +18,9 @@ RUN echo '{"testEnvironment": "node", "testMatch": ["**/*.test.js"]}' > jest.con
 RUN mkdir -p /tmp/execution
 RUN chmod 777 /tmp/execution
 
-# Copy execution script
-COPY executor.js .
+# Copy execution script (paths are relative to repository root during Render builds)
+COPY Backend/docker-executor/executor.js .
+COPY Backend/docker-executor/http-executor.js .
 
 # Set security limits
 RUN addgroup -g 1001 -S nodejs
@@ -34,5 +35,8 @@ USER executor
 # Set resource limits
 ENV NODE_OPTIONS="--max-old-space-size=128"
 
-# Default command
-CMD ["node", "executor.js"]
+# Expose default port for Render
+ENV PORT=10000
+
+# Default command: run HTTP executor which exposes /execute
+CMD ["node", "http-executor.js"]

@@ -50,10 +50,11 @@ router.get('/google/callback', passport.authenticate('google',{
   }
   const token = jwt.sign({id:user._id,name:user.name},process.env.JWT_SECRET_KEY,{expiresIn:'2h'})
     // Set JWT as cookie
+    const isProd = process.env.NODE_ENV === 'production';
     res.cookie('token', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'none',
+      secure: isProd,
+      sameSite: isProd ? 'none' : 'lax',
       maxAge: 2 * 60 * 60 * 1000 // 2 hours
     });
     // Redirect to frontend

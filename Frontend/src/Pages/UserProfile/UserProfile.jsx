@@ -79,7 +79,7 @@ const UserProfile = () => {
         try {
             const response = await api.put('/api/auth/update-profile', updateData);
 
-            console.log("Profile Updated:", response.data);
+            // Profile updated successfully
             
             // Update Redux state with new user data
             dispatch(login(response.data.user));
