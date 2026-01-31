@@ -3,6 +3,9 @@ const path = require('path');
 const fs = require('fs');
 const EvaluatorRegistry = require('../executors/EvaluatorRegistry');
 const logger = require('../utils/logger');
+const { URL } = require('url');
+const http = require('http');
+const https = require('https');
 
 /**
  * Universal Code Execution Controller
@@ -358,7 +361,22 @@ class UniversalExecutionController {
    * Execute code in sandboxed environment
    */
   async executeInSandbox(code, timeout, testCase, problemType = 'function') {
-    // Check if Docker is available and try Docker execution first
+    
+    // If a deployed HTTP executor URL is configured, use it first
+    const EXECUTOR_URL = process.env.EXECUTOR_URL || process.env.DEPLOYED_EXECUTOR_URL || process.env.EXECUTOR_HTTP_URL;
+    console.log(EXECUTOR_URL)
+    if (EXECUTOR_URL) {
+      try {
+        logger.info(`Using deployed executor at ${EXECUTOR_URL}`);
+        const out = await this.executeInHttpExecutor(EXECUTOR_URL, code, timeout, testCase, problemType);
+        return out;
+      } catch (httpErr) {
+        logger.warn('HTTP executor request failed — falling back to Docker/local', httpErr?.message || httpErr);
+        // continue to Docker/local fallbacks
+      }
+    }
+
+    // Check if Docker is available and try Docker execution
     try {
       execSync('docker --version', { stdio: 'ignore' });
       logger.info('Docker available — attempting Docker execution');
@@ -371,6 +389,61 @@ class UniversalExecutionController {
     } catch (error) {
       logger.info('Docker not available — using local execution');
       return await this.executeLocally(code, timeout, testCase);
+    }
+  }
+
+  /**
+   * Execute using a deployed HTTP executor service
+   */
+  async executeInHttpExecutor(executorUrl, code, timeout, testCase, problemType = 'function') {
+    const payload = { code, testCase, timeout, problemType };
+    console.log("Execution in deployed Docker")
+    const postJson = (urlString, body, timeoutMs) => new Promise((resolve, reject) => {
+      try {
+        const u = new URL(urlString);
+        const lib = u.protocol === 'https:' ? https : http;
+
+        // If the provided URL points to root ("/" or empty), default to the executor path
+        let pathName = u.pathname || '';
+        if (!pathName || pathName === '/') pathName = '/execute';
+
+        const opts = {
+          method: 'POST',
+          hostname: u.hostname,
+          port: u.port || (u.protocol === 'https:' ? 443 : 80),
+          path: pathName + (u.search || ''),
+          headers: {
+            'Content-Type': 'application/json',
+            'Content-Length': Buffer.byteLength(JSON.stringify(body))
+          },
+          timeout: timeoutMs
+        };
+
+        const req = lib.request(opts, (res) => {
+          let data = '';
+          res.setEncoding('utf8');
+          res.on('data', chunk => data += chunk);
+          res.on('end', () => {
+            if (res.statusCode >= 200 && res.statusCode < 300) return resolve(data);
+            return reject(new Error(`Executor HTTP ${res.statusCode}: ${data}`));
+          });
+        });
+
+        req.on('error', reject);
+        req.write(JSON.stringify(body));
+        req.end();
+      } catch (err) {
+        reject(err);
+      }
+    });
+
+    const raw = await postJson(executorUrl, payload, timeout + 2000).catch(err => { throw err; });
+    // Ensure we return a JSON string (existing callers expect a stringified JSON)
+    if (typeof raw === 'string') return raw.trim();
+    try {
+      return JSON.stringify(raw);
+    } catch (e) {
+      return String(raw);
     }
   }
 
