@@ -6,6 +6,8 @@ const logger = require('../utils/logger');
 const { URL } = require('url');
 const http = require('http');
 const https = require('https');
+const crypto = require('crypto');
+const redisClient = require('../utils/redisClient');
 
 /**
  * Universal Code Execution Controller
@@ -98,6 +100,28 @@ class UniversalExecutionController {
         };
       }
 
+      // Prepare caching key components
+      let cacheKey;
+      try {
+        const userId = (req.user && (req.user._id || req.user.id)) || req.body.userId || 'anonymous';
+        const payloadHash = crypto.createHash('sha256').update(code + JSON.stringify(finalTestCases || testCases || []) + String(problemId || '') + String(testType || '')).digest('hex');
+        cacheKey = `exec:${userId}:${payloadHash}`;
+
+        // Try to read cache; if present, return cached result
+        try {
+          const cached = await redisClient.get(cacheKey);
+          if (cached) {
+            logger.info(`Cache hit for ${cacheKey}`);
+            const parsed = JSON.parse(cached);
+            return res.json(parsed);
+          }
+        } catch (cacheReadErr) {
+          logger.warn('Redis read failed, continuing without cache:', cacheReadErr?.message || cacheReadErr);
+        }
+      } catch (err) {
+        logger.warn('Cache key generation failed, continuing without cache:', err?.message || err);
+      }
+
       // Execute tests based on problem type and environment
       const results = await this.executeTests(code, finalTestCases, problem);
 
@@ -111,6 +135,16 @@ class UniversalExecutionController {
       if (problemId && testType === 'main' && problem.edgeCases && problem.edgeCases.length > 0) {
         const edgeCaseResults = await this.runEdgeCaseTests(code, problem.edgeCases, problem);
         results.push(...edgeCaseResults);
+      }
+
+      // Attempt to write to cache asynchronously (best-effort)
+      try {
+        const ttl = parseInt(process.env.REDIS_TTL_SECONDS || '300', 10);
+        if (cacheKey) {
+          await redisClient.set(cacheKey, JSON.stringify(results), ttl);
+        }
+      } catch (cacheWriteErr) {
+        logger.warn('Redis write failed:', cacheWriteErr?.message || cacheWriteErr);
       }
 
       res.json(results);
