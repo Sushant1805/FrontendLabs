@@ -19,7 +19,7 @@ var cors = require('cors')
 
 // Allow configuring frontend origins via env var FRONTEND_URLS (comma-separated).
 // Example: FRONTEND_URLS="https://your-frontend.vercel.app,https://staging.example.com"
-const FRONTEND_URLS = (process.env.FRONTEND_URLS && process.env.FRONTEND_URLS.split(',')) || ["http://localhost:5173", "https://codinglabs18.vercel.app/"];
+const FRONTEND_URLS = (process.env.FRONTEND_URLS && process.env.FRONTEND_URLS.split(',')) || ["http://localhost:5173", "https://codinglabs18.vercel.app"];
 const logger = require('./utils/logger');
 logger.info('Allowed frontend origins:', FRONTEND_URLS);
 
