@@ -1,0 +1,59 @@
+.blogSection {
+  padding: 80px 24px;
+  max-width: 1100px;
+  margin: 0 auto 80px;
+  text-align: center;
+}
+
+.blogHeading {
+  font-size: 36px;
+  margin-bottom: 8px;
+}
+
+.blogSubheading {
+  color: rgba(255,255,255,0.8);
+  margin-bottom: 32px;
+}
+
+.postsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+  align-items: stretch;
+}
+
+.postCard {
+  padding: 20px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.postMeta {
+  display: flex;
+  justify-content: space-between;
+  color: rgba(255,255,255,0.7);
+  font-size: 13px;
+  margin-bottom: 12px;
+}
+
+.postTitle {
+  font-size: 20px;
+  margin: 6px 0 10px;
+}
+
+.postExcerpt {
+  color: rgba(255,255,255,0.85);
+  flex-grow: 1;
+}
+
+.postActions {
+  margin-top: 16px;
+  display: flex;
+  gap: 10px;
+}
+
+.postDate, .postAuthor {
+  opacity: 0.9;
+}

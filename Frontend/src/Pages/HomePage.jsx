@@ -41,13 +41,13 @@ const HomePage = () => {
             Ready to Start Your Journey?
           </h1>
             <p className='cta-subheading' data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
-            Join thousands of developers who are already mastering frontend development with FrontendLabs
+            Join thousands of developers who are already mastering development with CodingLabs
           </p>
           
           <div className='cta-stats comparison-cards two-cards' data-aos="fade-up" data-aos-duration="1000" data-aos-delay="400">
             <div className='comparison-card feature-card'>
               <div className='card-head'>
-                <h4>FrontendLabs</h4>
+                <h4>CodingLabs</h4>
                 <span className='badge winner'>Recommended</span>
               </div>
               <ul className='feature-list'>

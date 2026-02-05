@@ -406,3 +406,14 @@ a {
   right: 8px;
   color: #bbb;
 }
+
+/* Active menu item styling */
+.navbar-menu li.active,
+.nav-dropdown-menu li.active {
+  color: var(--primary-color);
+}
+
+.navbar-menu li.active a,
+.nav-dropdown-menu li.active a {
+  color: var(--primary-color);
+}

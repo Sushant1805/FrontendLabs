@@ -249,11 +249,12 @@ const Navbar = ({ problemId }) => {
     }
   }
   const NavbarMenu = ({className}) => {
+  const currentPath = location.pathname;
+  const isActive = (path) => currentPath === path;
+
   return (
     <ul className={className}>
-      <li><Link to="/features" style={{ textDecoration: 'none', color: 'inherit' }}>Features</Link></li>
-      <li><Link to="/problems" style={{ textDecoration: 'none', color: 'inherit' }}>Problems</Link></li>
-      <li>Blog</li>
+   
     </ul>
   );
 };
@@ -264,7 +265,7 @@ const Navbar = ({ problemId }) => {
         <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
           <div className="logo">
             <img className="FrontendLabs-logo" src={FrontendLabsLogo} alt="FrontendLabs Logo" />
-            <p className="logo"><strong>FrontendLabs</strong></p>
+            <p className="logo"><strong>CodingLabs</strong></p>
           </div>
         </Link>
 

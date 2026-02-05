@@ -87,7 +87,7 @@ const RegisterForm = () => {
             <header>
                 <h1>Create your Account</h1>
                 <h2 className={styles.registerSubheading}>
-                    Enter your details to start using FrontendLabs
+                    Enter your details to start using CodingLabs
                 </h2>
             </header>
 
